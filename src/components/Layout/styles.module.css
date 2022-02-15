@@ -1,0 +1,11 @@
+.layout {
+	height: 70px;
+	background-color: #2ac083;
+	display: flex;
+	justify-content: space-between;
+	color: #ffffff;
+	align-items: center;
+	padding-left: 20px;
+	padding-right: 20px;
+	font-size: 26px;
+}
