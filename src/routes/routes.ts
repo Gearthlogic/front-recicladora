@@ -31,15 +31,15 @@ export type LayoutProps = {
 
 export const routes: Array<Route> = [
 	{
-		routeProps: { route: paths.index, component: Landing, private: true, path: paths.index, exact:true },
+		routeProps: { route: paths.index, component: Landing, private: false, path: paths.index, exact: true, roles: ['admin', 'user'] },
 		layoutProps: { name: 'Inicio', inLayout: true },
 	},
 	{
-		routeProps: { route: paths.login, component: LogIn, private: false, path: paths.login, exact:true },
+		routeProps: { route: paths.login, component: LogIn, private: false, path: paths.login, exact: true },
 		layoutProps: { name: 'Login' },
 	},
 	{
-		routeProps: { route: paths.register, component: Register, private: false, path: paths.register, exact:true },
+		routeProps: { route: paths.register, component: Register, private: false, path: paths.register, exact: true },
 		layoutProps: { name: 'Register' },
 	},
 	/* {

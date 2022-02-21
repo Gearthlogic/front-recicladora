@@ -1,9 +1,11 @@
-import React from 'react'
+import ClientList from './ClientList'
+import NewClientForm from './NewClientForm'
 
 const Landing = () => {
     return (
         <div>
-            Landing
+            {/* <NewClientForm /> */}
+            <ClientList />
         </div>
     )
 }

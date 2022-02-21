@@ -7,14 +7,14 @@ export const login = async (user: String, password: String) => {
         password
     });
     localStorage.setItem("token", response.data.access_token);
-    return response.data.user;
+    return response.data;
 }
 
 export const register = async (user: String, password: String) => {
     const response = await axios.post('https://recicladora.herokuapp.com/user', {
         username: user,
         password,
-        roles:Role.Purchaser
+        roles: Role.Purchaser
     });
     return response.data;
 }

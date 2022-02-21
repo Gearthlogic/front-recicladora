@@ -11,7 +11,7 @@ interface authState {
 const initialState: authState = {
   loggedIn: false,
   user: {},
-  role: ""
+  role: "",
 };
 
 export function authReducer(state: authState = initialState, action: AuthDispatchTypes) {
@@ -21,7 +21,8 @@ export function authReducer(state: authState = initialState, action: AuthDispatc
         ...state,
         loggedIn: true,
         user: action.payload.user,
-        role: Role.Purchaser
+        role: Role.Purchaser,
+
       };
     case AuthType.REGISTER:
       /* return {
