@@ -1,17 +1,17 @@
+import { useSelector } from 'react-redux';
 import { Route } from 'react-router-dom';
-import { rolesName } from '../../routes/roles';
+import { RootStore } from '../../redux';
 import { routes } from '../../routes/routes';
 
-const user = {
-	loggedIn: false,
-	role: rolesName.user,
-};
-
 const Router = () => {
+
+	const auth = useSelector((state: RootStore) => state.auth);
+
 	const constructRoutes = () => {
 		let filteredRoutes;
-		if (user.loggedIn) {
-			filteredRoutes = routes.filter(route => route.routeProps.roles?.includes(user.role));
+		if (auth.loggedIn) {
+			/* filteredRoutes = routes.filter(route => route.routeProps.roles?.includes(auth.user.role)); */
+			filteredRoutes = routes.filter(route => !route.routeProps.private);
 		} else {
 			filteredRoutes = routes.filter(route => !route.routeProps.private);
 		}

@@ -1,9 +1,5 @@
-export const rolesID = {
-	1: 'user',
-	2: 'admin',
-};
-
-export const rolesName = {
-	user: 'user',
-	admin: 'admin',
-};
+export enum Role {
+	Purchaser = 'Purchaser',
+	EntryController = 'EntryController',
+	Admin = 'Admin',
+}

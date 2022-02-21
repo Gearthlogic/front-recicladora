@@ -1,18 +1,18 @@
-import { rolesName } from '../../../routes/roles';
 import { routes } from '../../../routes/routes';
 import Link from './Link';
 import styles from './styles.module.css';
 
 const user = {
 	loggedIn: false,
-	role: rolesName.user,
+	role: "",
 };
 
 const Links = () => {
 	const constructLinks = () => {
 		let filteredRoutes;
 		if (user.loggedIn) {
-			filteredRoutes = routes.filter(route => route.routeProps.roles?.includes(user.role));
+			/* filteredRoutes = routes.filter(route => route.routeProps.roles?.includes(user.role)); */
+			filteredRoutes = routes.filter(route => !route.routeProps.private);
 		} else {
 			filteredRoutes = routes.filter(route => !route.routeProps.private);
 		}
