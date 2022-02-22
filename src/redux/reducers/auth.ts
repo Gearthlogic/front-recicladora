@@ -20,9 +20,16 @@ export function authReducer(state: authState = initialState, action: AuthDispatc
       return {
         ...state,
         loggedIn: true,
-        user: action.payload.user,
-        role: Role.Purchaser,
+        user: action.payload.user
+      };
 
+    case AuthType.GET_USER_DATA:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          user: action.payload
+        }
       };
     case AuthType.REGISTER:
       /* return {

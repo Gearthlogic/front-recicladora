@@ -1,6 +1,6 @@
 import { Button, Grid, Paper, TextField, Typography } from "@mui/material";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { paths } from "../../../routes/paths";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -24,6 +24,7 @@ const schema = yup
 const LogIn = () => {
   const auth = useSelector((state: RootStore) => state.auth);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
     console.log(auth);
@@ -43,9 +44,11 @@ const LogIn = () => {
   } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
-  const onSubmit: SubmitHandler<FormData> = (data) => {
+
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     const { username, password } = data;
-    dispatch(actionLogin(username, password));
+    await dispatch(actionLogin(username, password));
+    history.push(paths.home);
   };
 
   return (
