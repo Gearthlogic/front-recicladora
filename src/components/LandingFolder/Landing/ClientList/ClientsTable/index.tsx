@@ -1,44 +1,52 @@
-import * as React from 'react';
 import { DataGrid, GridColDef } from '@material-ui/data-grid';
-import { FaEdit } from 'react-icons/fa'
+import EditAccion from './EditAccion';
+
 
 const columns: GridColDef[] = [
     {
         field: 'alias',
         headerName: 'Alias',
         width: 150,
-        editable: true,
+
     },
     {
         field: 'firstname',
         headerName: 'Nombre',
         width: 150,
-        editable: true,
+
     },
     {
         field: 'lastname',
         headerName: 'Apellido',
         width: 150,
-        editable: true,
+
     },
     {
         field: 'email',
         headerName: 'Email',
         width: 200,
-        editable: true,
+
     },
     {
         field: 'cellphone',
         headerName: 'Telefono',
         width: 150,
-        editable: true,
+
     },
     {
-        field: 'editar',
-        headerName: 'Editar',
-        width: 150,
-        editable: true,
-    },
+        field: "actions",
+        headerName: "Actions",
+        sortable: false,
+        align: "center",
+        width: 140,
+        renderCell: (params) => {
+            return (
+                <div style={{ cursor: "pointer" }}>
+                    <EditAccion index={params.row.id} state={params.row.type} />
+                </div>
+            );
+        }
+    }
 ];
 
 
@@ -59,7 +67,7 @@ export default function ClientsTable({ rows }: any) {
                 rows={editRows}
                 columns={columns}
                 pageSize={5}
-                disableSelectionOnClick
+
             />
         </div>
     );
