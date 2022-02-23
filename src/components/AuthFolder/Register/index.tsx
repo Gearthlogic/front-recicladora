@@ -28,7 +28,7 @@ const Register = () => {
   useEffect(() => {
     console.log(auth);
   }, []);
-  
+
   const paperStyle = {
     padding: 30,
     height: "50vh",

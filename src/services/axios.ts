@@ -30,7 +30,7 @@ privateAxiosInstance.interceptors.request.use((config) => {
 
     /*@ts-ignore*/
     if (user.access_token && config.headers) {
-            /*@ts-ignore*/
+        /*@ts-ignore*/
         config.headers.Authorization = `Bearer ${user.access_token}`;
     }
     console.log(user)

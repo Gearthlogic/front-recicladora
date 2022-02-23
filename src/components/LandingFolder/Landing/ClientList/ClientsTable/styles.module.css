@@ -1,0 +1,29 @@
+.activeBtn{
+  line-height: 30px;
+  width: 80px;
+}
+
+.activo{
+height: 50%;
+border-radius: 10px;
+align-items: center;
+justify-content: flex-start;
+border:1px solid green;
+color: white;
+letter-spacing: 1px;
+font-weight: 500;
+background-color: green;
+font-size: 15px;
+}
+.inactivo{
+height: 50%;
+border-radius: 10px;
+align-items: center;
+justify-content: flex-start;
+border:1px solid red;
+color: white;
+letter-spacing: 1px;
+font-weight: 500;
+background-color: red;
+font-size: 15px;
+}

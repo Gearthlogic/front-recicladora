@@ -48,7 +48,7 @@ const LogIn = () => {
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     const { username, password } = data;
     await dispatch(actionLogin(username, password));
-    history.push(paths.home);
+    history.push(paths.index);
   };
 
   return (

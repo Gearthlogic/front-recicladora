@@ -1,4 +1,3 @@
-import { Role } from "../../routes/roles";
 import { AuthDispatchTypes } from "../actions/auth/types";
 import { AuthType } from "../types";
 

@@ -1,5 +1,6 @@
 import { DataGrid, GridColDef } from '@material-ui/data-grid';
-import EditAccion from './EditAccion';
+import ChangeState from './ChangeState';
+import EditAction from './EditAction';
 
 
 const columns: GridColDef[] = [
@@ -24,25 +25,43 @@ const columns: GridColDef[] = [
     {
         field: 'email',
         headerName: 'Email',
-        width: 200,
+        width: 150,
 
     },
     {
         field: 'cellphone',
         headerName: 'Telefono',
+        width: 120,
+
+    },
+    {
+        field: 'Actions',
+        headerName: 'Tipo',
         width: 150,
 
     },
     {
-        field: "actions",
-        headerName: "Actions",
-        sortable: false,
+        field: "Edit",
+        headerName: "Editar",
         align: "center",
-        width: 140,
+        width: 100,
         renderCell: (params) => {
             return (
                 <div style={{ cursor: "pointer" }}>
-                    <EditAccion index={params.row.id} state={params.row.type} />
+                    <ChangeState index={params.row.id} />
+                </div>
+            );
+        }
+    },
+    {
+        field: "Actions",
+        headerName: "Estado",
+        align: "center",
+        width: 100,
+        renderCell: (params) => {
+            return (
+                <div style={{ cursor: "pointer" }}>
+                    <EditAction index={params.row.id} />
                 </div>
             );
         }
@@ -52,21 +71,22 @@ const columns: GridColDef[] = [
 
 export default function ClientsTable({ rows }: any) {
 
-    const editRows = rows.map((row: any) => {
-
-        const icon = 'icon'
-
-        return {
-            ...row, editar: icon
+    const translateRows = rows.map((row: any) => {
+        if (row.type === 'permanent') {
+            return { ...row, type: 'Permanente' }
+        } else if (row.type === 'temporary') {
+            return { ...row, type: 'Temporario' }
         }
     })
 
+
     return (
-        <div style={{ height: 400, width: '50%', alignItems: 'center', textAlign: 'center', justifyContent: 'center' }}>
+        <div>
             <DataGrid
-                rows={editRows}
+                rows={translateRows}
                 columns={columns}
-                pageSize={5}
+                pageSize={10}
+                style={{ width: '70%', justifyContent: 'center', height: '80vh', marginLeft: '15%' }}
 
             />
         </div>

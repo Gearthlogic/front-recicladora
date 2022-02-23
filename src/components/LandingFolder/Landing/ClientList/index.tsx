@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { getAllClients } from "../../../../services/api/getAllClients"
 import ClientsTable from "./ClientsTable"
+import styles from "./styles.module.css"
 
 
 const ClientList = () => {
@@ -12,8 +13,9 @@ const ClientList = () => {
             .then(res => setData(res.data))
     }, [])
 
+
     return (
-        <div>
+        <div className={styles.clientTableMain}>
             <ClientsTable rows={data} />
         </div>
     )

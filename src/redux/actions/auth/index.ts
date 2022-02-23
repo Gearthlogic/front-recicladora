@@ -15,7 +15,6 @@ export const actionLogin = (username: String, password: String) => async (dispat
 
 export const getProfileAction = () => async (dispatch: Dispatch) => {
     const response = await profile();
-    debugger
     dispatch({
         type: AuthType.GET_USER_DATA,
         payload: response.data
@@ -24,7 +23,6 @@ export const getProfileAction = () => async (dispatch: Dispatch) => {
 
 export const setSavedToken = () => async (dispatch: Dispatch) => {
     const token = localStorage.getItem('token');
-    debugger
     dispatch({
         type: AuthType.LOGIN,
         payload: {
