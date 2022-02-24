@@ -1,10 +1,10 @@
 import { Button, Grid, Paper, TextField, Typography } from "@mui/material";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { paths } from "../../../routes/paths";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { actionRegister } from "../../../redux/actions";
+
+import { Path } from "../../../constants/enums/path.enum";
 import { useDispatch, useSelector } from "react-redux";
 import { RootStore } from "../../../redux";
 import { useEffect } from "react";
@@ -44,7 +44,7 @@ const Register = () => {
   });
   const onSubmit: SubmitHandler<FormData> = (data) => {
     const { username, password } = data;
-    dispatch(actionRegister(username, password));
+    //dispatch(actionRegister(username, password));
   };
   return (
     <Grid
@@ -108,7 +108,7 @@ const Register = () => {
           </Button>
         </form>
         <Typography align="center">
-          Ya tiene una cuenta? <Link to={paths.login}>Inicie sesión</Link>
+          Ya tiene una cuenta? <Link to={Path.login}>Inicie sesión</Link>
         </Typography>
       </Paper>
     </Grid>

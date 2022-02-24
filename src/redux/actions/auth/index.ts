@@ -1,48 +1,32 @@
 import { Dispatch } from 'redux';
-import { login, register, profile } from '../../../services/api/auth';
+import { login, profile } from '../../../services/api/auth';
 import { AuthType } from '../../types';
 
 export const actionLogin = (username: String, password: String) => async (dispatch: Dispatch) => {
-    const user = await login(username, password);
+    const response = await login(username, password);
 
     dispatch({
         type: AuthType.LOGIN,
         payload: {
-            user
+            token: response.data.access_token,
+            user: response.data.user
         }
     });
 }
 
 export const getProfileAction = () => async (dispatch: Dispatch) => {
+    dispatch(setSavedToken());
     const response = await profile();
     dispatch({
-        type: AuthType.GET_USER_DATA,
+        type: AuthType.GET_PROFILE,
         payload: response.data
     });
 }
 
-export const setSavedToken = () => async (dispatch: Dispatch) => {
+export const setSavedToken = () => {
     const token = localStorage.getItem('token');
-    dispatch({
+    return {
         type: AuthType.LOGIN,
-        payload: {
-            user: {
-                access_token: token
-            }
-        }
-    });
-}
-
-
-
-export const actionRegister = (username: String, password: String) => async (dispatch: Dispatch) => {
-    const data = await register(username, password);
-    console.log('REGISTRO');
-    console.log(data);
-    dispatch({
-        type: AuthType.REGISTER,
-        payload: {
-            data
-        }
-    });
+        payload: { token }
+    };
 }

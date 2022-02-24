@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { createNewClient } from "../../../../services/api/createNewClient";
 import { useHistory, useParams } from "react-router-dom";
-import { paths } from "../../../../routes/paths";
+import { Path } from "../../../../constants/enums/path.enum";
 import { useEffect } from "react";
 import { getAllClients } from "../../../../services/api/getAllClients";
 import { updateClient } from "../../../../services/api/updateClient";
@@ -82,13 +82,13 @@ const NewClientForm = () => {
         createNewClient(data)
             .then(res => console.log(res))
             .catch(err => console.log(err))
-            .finally(() => history.push(paths.clientList))
+            .finally(() => history.push(Path.clientList))
     };
     const onSubmitEdit = (data: any) => {
         updateClient(data)
             .then(res => console.log(res))
             .catch(err => console.log(err))
-            .finally(() => history.push(paths.clientList))
+            .finally(() => history.push(Path.clientList))
     };
 
     return (

@@ -1,13 +1,11 @@
 import { Button, Grid, Paper, TextField, Typography } from "@mui/material";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { Link, useHistory } from "react-router-dom";
-import { paths } from "../../../routes/paths";
+import { Path } from "../../../constants/enums/path.enum";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useEffect } from "react";
 import { actionLogin } from '../../../redux/actions';
-import { useDispatch, useSelector } from "react-redux";
-import { RootStore } from "../../../redux";
+import { useDispatch } from "react-redux";
 
 interface FormData {
   username: string;
@@ -22,13 +20,8 @@ const schema = yup
   .required();
 
 const LogIn = () => {
-  const auth = useSelector((state: RootStore) => state.auth);
   const dispatch = useDispatch();
   const history = useHistory();
-
-  useEffect(() => {
-    console.log(auth);
-  }, []);
 
   const paperStyle = {
     padding: 30,
@@ -48,7 +41,7 @@ const LogIn = () => {
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     const { username, password } = data;
     await dispatch(actionLogin(username, password));
-    history.push(paths.index);
+    history.push(Path.index);
   };
 
   return (
@@ -113,7 +106,7 @@ const LogIn = () => {
           </Button>
         </form>
         <Typography align="center">
-          No tiene una cuenta? <Link to={paths.register}>Registrese</Link>
+          No tiene una cuenta? <Link to={Path.register}>Registrese</Link>
         </Typography>
       </Paper>
     </Grid>
