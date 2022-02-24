@@ -1,4 +1,3 @@
-import { Role } from "../../routes/roles";
 import { AuthDispatchTypes } from "../actions/auth/types";
 import { AuthType } from "../types";
 
@@ -11,7 +10,7 @@ interface authState {
 const initialState: authState = {
   loggedIn: false,
   user: {},
-  role: ""
+  role: "",
 };
 
 export function authReducer(state: authState = initialState, action: AuthDispatchTypes) {
@@ -20,8 +19,16 @@ export function authReducer(state: authState = initialState, action: AuthDispatc
       return {
         ...state,
         loggedIn: true,
-        user: action.payload.user,
-        role: Role.Purchaser
+        user: action.payload.user
+      };
+
+    case AuthType.GET_USER_DATA:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          user: action.payload
+        }
       };
     case AuthType.REGISTER:
       /* return {

@@ -1,7 +1,10 @@
 export const paths = {
 	index: '/',
 	home: '/home',
-    login: '/login',
+	login: '/login',
 	register: '/register',
 	statistics: '/statistics',
+	createClient: '/createclient',
+	clientList: '/clientlist',
+	editClient: '/editClient/'
 };
