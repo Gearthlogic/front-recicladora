@@ -38,7 +38,7 @@ export interface LayoutProps {
 };
 
 export interface CustomRouteProps extends RouteProps {
-	path?: Path
+	path: Path
 }
 
 export const routes: Array<Route> = [
@@ -70,7 +70,7 @@ export const routes: Array<Route> = [
 		[Role.Admin, Role.Purchaser]
 	),
 	new Route(
-		{ component: NotFound }
+		{ path: Path.notFound ,component: NotFound }
 	)
 ];
 

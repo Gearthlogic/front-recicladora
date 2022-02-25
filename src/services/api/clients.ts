@@ -1,7 +1,7 @@
 import {privateAxiosInstance} from '../axios';
 import {ClientType} from '../../constants/enums/client.enum';
 
-interface CreateClientDTO {
+export interface CreateClientDTO {
 	alias: string;
 	firstname: string;
 	lastname: string;
@@ -10,7 +10,7 @@ interface CreateClientDTO {
 	type: ClientType;
 }
 
-interface UpdateClientDTO extends CreateClientDTO {
+export interface UpdateClientDTO extends CreateClientDTO {
 	id: string;
 }
 
@@ -27,6 +27,7 @@ export const createNewClient = (body: CreateClientDTO) => {
 };
 
 export const updateClient = (body: UpdateClientDTO) => {
+	
 	return privateAxiosInstance.put('/client', body);
 };
 

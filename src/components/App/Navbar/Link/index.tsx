@@ -6,7 +6,7 @@ import {  LayoutProps } from '../../routes/routes';
 import styles from './styles.module.css';
 
 interface CustomLinkProps {
-	to?: Path,
+	to: Path,
 	layoutProps? : LayoutProps
 }
 

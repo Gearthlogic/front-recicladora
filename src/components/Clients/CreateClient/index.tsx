@@ -9,18 +9,18 @@ import {
 	TextField,
 	Typography,
 } from '@mui/material';
-import {useForm, SubmitHandler, Controller} from 'react-hook-form';
-import {yupResolver} from '@hookform/resolvers/yup';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import {useHistory, useParams} from 'react-router-dom';
-import {Path} from '../../../constants/enums/path.enum';
-import {useEffect} from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import { Path } from '../../../constants/enums/path.enum';
+import { useEffect } from 'react';
 import {
 	getClientDetails,
 	updateClient,
-	createNewClient,
+	createNewClient
 } from '../../../services/api/clients';
-import {ClientType} from '../../../constants/enums/client.enum';
+import { ClientType } from '../../../constants/enums/client.enum';
 
 interface FormData {
 	alias: string;
@@ -32,7 +32,8 @@ interface FormData {
 }
 
 const phoneRegExp =
-	/^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+	/^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/
+
 
 const schema = yup
 	.object({
@@ -57,7 +58,7 @@ const schema = yup
 			.required('Debe ingresar un Email'),
 		cellphone: yup
 			.string()
-			.matches(phoneRegExp, 'Numero de telefono no valido')
+			.matches(phoneRegExp)
 			.required('Debe ingresar un telefono'),
 		type: yup.string().required('Debe ingresar un Tipo de Cliente'),
 	})
@@ -70,45 +71,49 @@ interface ParamTypes {
 const CreateClient = () => {
 	const history = useHistory();
 
-	const {id} = useParams<ParamTypes>();
+	const { id } = useParams<ParamTypes>();
 
 	const {
 		handleSubmit,
 		control,
-		formState: {errors},
+		formState: { errors },
 		reset,
-	} = useForm<FormData>({resolver: yupResolver(schema)});
+	} = useForm<FormData>({ resolver: yupResolver(schema) });
 
 	useEffect(() => {
-		try {
+		if (id) {
 			getClientDetails(id).then((res) => reset(res.data));
-		} catch (error) {
-			console.log(error);
 		}
 	}, [id, reset]);
 
-	const onSubmitCreate: SubmitHandler<FormData> = (data) => {
-		createNewClient(data)
-			.then((res) => console.log(res))
-			.catch((err) => console.log(err))
-			.finally(() => history.push(Path.clientList));
+	const onSubmitCreate: SubmitHandler<FormData> = async data => {
+		try {
+			const response = await createNewClient(data)
+
+			history.push(Path.editClient.replace(':id', response.data.id))
+		} catch (error) {
+			console.log(error)
+		}
 	};
 
-	const onSubmitEdit = (data: any) => {
-		updateClient(data)
-			.then((res) => console.log(res))
-			.catch((err) => console.log(err))
-			.finally(() => history.push(Path.clientList));
+	const onSubmitEdit = async (data: any) => {
+		try {
+			const {updatedAt, createdAt, prices, ...dto} = data;
+			
+			await updateClient(dto)
+			history.push(Path.clientList)
+
+		} catch (error) {
+
+		}
+
+
 	};
 
 	return (
 		<Grid
 			container
-			style={{
-				minHeight: '100vh',
-				width: '100%',
-				justifyContent: 'center',
-			}}
+			justifyContent="center"
 		>
 			<Paper
 				elevation={2}
@@ -128,7 +133,7 @@ const CreateClient = () => {
 					<Controller
 						name='alias'
 						control={control}
-						render={({field}) => (
+						render={({ field }) => (
 							<TextField
 								label={id ? '' : 'Alias'}
 								placeholder='Ingrese Alias de Cliente'
@@ -140,14 +145,14 @@ const CreateClient = () => {
 						)}
 					/>
 					{errors.alias && (
-						<Typography variant='subtitle2' style={{color: 'red'}}>
+						<Typography variant='subtitle2' style={{ color: 'red' }}>
 							{errors.alias.message}
 						</Typography>
 					)}
 					<Controller
 						name='firstname'
 						control={control}
-						render={({field}) => (
+						render={({ field }) => (
 							<TextField
 								label={id ? '' : 'Nombre'}
 								placeholder='Ingrese Nombre de Cliente'
@@ -159,14 +164,14 @@ const CreateClient = () => {
 						)}
 					/>
 					{errors.firstname && (
-						<Typography variant='subtitle2' style={{color: 'red'}}>
+						<Typography variant='subtitle2' style={{ color: 'red' }}>
 							{errors.firstname.message}
 						</Typography>
 					)}
 					<Controller
 						name='lastname'
 						control={control}
-						render={({field}) => (
+						render={({ field }) => (
 							<TextField
 								label={id ? '' : 'Apellido'}
 								placeholder='Ingrese Apellido de Cliente'
@@ -178,14 +183,14 @@ const CreateClient = () => {
 						)}
 					/>
 					{errors.lastname && (
-						<Typography variant='subtitle2' style={{color: 'red'}}>
+						<Typography variant='subtitle2' style={{ color: 'red' }}>
 							{errors.lastname.message}
 						</Typography>
 					)}
 					<Controller
 						name='email'
 						control={control}
-						render={({field}) => (
+						render={({ field }) => (
 							<TextField
 								label={id ? '' : 'Email'}
 								placeholder='Ingrese Email de Cliente'
@@ -197,14 +202,14 @@ const CreateClient = () => {
 						)}
 					/>
 					{errors.email && (
-						<Typography variant='subtitle2' style={{color: 'red'}}>
+						<Typography variant='subtitle2' style={{ color: 'red' }}>
 							{errors.email.message}
 						</Typography>
 					)}
 					<Controller
 						name='cellphone'
 						control={control}
-						render={({field}) => (
+						render={({ field }) => (
 							<TextField
 								label={id ? '' : 'Telefono'}
 								placeholder='Ingrese Telefono de Cliente'
@@ -216,40 +221,40 @@ const CreateClient = () => {
 						)}
 					/>
 					{errors.cellphone && (
-						<Typography variant='subtitle2' style={{color: 'red'}}>
+						<Typography variant='subtitle2' style={{ color: 'red' }}>
 							{errors.cellphone.message}
 						</Typography>
 					)}
-					<FormControl variant='standard' sx={{mt: 2, minWidth: 150}}>
+					<FormControl variant='standard' sx={{ mt: 2, minWidth: 150 }}>
 						<InputLabel id='demo-simple-select-standard-label'>
 							Tipo de Cliente
 						</InputLabel>
 						<Controller
 							name='type'
 							control={control}
-							render={({field}) => (
-								<Select
-									labelId='demo-simple-select-standard-label'
-									id='demo-simple-select-standard'
-									label='Tipo de Cliente'
-									{...field}
-								>
-									<MenuItem value={''}>
-										Tipo de Cliente
-									</MenuItem>
-									<MenuItem value={ClientType.Permanent}>
-										Permantente
-									</MenuItem>
-									<MenuItem value={ClientType.Temporary}>
-										Temporal
-									</MenuItem>
-								</Select>
-							)}
+							render={({ field }) => {
+
+								return (
+									<Select
+										fullWidth
+										labelId='demo-simple-select-standard-label'
+										id='demo-simple-select-standard'
+										label='Tipo de Cliente'
+										{...field}
+									>
+										{Object.values(ClientType).map(type => (
+											<MenuItem value={type}>
+												{type}
+											</MenuItem>
+										))}
+									</Select>
+								)
+							}}
 						/>
 						{errors.type && (
 							<Typography
 								variant='subtitle2'
-								style={{color: 'red'}}
+								style={{ color: 'red' }}
 							>
 								{errors.type.message}
 							</Typography>
@@ -260,7 +265,7 @@ const CreateClient = () => {
 						type='submit'
 						color='primary'
 						variant='contained'
-						style={{margin: '30px 0'}}
+						style={{ margin: '30px 0' }}
 						fullWidth
 					>
 						{id ? 'Editar' : 'Guardar'}

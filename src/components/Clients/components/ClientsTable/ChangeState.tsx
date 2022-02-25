@@ -1,31 +1,38 @@
+import { useState } from "react";
+import LoadingButton from '@mui/lab/LoadingButton';
 import { changeClientState } from "../../../../services/api/clients"
-import styles from './styles.module.css'
 
 interface ChangeStateProps {
     id: number;
     active: Boolean;
-    successCallback : () => void
 }
 
-const ChangeState = ({ id, active,successCallback }: ChangeStateProps) => {
+const ChangeState = ({ id, active }: ChangeStateProps) => {
+    const [loading, setLoading] = useState(false)
+    const [isActive, setIsActive] = useState(active)
 
-    const handleChangeState = (id: number) => {
+    const handleChangeState = async (id: number) => {
         try {
-            changeClientState(id)
-            successCallback();
+            setLoading(true);
+            await changeClientState(id);
+            setIsActive(prev => !prev);
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     }
 
     return (
-        <div onClick={() => handleChangeState(id)} className={styles.activeBtn}>
-            <div
-                className={active ? `${styles.activo}` : `${styles.inactivo}`}
-            >
-                {active ? 'Activo' : 'Inactivo'}
-            </div>
-        </div>
+        <LoadingButton
+            variant="contained"
+            color={isActive ? 'success' : 'error' }
+            loading={loading}
+            fullWidth
+            onClick={() => handleChangeState(id)}
+        >
+            {isActive ? 'Activo' : 'Inactivo'}
+        </LoadingButton>
     )
 }
 
