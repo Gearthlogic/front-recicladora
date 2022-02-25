@@ -39,9 +39,16 @@ const columns: GridColDef[] = [
         align: "center",
         width: 100,
         renderCell: (params) => {
+
             return (
                 <div style={{ cursor: "pointer" }}>
-                    <ChangeState index={params.row.id} />
+                    <ChangeState
+                        successCallback={() => {
+                            debugger
+                            params.row.active = !params.row.active
+                        }}
+                        active={params.row.active}
+                        id={params.row.id} />
                 </div>
             );
         }
@@ -71,8 +78,8 @@ export default function ClientsTable({ rows }: any) {
     const translatedRows = rows.map((row: any) => {
         /* @ts-ignore */
         const type = translationMap[row.type];
-        
-        return {...row, type} 
+
+        return { ...row, type }
     })
 
     return (
@@ -82,11 +89,11 @@ export default function ClientsTable({ rows }: any) {
                 columns={columns}
                 pageSize={10}
                 rowsPerPageOptions={[5, 10, 20]}
-                style={{ 
-                    width: '70%', 
-                    justifyContent: 'center', 
-                    height: '80vh', 
-                    marginLeft: '15%' 
+                style={{
+                    width: '70%',
+                    justifyContent: 'center',
+                    height: '80vh',
+                    marginLeft: '15%'
                 }}
             />
         </div>

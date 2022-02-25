@@ -30,6 +30,6 @@ export const updateClient = (body: UpdateClientDTO) => {
     return privateAxiosInstance.put('/client', body);
 };
 
-export const changeClientState = async (id: string) => {
-    return await privateAxiosInstance.patch(`client/state/${id}`);
+export const changeClientState = async (id: number) => {
+    return await privateAxiosInstance.patch(`client/${id}/state`);
 };

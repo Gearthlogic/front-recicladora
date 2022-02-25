@@ -1,32 +1,30 @@
-import { useEffect, useState } from "react"
 import { changeClientState } from "../../../services/api/clients"
 import styles from './styles.module.css'
 
+interface ChangeStateProps {
+    id: number;
+    active: Boolean;
+    successCallback : () => void
+}
 
-const ChangeState = ({ index, state }: any) => {
+const ChangeState = ({ id, active,successCallback }: ChangeStateProps) => {
 
-    const [estado, setEstado] = useState('')
-
-    useEffect(() => {
+    const handleChangeState = (id: number) => {
         try {
-            if (state) {
-                setEstado('Activo')
-            } else {
-                setEstado('Inactivo')
-            }
+            changeClientState(id)
+            successCallback();
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }, [state])
-
-
-    const handleChangeState = (index: string) => {
-        changeClientState(index)
     }
 
     return (
-        <div onClick={() => handleChangeState(index)} className={styles.activeBtn}>
-            <div className={estado === 'Activo' ? `${styles.activo}` : `${styles.inactivo}`}>{estado}</div>
+        <div onClick={() => handleChangeState(id)} className={styles.activeBtn}>
+            <div
+                className={active ? `${styles.activo}` : `${styles.inactivo}`}
+            >
+                {active ? 'Activo' : 'Inactivo'}
+            </div>
         </div>
     )
 }
