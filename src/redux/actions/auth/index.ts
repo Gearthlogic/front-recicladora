@@ -17,13 +17,10 @@ export const actionLogin =
 		callback();
 	};
 
-export const actionLogOut =
-	(callback: () => any) => async (dispatch: Dispatch) => {
-		dispatch({
-			type: AuthType.LOGOUT,
-		});
-		callback();
-	};
+export const actionLogOut = (callback: () => any) => (dispatch: Dispatch) => {
+	dispatch({type: AuthType.LOGOUT});
+	callback();
+};
 
 export const getProfileAction =
 	(callback: () => any) => async (dispatch: Dispatch) => {
