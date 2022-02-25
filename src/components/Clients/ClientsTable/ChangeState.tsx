@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { changeClientState } from "../../../../../services/api/changeClientState"
+import { changeClientState } from "../../../services/api/clients"
 import styles from './styles.module.css'
 
 

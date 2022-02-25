@@ -1,13 +1,13 @@
-import React from 'react';
 import { RouteProps } from 'react-router-dom';
 
-import Landing from '../../LandingFolder/Landing';
-import LogIn from '../../AuthFolder/LogIn';
+import Landing from '../../Landing/Landing';
+import LogIn from '../../Login/LogIn';
 import NotFound from '../../NotFound';
+import CreateUser from '../../Users/create';
+import CreateClient from '../../Clients/CreateClient';
+import ClientList from '../../Clients';
+
 import { Path } from '../../../constants/enums/path.enum';
-import Register from '../../AuthFolder/Register';
-import NewClientForm from '../../LandingFolder/Landing/NewClientForm';
-import ClientList from '../../LandingFolder/Landing/ClientList';
 import { Role } from '../../../constants/enums/role.enum';
 import { User } from '../../../constants/types/user.type';
 
@@ -41,7 +41,6 @@ export interface CustomRouteProps extends RouteProps {
 	path?: Path
 }
 
-
 export const routes: Array<Route> = [
 	new Route(
 		{ path: Path.index, component: Landing, exact: true },
@@ -51,14 +50,9 @@ export const routes: Array<Route> = [
 		{ path: Path.login, component: LogIn, exact: true },
 	),
 	new Route(
-		{ component: Register, path: Path.register, exact: true },
+		{ component: CreateUser, path: Path.createUser, exact: true },
 		undefined,
 		[Role.Admin]
-	),
-	new Route(
-		{ component: NewClientForm, path: Path.createClient, exact: true },
-		undefined,
-		[Role.Admin, Role.Purchaser]
 	),
 	new Route(
 		{ component: ClientList, path: Path.clientList, exact: true },
@@ -66,7 +60,12 @@ export const routes: Array<Route> = [
 		[Role.Admin, Role.Purchaser]
 	),
 	new Route(
-		{ component: NewClientForm, path: Path.editClient },
+		{ component: CreateClient, path: Path.createClient, exact: true },
+		undefined,
+		[Role.Admin, Role.Purchaser]
+	),
+	new Route(
+		{ component: CreateClient, path: Path.editClient },
 		undefined,
 		[Role.Admin, Role.Purchaser]
 	),
@@ -74,7 +73,6 @@ export const routes: Array<Route> = [
 		{ component: NotFound }
 	)
 ];
-
 
 export const createUserRoutes = (user?: User) => {
 	const userRoutes = routes.filter(route =>

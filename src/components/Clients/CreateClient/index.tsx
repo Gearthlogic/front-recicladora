@@ -2,17 +2,11 @@ import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextFie
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { createNewClient } from "../../../../services/api/createNewClient";
 import { useHistory, useParams } from "react-router-dom";
-import { Path } from "../../../../constants/enums/path.enum";
+import { Path } from "../../../constants/enums/path.enum";
 import { useEffect } from "react";
-import { getAllClients } from "../../../../services/api/getAllClients";
-import { updateClient } from "../../../../services/api/updateClient";
-
-export enum ClientType {
-    permanent = 'permanent',
-    temporary = 'temporary'
-}
+import { getClientDetails, updateClient, createNewClient } from "../../../services/api/clients";
+import { ClientType } from "../../../constants/enums/client.enum";
 
 
 interface FormData {
@@ -23,16 +17,6 @@ interface FormData {
     cellphone: string;
     type: ClientType;
 }
-
-/* interface FormDataUpdate {
-    id: string;
-    alias: string;
-    firstname: string;
-    lastname: string;
-    email: string;
-    cellphone: string;
-    type: ClientType;
-} */
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
@@ -51,32 +35,25 @@ interface ParamTypes {
     id: string
 }
 
-const NewClientForm = () => {
-
-    const { id } = useParams<ParamTypes>()
-
+const CreateClient = () => {
     const history = useHistory()
 
-
-
-    useEffect(() => {
-        try {
-            getAllClients()
-                .then((res) => reset(res.data.find((client: any) => client.id === parseInt(id))))
-        } catch (error) {
-            console.log(error)
-        }
-    }, [id])
-
+    const { id } = useParams<ParamTypes>()
 
     const {
         handleSubmit,
         control,
         formState: { errors },
         reset
-    } = useForm<FormData>({
-        resolver: yupResolver(schema),
-    });
+    } = useForm<FormData>({ resolver: yupResolver(schema) });
+
+    useEffect(() => {
+        try {
+            getClientDetails(id).then((res) => reset(res.data))
+        } catch (error) {
+            console.log(error)
+        }
+    }, [id, reset])
 
     const onSubmitCreate: SubmitHandler<FormData> = (data) => {
         createNewClient(data)
@@ -84,6 +61,7 @@ const NewClientForm = () => {
             .catch(err => console.log(err))
             .finally(() => history.push(Path.clientList))
     };
+
     const onSubmitEdit = (data: any) => {
         updateClient(data)
             .then(res => console.log(res))
@@ -214,8 +192,8 @@ const NewClientForm = () => {
                                     {...field}
                                 >
                                     <MenuItem value={''}>Tipo de Cliente</MenuItem>
-                                    <MenuItem value={ClientType.permanent}>Permantente</MenuItem>
-                                    <MenuItem value={ClientType.temporary}>Temporal</MenuItem>
+                                    <MenuItem value={ClientType.Permanent}>Permantente</MenuItem>
+                                    <MenuItem value={ClientType.Temporary}>Temporal</MenuItem>
                                 </Select>
                             )}
                         />
@@ -242,4 +220,4 @@ const NewClientForm = () => {
     );
 };
 
-export default NewClientForm;
+export default CreateClient;

@@ -1,17 +1,18 @@
-import { useSelector } from 'react-redux';
+import { memo } from 'react';
 import { Route } from 'react-router-dom';
-import { RootStore } from '../../../redux';
-import { createUserRoutes } from '../routes/routes';
 
-const Router = () => {
-	const user = useSelector((state: RootStore) => state.auth.user);
+import { Route as RouteObject } from '../routes/routes'
+
+interface RouterProps {
+	userRoutes: RouteObject[]
+}
+
+const Router = ({ userRoutes }: RouterProps) => {
 
 	const builRoutes = () => {
-		const userRoutes = createUserRoutes(user)
-
 		return userRoutes.map(route => (
 			<Route
-				key={route.routeProps.toString()}
+				key={JSON.stringify(route.routeProps)}
 				{...route.routeProps}
 			/>
 		))
@@ -20,4 +21,4 @@ const Router = () => {
 	return <>{builRoutes()}</>;
 };
 
-export default Router;
+export default memo(Router);

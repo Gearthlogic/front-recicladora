@@ -1,6 +1,6 @@
 import { FaEdit } from 'react-icons/fa'
 import { useHistory } from 'react-router-dom'
-import { Path } from '../../../../../constants/enums/path.enum'
+import { Path } from '../../../constants/enums/path.enum';
 
 const EditAction = ({ index }: any) => {
 

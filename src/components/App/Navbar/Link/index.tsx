@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom'; 
-import { Path } from '../../../../../constants/enums/path.enum';
+import { Path } from '../../../../constants/enums/path.enum';
 
-import {  LayoutProps } from '../../../routes/routes';
+import {  LayoutProps } from '../../routes/routes';
 import styles from './styles.module.css';
 
 interface CustomLinkProps {

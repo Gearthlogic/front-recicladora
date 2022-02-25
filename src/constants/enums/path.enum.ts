@@ -1,10 +1,8 @@
 export enum Path {
 	index = '/',
-	home = '/home',
 	login = '/login',
-	register = '/register',
-	statistics = '/statistics',
-	createClient = '/createclient',
-	clientList = '/clientlist',
-	editClient = '/editClient/:id'
+	createUser = '/users/create',
+	clientList = '/clients',
+	createClient = '/clients/create',
+	editClient = '/clients/:id'
 };

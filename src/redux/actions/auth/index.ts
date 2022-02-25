@@ -2,25 +2,36 @@ import { Dispatch } from 'redux';
 import { login, profile } from '../../../services/api/auth';
 import { AuthType } from '../../types';
 
-export const actionLogin = (username: String, password: String) => async (dispatch: Dispatch) => {
-    const response = await login(username, password);
+export const actionLogin = (
+    username: String,
+    password: String,
+    callback: () => any) => async (dispatch: Dispatch) => {
+        const data = await login(username, password);
+        debugger
+        dispatch({
+            type: AuthType.LOGIN,
+            payload: {
+                token: data.access_token,
+                user: data.user
+            }
+        });
+        debugger
+        callback();
+    }
 
-    dispatch({
-        type: AuthType.LOGIN,
-        payload: {
-            token: response.data.access_token,
-            user: response.data.user
-        }
-    });
-}
-
-export const getProfileAction = () => async (dispatch: Dispatch) => {
+export const getProfileAction = (callback: () => any) => async (dispatch: Dispatch) => {
     dispatch(setSavedToken());
-    const response = await profile();
-    dispatch({
-        type: AuthType.GET_PROFILE,
-        payload: response.data
-    });
+    try {
+        const response = await profile();
+        dispatch({
+            type: AuthType.GET_PROFILE,
+            payload: response.data
+        });
+    } catch {
+    } finally {
+        callback();
+    }
+
 }
 
 export const setSavedToken = () => {

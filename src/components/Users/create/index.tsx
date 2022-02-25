@@ -1,47 +1,54 @@
 import { Button, Grid, Paper, TextField, Typography } from "@mui/material";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { Link, useHistory } from "react-router-dom";
-import { Path } from "../../../constants/enums/path.enum";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { actionLogin } from '../../../redux/actions';
-import { useDispatch } from "react-redux";
 
-interface FormData {
+import { createUser } from '../../../services/api/user';
+import { Role } from '../../../constants/enums/role.enum';
+
+interface UserFormData {
   username: string;
   password: string;
+  roles: Role[];
 }
 
 const schema = yup
   .object({
     username: yup.string().required("El usuario es requerido."),
     password: yup.string().required("La contraseña es requerida"),
-  })
-  .required();
+    roles: yup.array(
+      yup.mixed().oneOf(Object.values(Role)
+      ).required("Debe asignarle un rol al usuario")
+    )
+  }).required();
 
-const LogIn = () => {
-  const dispatch = useDispatch();
-  const history = useHistory();
+const paperStyle = {
+  padding: 30,
+  height: "50vh",
+  width: 300,
+};
 
-  const paperStyle = {
-    padding: 30,
-    height: 420,
-    width: 300,
-  };
-  const btnstyle = { margin: "30px 0" };
+const btnstyle = {
+  margin: "30px 0"
+};
+
+const CreateUser = () => {
 
   const {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<UserFormData>({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
-    const { username, password } = data;
-    await dispatch(actionLogin(username, password));
-    history.push(Path.index);
+  const onSubmit: SubmitHandler<UserFormData> = async (data) => {
+    const { username, password, roles } = data;
+    try {
+      await createUser(username, password, roles);
+    } catch (error) {
+      
+    }
   };
 
   return (
@@ -53,7 +60,7 @@ const LogIn = () => {
     >
       <Paper elevation={10} style={paperStyle}>
         <Typography align="center" variant="h4" margin={4}>
-          Login
+          Registro
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
@@ -102,15 +109,12 @@ const LogIn = () => {
             style={btnstyle}
             fullWidth
           >
-            Iniciar Sesión
+            Crear usuario
           </Button>
         </form>
-        <Typography align="center">
-          No tiene una cuenta? <Link to={Path.register}>Registrese</Link>
-        </Typography>
       </Paper>
     </Grid>
   );
 };
 
-export default LogIn;
+export default CreateUser;

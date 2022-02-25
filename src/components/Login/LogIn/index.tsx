@@ -1,13 +1,11 @@
 import { Button, Grid, Paper, TextField, Typography } from "@mui/material";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { Path } from "../../../constants/enums/path.enum";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-
-import { Path } from "../../../constants/enums/path.enum";
-import { useDispatch, useSelector } from "react-redux";
-import { RootStore } from "../../../redux";
-import { useEffect } from "react";
+import { actionLogin } from '../../../redux/actions';
+import { useDispatch } from "react-redux";
 
 interface FormData {
   username: string;
@@ -21,20 +19,17 @@ const schema = yup
   })
   .required();
 
-const Register = () => {
-  const auth = useSelector((state: RootStore) => state.auth);
+const LogIn = () => {
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    console.log(auth);
-  }, []);
+  const history = useHistory();
 
   const paperStyle = {
     padding: 30,
-    height: "50vh",
+    height: 420,
     width: 300,
   };
   const btnstyle = { margin: "30px 0" };
+
   const {
     handleSubmit,
     control,
@@ -42,10 +37,12 @@ const Register = () => {
   } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
-  const onSubmit: SubmitHandler<FormData> = (data) => {
+
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     const { username, password } = data;
-    //dispatch(actionRegister(username, password));
+    dispatch(actionLogin(username, password, () => history.push(Path.index)));
   };
+
   return (
     <Grid
       container
@@ -55,7 +52,7 @@ const Register = () => {
     >
       <Paper elevation={10} style={paperStyle}>
         <Typography align="center" variant="h4" margin={4}>
-          Registro
+          Login
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
@@ -104,15 +101,12 @@ const Register = () => {
             style={btnstyle}
             fullWidth
           >
-            Registrarse
+            Iniciar Sesión
           </Button>
         </form>
-        <Typography align="center">
-          Ya tiene una cuenta? <Link to={Path.login}>Inicie sesión</Link>
-        </Typography>
       </Paper>
     </Grid>
   );
 };
 
-export default Register;
+export default LogIn;
