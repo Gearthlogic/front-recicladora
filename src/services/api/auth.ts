@@ -14,12 +14,3 @@ export const login = async (username: String, password: String) => {
 export const profile = async () => {
     return await privateAxiosInstance.get('/auth/profile');
 }
-
-export const register = async (user: String, password: String) => {
-    const response = await privateAxiosInstance.post('/user', {
-        username: user,
-        password,
-    });
-
-    return response.data;
-}

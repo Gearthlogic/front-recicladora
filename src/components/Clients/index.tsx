@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { getClients } from '../../services/api/clients';
-import ClientsTable from "./ClientsTable"
+import ClientsTable from "./components/ClientsTable"
 import styles from "./styles.module.css"
 
 

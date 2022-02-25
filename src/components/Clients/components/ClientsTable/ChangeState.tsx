@@ -1,4 +1,4 @@
-import { changeClientState } from "../../../services/api/clients"
+import { changeClientState } from "../../../../services/api/clients"
 import styles from './styles.module.css'
 
 interface ChangeStateProps {

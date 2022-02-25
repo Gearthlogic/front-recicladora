@@ -1,6 +1,6 @@
 import { FaEdit } from 'react-icons/fa'
 import { useHistory } from 'react-router-dom'
-import { Path } from '../../../constants/enums/path.enum';
+import { Path } from '../../../../constants/enums/path.enum';
 
 const EditAction = ({ index }: any) => {
 
@@ -8,7 +8,8 @@ const EditAction = ({ index }: any) => {
 
     return (
         <div>
-            <FaEdit style={{ width: '30px', height: '20px' }} onClick={() => history.push(Path.editClient + index)} />
+            <FaEdit style={{ width: '30px', height: '20px' }} 
+            onClick={() => history.push(Path.editClient.replace(':id', index)  )} />
         </div>
     )
 }

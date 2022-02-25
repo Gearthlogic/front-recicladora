@@ -19,6 +19,7 @@ export const getClients = async () => {
 };
 
 export const getClientDetails = async (id: string) => {
+    debugger
     return await privateAxiosInstance.get(`/client/${id}`);
 };
 

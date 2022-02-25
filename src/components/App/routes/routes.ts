@@ -32,7 +32,7 @@ export class Route {
 
 }
 
-export type LayoutProps = {
+export interface LayoutProps {
 	name?: string;
 	icon?: React.ComponentType;
 };

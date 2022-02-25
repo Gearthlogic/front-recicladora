@@ -18,11 +18,7 @@ export function authReducer(
 ) {
   switch (action.type) {
     case AuthType.LOGIN: return action.payload;
-    case AuthType.GET_PROFILE:
-      return {
-        ...state,
-        user: action.payload
-      };
+    case AuthType.GET_PROFILE: return { ...state, user: action.payload };
     case AuthType.LOGOUT: return initialState;
     default: return state;
   }

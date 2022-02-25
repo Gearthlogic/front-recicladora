@@ -22,14 +22,29 @@ const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2
 
 const schema = yup
     .object({
-        alias: yup.string().required("Debe ingresar un Alias").min(3, 'Minimo valido 3 caracteres').max(25, 'Maximo valido 25 caracteres'),
-        firstname: yup.string().required("Debe ingresar un Nombre").min(3, 'Minimo valido 3 caracteres').max(25, 'Maximo valido 25 caracteres'),
-        lastname: yup.string().required("Debe ingresar un Apellido").min(3, 'Minimo valido 3 caracteres').max(25, 'Maximo valido 25 caracteres'),
-        email: yup.string().email("Debe ser un email valido").required("Debe ingresar un Email"),
-        cellphone: yup.string().matches(phoneRegExp, "Numero de telefono no valido").required("Debe ingresar un telefono"),
-        type: yup.string().required("Debe ingresar un Tipo de Cliente")
-    })
-    .required();
+        alias: yup
+            .string().required("Debe ingresar un Alias")
+            .min(3, 'Minimo valido 3 caracteres')
+            .max(25, 'Maximo valido 25 caracteres'),
+        firstname: yup
+            .string().required("Debe ingresar un Nombre")
+            .min(3, 'Minimo valido 3 caracteres')
+            .max(25, 'Maximo valido 25 caracteres'),
+        lastname: yup
+            .string().required("Debe ingresar un Apellido")
+            .min(3, 'Minimo valido 3 caracteres')
+            .max(25, 'Maximo valido 25 caracteres'),
+        email: yup.string()
+            .email("Debe ser un email valido")
+            .required("Debe ingresar un Email"),
+        cellphone: yup
+            .string()
+            .matches(phoneRegExp, "Numero de telefono no valido")
+            .required("Debe ingresar un telefono"),
+        type: yup
+            .string()
+            .required("Debe ingresar un Tipo de Cliente")
+    }).required();
 
 interface ParamTypes {
     id: string
@@ -49,6 +64,7 @@ const CreateClient = () => {
 
     useEffect(() => {
         try {
+            debugger
             getClientDetails(id).then((res) => reset(res.data))
         } catch (error) {
             console.log(error)
