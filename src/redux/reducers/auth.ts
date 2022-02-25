@@ -1,44 +1,25 @@
 import { AuthDispatchTypes } from "../actions/auth/types";
 import { AuthType } from "../types";
+import { User } from '../../constants/types/user.type'
 
-interface authState {
-  loggedIn: boolean;
-  user: object;
-  role: string;
+export interface AuthState {
+  token?: string;
+  user?: User;
 }
 
-const initialState: authState = {
-  loggedIn: false,
-  user: {},
-  role: "",
+const initialState: AuthState = {
+  token: undefined,
+  user: undefined,
 };
 
-export function authReducer(state: authState = initialState, action: AuthDispatchTypes) {
+export function authReducer(
+  state: AuthState = initialState,
+  action: AuthDispatchTypes
+) {
   switch (action.type) {
-    case AuthType.LOGIN:
-      return {
-        ...state,
-        loggedIn: true,
-        user: action.payload.user
-      };
-
-    case AuthType.GET_USER_DATA:
-      return {
-        ...state,
-        user: {
-          ...state.user,
-          user: action.payload
-        }
-      };
-    case AuthType.REGISTER:
-      /* return {
-        ...initialState,
-        user: action.payload,
-      } */
-      return initialState;
-    case AuthType.LOGOUT:
-      return initialState;
-    default:
-      return state;
+    case AuthType.LOGIN: return action.payload;
+    case AuthType.GET_PROFILE: return { ...state, user: action.payload };
+    case AuthType.LOGOUT: return initialState;
+    default: return state;
   }
 }

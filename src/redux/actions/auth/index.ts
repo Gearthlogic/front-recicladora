@@ -1,48 +1,46 @@
-import { Dispatch } from 'redux';
-import { login, register, profile } from '../../../services/api/auth';
-import { AuthType } from '../../types';
+import {Dispatch} from 'redux';
+import {login, profile} from '../../../services/api/auth';
+import {AuthType} from '../../types';
 
-export const actionLogin = (username: String, password: String) => async (dispatch: Dispatch) => {
-    const user = await login(username, password);
+export const actionLogin =
+	(username: String, password: String, callback: () => any) =>
+	async (dispatch: Dispatch) => {
+		const data = await login(username, password);
+		dispatch({
+			type: AuthType.LOGIN,
+			payload: {
+				token: data.access_token,
+				user: data.user,
+			},
+		});
 
-    dispatch({
-        type: AuthType.LOGIN,
-        payload: {
-            user
-        }
-    });
-}
+		callback();
+	};
 
-export const getProfileAction = () => async (dispatch: Dispatch) => {
-    const response = await profile();
-    dispatch({
-        type: AuthType.GET_USER_DATA,
-        payload: response.data
-    });
-}
+export const actionLogOut = (callback: () => any) => (dispatch: Dispatch) => {
+	dispatch({type: AuthType.LOGOUT});
+	callback();
+};
 
-export const setSavedToken = () => async (dispatch: Dispatch) => {
-    const token = localStorage.getItem('token');
-    dispatch({
-        type: AuthType.LOGIN,
-        payload: {
-            user: {
-                access_token: token
-            }
-        }
-    });
-}
+export const getProfileAction =
+	(callback: () => any) => async (dispatch: Dispatch) => {
+		dispatch(setSavedToken());
+		try {
+			const response = await profile();
+			dispatch({
+				type: AuthType.GET_PROFILE,
+				payload: response.data,
+			});
+		} catch {
+		} finally {
+			callback();
+		}
+	};
 
-
-
-export const actionRegister = (username: String, password: String) => async (dispatch: Dispatch) => {
-    const data = await register(username, password);
-    console.log('REGISTRO');
-    console.log(data);
-    dispatch({
-        type: AuthType.REGISTER,
-        payload: {
-            data
-        }
-    });
-}
+export const setSavedToken = () => {
+	const token = localStorage.getItem('token');
+	return {
+		type: AuthType.LOGIN,
+		payload: {token},
+	};
+};

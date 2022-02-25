@@ -1,43 +1,28 @@
-import { AuthType } from '../../types';
+import {AuthType} from '../../types';
 
-enum Role {
-    Purchaser = 'Purchaser',
-    EntryController = 'EntryController',
-    Admin = 'Admin',
-}
-
-type User = {
-    access_token: string;
-    user: {
-        id: number,
-        username: string,
-        roles: Role[]
-    }
-}
+import {User} from '../../../constants/types/user.type';
+import {AuthState} from '../../reducers/auth';
 
 export interface IactionLogin {
-    type: typeof AuthType.LOGIN,
-    payload: {
-        user: User
-    }
+	type: typeof AuthType.LOGIN;
+	payload: AuthState;
 }
 
-export interface IactionRegister {
-    type: typeof AuthType.REGISTER
-    payload: {
-        user: User
-    }
+export interface IactionLogOut {
+	type: typeof AuthType.LOGOUT;
+	payload: AuthState;
 }
 
 export interface IactionGetUserData {
-    type: typeof AuthType.GET_USER_DATA
-    payload: {
-        user: User
-    }
+	type: typeof AuthType.GET_PROFILE;
+	payload: User;
 }
 
 export interface IactionLogout {
-    type: typeof AuthType.LOGOUT;
+	type: typeof AuthType.LOGOUT;
 }
 
-export type AuthDispatchTypes = IactionLogin | IactionRegister | IactionLogout | IactionGetUserData;
+export type AuthDispatchTypes =
+	| IactionLogin
+	| IactionLogout
+	| IactionGetUserData;
