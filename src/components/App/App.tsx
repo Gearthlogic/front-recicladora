@@ -12,12 +12,12 @@ function App() {
 	const user = useSelector((state: RootStore) => state.auth.user);
 	const dispatch = useDispatch();
 
-	useEffect( () => {
-		 dispatch(getProfileAction(() => setInitializing(false)))
+	useEffect(() => {
+		dispatch(getProfileAction(() => setInitializing(false)))
 	}, [dispatch])
 
 	const userRoutes = useMemo(() => createUserRoutes(user), [user])
-	
+
 	return (
 		<BrowserRouter>
 			{!initializing && (
