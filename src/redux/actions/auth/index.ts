@@ -1,19 +1,25 @@
 import {Dispatch} from 'redux';
 import {login, profile} from '../../../services/api/auth';
 import {AuthType} from '../../types';
+import {endLoading, startLoading} from '../loading/loading';
 
 export const actionLogin =
 	(username: String, password: String, callback: () => any) =>
 	async (dispatch: Dispatch) => {
-		const data = await login(username, password);
-		dispatch({
-			type: AuthType.LOGIN,
-			payload: {
-				token: data.access_token,
-				user: data.user,
-			},
-		});
-
+		dispatch(startLoading());
+		try {
+			const data = await login(username, password);
+			dispatch({
+				type: AuthType.LOGIN,
+				payload: {
+					token: data.access_token,
+					user: data.user,
+				},
+			});
+		} catch (error) {
+			// console.log(error);
+		}
+		dispatch(endLoading());
 		callback();
 	};
 
