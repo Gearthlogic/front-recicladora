@@ -6,7 +6,6 @@ import Router from './Router';
 import { getProfileAction } from '../../redux/actions/auth';
 import { createUserRoutes } from './routes/routes';
 import { RootStore } from '../../redux';
-import { startLoading } from '../../redux/actions/loading/loading';
 import Loader from '../common/Loader/Loader';
 
 function App() {
