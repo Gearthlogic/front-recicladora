@@ -4,6 +4,6 @@ export enum Path {
 	createUser = '/users/create',
 	clientList = '/clients',
 	createClient = '/clients/create',
-	editClient = '/clients/:id',
+	editClient = '/clients/edit/:id',
 	notFound = '/*'
 };

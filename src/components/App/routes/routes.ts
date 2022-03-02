@@ -60,12 +60,12 @@ export const routes: Array<Route> = [
 		[Role.Admin, Role.Purchaser]
 	),
 	new Route(
-		{ component: CreateClient, path: Path.createClient, exact: true },
+		{ component: CreateClient, exact: true, path: Path.editClient },
 		undefined,
 		[Role.Admin, Role.Purchaser]
 	),
 	new Route(
-		{ component: CreateClient, path: Path.editClient },
+		{ component: CreateClient, path: Path.createClient, exact: true },
 		undefined,
 		[Role.Admin, Role.Purchaser]
 	),

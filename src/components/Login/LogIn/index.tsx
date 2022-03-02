@@ -58,7 +58,6 @@ const LogIn = () => {
           <Controller
             name="username"
             control={control}
-            defaultValue="a"
             render={({ field }) => (
               <TextField
                 label="Usuario"
@@ -77,7 +76,6 @@ const LogIn = () => {
           <Controller
             name="password"
             control={control}
-            defaultValue="a"
             render={({ field }) => (
               <TextField
                 label="Contraseña"
