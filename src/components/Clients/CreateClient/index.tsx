@@ -129,7 +129,7 @@ const CreateClient = () => {
 
 	const onSubmitEdit = async (data: any) => {
 		dispatch(startLoading())
-		
+
 		const newBody = {
 			alias: data.alias,
 			firstname: data.firstname,
@@ -176,6 +176,7 @@ const CreateClient = () => {
 					<Controller
 						name='alias'
 						control={control}
+						defaultValue=''
 						render={({ field }) => (
 							<TextField
 								label={id ? '' : 'Alias'}
@@ -195,6 +196,7 @@ const CreateClient = () => {
 					<Controller
 						name='firstname'
 						control={control}
+						defaultValue=''
 						render={({ field }) => (
 							<TextField
 								label={id ? '' : 'Nombre'}
@@ -214,6 +216,7 @@ const CreateClient = () => {
 					<Controller
 						name='lastname'
 						control={control}
+						defaultValue=''
 						render={({ field }) => (
 							<TextField
 								label={id ? '' : 'Apellido'}
@@ -233,6 +236,7 @@ const CreateClient = () => {
 					<Controller
 						name={'street'}
 						control={control}
+						defaultValue=''
 						render={({ field }) => (
 							<TextField
 								label={id ? '' : 'Calle'}
@@ -253,6 +257,7 @@ const CreateClient = () => {
 					<Controller
 						name='streetNumber'
 						control={control}
+						defaultValue=''
 						render={({ field }) => (
 							<TextField
 								label={id ? '' : 'Altura'}
@@ -272,6 +277,7 @@ const CreateClient = () => {
 					<Controller
 						name='email'
 						control={control}
+						defaultValue=''
 						render={({ field }) => (
 							<TextField
 								label={id ? '' : 'Email'}
@@ -291,6 +297,7 @@ const CreateClient = () => {
 					<Controller
 						name='cellphone'
 						control={control}
+						defaultValue=''
 						render={({ field }) => (
 							<TextField
 								label={id ? '' : 'Telefono'}
@@ -314,8 +321,8 @@ const CreateClient = () => {
 						<Controller
 							name='type'
 							control={control}
+							defaultValue={ClientType['disabled']}
 							render={({ field }) => {
-
 								return (
 									<Select
 										fullWidth
@@ -324,7 +331,7 @@ const CreateClient = () => {
 										label='Tipo de Cliente'
 										{...field}
 									>
-										{Object.values(ClientType).map((type, i) => (
+										{Object.values(ClientType).filter((e)=> e !== '').map((type, i) => (
 											<MenuItem value={type} key={i}>
 												{type}
 											</MenuItem>
