@@ -361,6 +361,7 @@ const CreateClient = () => {
 					</Button>
 				</form>
 			</Paper>
+					{id && 'Agregar precios'}
 		</Grid>
 	);
 };
