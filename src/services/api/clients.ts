@@ -9,6 +9,16 @@ export interface CreateClientDTO {
 	cellphone: string;
 	type: ClientType;
 }
+interface CreateClientPrices {
+   clientId: number
+   prices: Prices[]
+
+}
+interface Prices {
+   price: number;
+   material: string;
+}
+
 
 export interface UpdateClientDTO extends CreateClientDTO {
 	id: string;
@@ -34,3 +44,7 @@ export const updateClient = (body: UpdateClientDTO) => {
 export const changeClientState = async (id: number) => {
 	return await privateAxiosInstance.patch(`client/${id}/state`);
 };
+
+export const createClientPrices = async (body: CreateClientPrices)=>{
+	return privateAxiosInstance.post('/client/prices', body)
+}
