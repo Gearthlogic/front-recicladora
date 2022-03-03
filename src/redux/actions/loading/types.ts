@@ -11,7 +11,6 @@ export interface IactionEndLoading {
 	payload: LoadingState;
 }
 
-
 export type LoadingDispatchTypes =
 	| IactionStartLoading
 	| IactionEndLoading

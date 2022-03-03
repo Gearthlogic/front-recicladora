@@ -38,7 +38,7 @@ interface FormData {
 
 const phoneRegExp =
 	/^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/
-
+const onlyNumbers = /^\d+$/
 
 const schema = yup
 	.object({
@@ -64,6 +64,7 @@ const schema = yup
 			.max(50, 'Maximo valido 50 caracteres'),
 		streetNumber: yup
 			.string()
+			.matches(onlyNumbers)
 			.required('Debe ingresar la Altura')
 			.min(1, 'Minimo valido 1 caracteres')
 			.max(5, 'Maximo valido 5 caracteres'),
