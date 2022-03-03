@@ -44,6 +44,7 @@ const ClientPrices = () => {
 
    const onSubmit = async () => {
       dispatch(startLoading())
+      
       const data = {
          clientId: parseInt(id),
          prices:[
@@ -52,8 +53,6 @@ const ClientPrices = () => {
          ]
       }
       
-      console.log(data)
-
       try {
 			const response = await createClientPrices(data)
 			history.push(Path.editClient.replace(':id', response.data.id))
@@ -81,7 +80,7 @@ const ClientPrices = () => {
             }}
          >
             <Typography align='center' variant='h4' margin={0}>
-               {id ? 'Precios de Materiales' : ''}
+               Precios de Materiales
             </Typography>
 
             <form
@@ -95,7 +94,6 @@ const ClientPrices = () => {
                      id='iron'
                      name='iron'
                      type='text'
-                     step='0.01'
                      onChange={onChaneIron}
                      maxLength={10}
                   />
@@ -113,7 +111,6 @@ const ClientPrices = () => {
                   />
                </div>
 
-               {/* <button type='submit'>Submit</button> */}
                <Button
                   type='submit'
                   color='primary'
