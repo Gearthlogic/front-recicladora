@@ -21,19 +21,24 @@ import {
 	createNewClient
 } from '../../../services/api/clients';
 import { ClientType } from '../../../constants/enums/client.enum';
+import { useDispatch } from 'react-redux';
+import { endLoading, startLoading } from '../../../redux/actions/loading/loading';
 
 interface FormData {
 	alias: string;
 	firstname: string;
 	lastname: string;
+	street?: string;
+	streetNumber?: string;
 	email: string;
 	cellphone: string;
 	type: ClientType;
 }
 
+
 const phoneRegExp =
 	/^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/
-
+const onlyNumbers = /^\d+$/
 
 const schema = yup
 	.object({
@@ -52,6 +57,17 @@ const schema = yup
 			.required('Debe ingresar un Apellido')
 			.min(3, 'Minimo valido 3 caracteres')
 			.max(25, 'Maximo valido 25 caracteres'),
+		street: yup
+			.string()
+			.required('Debe ingresar una Calle')
+			.min(3, 'Minimo valido 3 caracteres')
+			.max(50, 'Maximo valido 50 caracteres'),
+		streetNumber: yup
+			.string()
+			.matches(onlyNumbers)
+			.required('Debe ingresar la Altura')
+			.min(1, 'Minimo valido 1 caracteres')
+			.max(5, 'Maximo valido 5 caracteres'),
 		email: yup
 			.string()
 			.email('Debe ser un email valido')
@@ -69,6 +85,7 @@ interface ParamTypes {
 }
 
 const CreateClient = () => {
+	const dispatch = useDispatch()
 	const history = useHistory();
 
 	const { id } = useParams<ParamTypes>();
@@ -87,27 +104,52 @@ const CreateClient = () => {
 	}, [id, reset]);
 
 	const onSubmitCreate: SubmitHandler<FormData> = async data => {
+		dispatch(startLoading())
+
+		const newBody = {
+			...data,
+			address: {
+				street: data.street,
+				streetNumber: data.streetNumber
+			}
+		}
+		delete newBody.street
+		delete newBody.streetNumber
+
 		try {
-			const response = await createNewClient(data)
+			const response = await createNewClient(newBody)
 
 			history.push(Path.editClient.replace(':id', response.data.id))
 		} catch (error) {
 			console.log(error)
 		}
+
+		dispatch(endLoading())
 	};
 
 	const onSubmitEdit = async (data: any) => {
-		try {
-			const {updatedAt, createdAt, prices, ...dto} = data;
-			
-			await updateClient(dto)
-			history.push(Path.clientList)
+		dispatch(startLoading())
 
-		} catch (error) {
-
+		const newBody = {
+			alias: data.alias,
+			firstname: data.firstname,
+			lastname: data.lastname,
+			address: {
+				street: data.street,
+				streetNumber: data.streetNumber
+			},
+			email: data.email,
+			cellphone: data.cellphone,
+			type: data.type,
+			id: data.id
 		}
 
+		try {
+			await updateClient(newBody)
+			history.push(Path.clientList)
+		} catch (error) { }
 
+		dispatch(endLoading())
 	};
 
 	return (
@@ -119,8 +161,9 @@ const CreateClient = () => {
 				elevation={2}
 				style={{
 					padding: 30,
-					height: 600,
+					height: 'auto',
 					width: '30%',
+					minWidth: 500,
 				}}
 			>
 				<Typography align='center' variant='h4' margin={0}>
@@ -133,6 +176,7 @@ const CreateClient = () => {
 					<Controller
 						name='alias'
 						control={control}
+						defaultValue=''
 						render={({ field }) => (
 							<TextField
 								label={id ? '' : 'Alias'}
@@ -152,6 +196,7 @@ const CreateClient = () => {
 					<Controller
 						name='firstname'
 						control={control}
+						defaultValue=''
 						render={({ field }) => (
 							<TextField
 								label={id ? '' : 'Nombre'}
@@ -171,6 +216,7 @@ const CreateClient = () => {
 					<Controller
 						name='lastname'
 						control={control}
+						defaultValue=''
 						render={({ field }) => (
 							<TextField
 								label={id ? '' : 'Apellido'}
@@ -188,8 +234,50 @@ const CreateClient = () => {
 						</Typography>
 					)}
 					<Controller
+						name={'street'}
+						control={control}
+						defaultValue=''
+						render={({ field }) => (
+							<TextField
+								label={id ? '' : 'Calle'}
+								placeholder='Ingrese la Calle del Cliente'
+								fullWidth
+								margin='normal'
+								{...field}
+								variant='standard'
+							/>
+						)}
+					/>
+					{errors.street && (
+						<Typography variant='subtitle2' style={{ color: 'red' }}>
+							{errors.street.message}
+
+						</Typography>
+					)}
+					<Controller
+						name='streetNumber'
+						control={control}
+						defaultValue=''
+						render={({ field }) => (
+							<TextField
+								label={id ? '' : 'Altura'}
+								placeholder='Ingrese la Altura'
+								fullWidth
+								margin='normal'
+								{...field}
+								variant='standard'
+							/>
+						)}
+					/>
+					{errors.streetNumber && (
+						<Typography variant='subtitle2' style={{ color: 'red' }}>
+							{errors.streetNumber.message}
+						</Typography>
+					)}
+					<Controller
 						name='email'
 						control={control}
+						defaultValue=''
 						render={({ field }) => (
 							<TextField
 								label={id ? '' : 'Email'}
@@ -209,6 +297,7 @@ const CreateClient = () => {
 					<Controller
 						name='cellphone'
 						control={control}
+						defaultValue=''
 						render={({ field }) => (
 							<TextField
 								label={id ? '' : 'Telefono'}
@@ -232,8 +321,8 @@ const CreateClient = () => {
 						<Controller
 							name='type'
 							control={control}
+							defaultValue={ClientType['disabled']}
 							render={({ field }) => {
-
 								return (
 									<Select
 										fullWidth
@@ -242,8 +331,8 @@ const CreateClient = () => {
 										label='Tipo de Cliente'
 										{...field}
 									>
-										{Object.values(ClientType).map(type => (
-											<MenuItem value={type}>
+										{Object.values(ClientType).filter((e)=> e !== '').map((type, i) => (
+											<MenuItem value={type} key={i}>
 												{type}
 											</MenuItem>
 										))}

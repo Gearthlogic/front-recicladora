@@ -6,10 +6,12 @@ import Router from './Router';
 import { getProfileAction } from '../../redux/actions/auth';
 import { createUserRoutes } from './routes/routes';
 import { RootStore } from '../../redux';
+import Loader from '../common/Loader/Loader';
 
 function App() {
 	const [initializing, setInitializing] = useState(true);
 	const user = useSelector((state: RootStore) => state.auth.user);
+	const isLoading = useSelector((state: RootStore) => state.loader.loading)
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -20,6 +22,7 @@ function App() {
 
 	return (
 		<BrowserRouter>
+			{isLoading && <Loader />}
 			{!initializing && (
 				<>
 					<Navbar userRoutes={userRoutes} />
