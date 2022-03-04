@@ -23,7 +23,8 @@ import {
 import { ClientType } from '../../../constants/enums/client.enum';
 import { useDispatch } from 'react-redux';
 import { endLoading, startLoading } from '../../../redux/actions/loading/loading';
-import ClientPrices from './ClientPrices/ClientPrices';
+import ClientPrices from './components/ClientPrices/ClientPrices';
+import { ClientPrice } from '../../../constants/types/clientPrices.type';
 
 interface FormData {
 	alias: string;
@@ -34,6 +35,7 @@ interface FormData {
 	email: string;
 	cellphone: string;
 	type: ClientType;
+	prices?: ClientPrice[]
 }
 
 
@@ -94,6 +96,7 @@ const CreateClient = () => {
 	const {
 		handleSubmit,
 		control,
+		getValues,
 		formState: { errors },
 		reset,
 	} = useForm<FormData>({ resolver: yupResolver(schema) });
@@ -364,7 +367,11 @@ const CreateClient = () => {
 					</Button>
 				</form>
 			</Paper>
-			{id && <ClientPrices />}
+			{id &&
+				<ClientPrices
+					id={id}
+					prices={getValues().prices}
+				/>}
 		</Grid>
 	);
 };
