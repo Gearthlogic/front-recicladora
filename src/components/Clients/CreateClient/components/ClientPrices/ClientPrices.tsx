@@ -14,10 +14,9 @@ interface ClientPricesProps {
    prices?: ClientPrice[]
 }
 
-const ClientPrices = ({id, prices} : ClientPricesProps) => {
+const ClientPrices = ({ id, prices }: ClientPricesProps) => {
    const dispatch = useDispatch();
    const { control, handleSubmit } = useForm()
-
 
    const onSubmit = async (data: any) => {
       dispatch(startLoading())
@@ -25,8 +24,7 @@ const ClientPrices = ({id, prices} : ClientPricesProps) => {
       const toSend = {
          clientId: parseInt(id),
          prices: Object.values(Material).map(material => ({
-            material: material,
-            price: data[material]
+            material, price: parseFloat(data[material])
          }))
       }
 

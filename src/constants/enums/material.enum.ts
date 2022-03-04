@@ -1,4 +1,4 @@
 export enum Material {
-    Iron = 'iron',
+    Iron = 'Iron',
     Veneer = 'veneer',
 }
