@@ -23,6 +23,7 @@ import {
 import { ClientType } from '../../../constants/enums/client.enum';
 import { useDispatch } from 'react-redux';
 import { endLoading, startLoading } from '../../../redux/actions/loading/loading';
+import ClientPrices from './ClientPrices/ClientPrices';
 
 interface FormData {
 	alias: string;
@@ -155,7 +156,9 @@ const CreateClient = () => {
 	return (
 		<Grid
 			container
-			justifyContent="center"
+			// justifyContent="center"
+			alignItems='center'
+			flexDirection='column'
 		>
 			<Paper
 				elevation={2}
@@ -331,7 +334,7 @@ const CreateClient = () => {
 										label='Tipo de Cliente'
 										{...field}
 									>
-										{Object.values(ClientType).filter((e)=> e !== '').map((type, i) => (
+										{Object.values(ClientType).filter((e) => e !== '').map((type, i) => (
 											<MenuItem value={type} key={i}>
 												{type}
 											</MenuItem>
@@ -361,6 +364,7 @@ const CreateClient = () => {
 					</Button>
 				</form>
 			</Paper>
+			{id && <ClientPrices />}
 		</Grid>
 	);
 };
