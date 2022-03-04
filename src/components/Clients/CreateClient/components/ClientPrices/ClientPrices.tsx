@@ -1,13 +1,11 @@
-import React, { useState } from 'react'
-import { Button, Grid, Paper, TextField, Typography } from '@mui/material'
-import { useDispatch } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { Button, Grid, Paper, TextField, Typography } from '@mui/material';
+import { useDispatch } from 'react-redux';
 
-import { endLoading, startLoading } from '../../../../../redux/actions/loading/loading'
+import { endLoading, startLoading } from '../../../../../redux/actions/loading/loading';
 import { Controller, useForm } from 'react-hook-form';
-import { createClientPrices } from '../../../../../services/api/clients'
-import { Material } from '../../../../../constants/enums/material.enum'
-import { ClientPrice } from '../../../../../constants/types/clientPrices.type'
+import { createClientPrices } from '../../../../../services/api/clients';
+import { Material } from '../../../../../constants/enums/material.enum';
+import { ClientPrice } from '../../../../../constants/types/clientPrices.type';
 
 interface ClientPricesProps {
    id: string;
@@ -29,7 +27,7 @@ const ClientPrices = ({ id, prices }: ClientPricesProps) => {
       }
 
       try {
-         const response = await createClientPrices(toSend)
+         await createClientPrices(toSend)
       } catch (error) {
          console.log(error)
       } finally {
