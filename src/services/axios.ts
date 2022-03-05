@@ -8,7 +8,7 @@ export interface Request<T> {
 export type ID = string | number;
 
 const instancesData: AxiosRequestConfig = {
-    baseURL: 'https://recicladora.herokuapp.com/',
+    baseURL: /* 'https://recicladora.herokuapp.com/' */ 'http://localhost:4000',
     headers: {
         'Content-Type': 'application/json',
     }

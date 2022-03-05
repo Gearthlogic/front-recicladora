@@ -26,7 +26,7 @@ interface UpdatePrice {
 }
 
 export interface UpdateClientDTO extends CreateClientDTO {
-	id: string;
+	id: number;
 }
 
 export const getClients = async () => {
@@ -53,7 +53,6 @@ export const changeClientState = async (id: number) => {
 export const createClientPrices = async (body: CreateClientPrices) => {
 	return privateAxiosInstance.post('/client/prices', body)
 }
-
 
 export const updateClientPrices = async (body: UpdatePrice[]) => {
 	return privateAxiosInstance.put('/client/prices', body)

@@ -13,18 +13,22 @@ import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useHistory, useParams } from 'react-router-dom';
-import { Path } from '../../../constants/enums/path.enum';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { Path } from '../../../constants/enums/path.enum';
+import { ClientType } from '../../../constants/enums/client.enum';
+import { endLoading, startLoading } from '../../../redux/actions/loading/loading';
+import ClientPrices from './components/ClientPrices/ClientPrices';
+import { ClientPrice } from '../../../constants/types/clientPrices.type';
+import translations from '../../../assets/translations.json';
 import {
 	getClientDetails,
 	updateClient,
 	createNewClient
 } from '../../../services/api/clients';
-import { ClientType } from '../../../constants/enums/client.enum';
-import { useDispatch } from 'react-redux';
-import { endLoading, startLoading } from '../../../redux/actions/loading/loading';
-import ClientPrices from './components/ClientPrices/ClientPrices';
-import { ClientPrice } from '../../../constants/types/clientPrices.type';
+import { RootStore } from '../../../redux';
+import { Role } from '../../../constants/enums/role.enum';
 
 interface FormData {
 	alias: string;
@@ -37,7 +41,6 @@ interface FormData {
 	type: ClientType;
 	prices?: ClientPrice[]
 }
-
 
 const phoneRegExp =
 	/^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/
@@ -90,7 +93,10 @@ interface ParamTypes {
 const CreateClient = () => {
 	const dispatch = useDispatch()
 	const history = useHistory();
-	const [prices, setPrices] = useState([])
+	const {loading, user} = useSelector((state: RootStore) => ({
+		user: state.auth.user,
+		loading: state.loader.loading
+	}))
 	const { id } = useParams<ParamTypes>();
 
 	const {
@@ -98,13 +104,15 @@ const CreateClient = () => {
 		control,
 		formState: { errors },
 		reset,
+		getValues
 	} = useForm<FormData>({ resolver: yupResolver(schema) });
 
 	useEffect(() => {
 		if (id) {
 			getClientDetails(id).then((res) => {
-				reset(res.data)
-				setPrices(res.data.__prices__);
+				const formData = { ...res.data, ...res.data.address };
+				delete formData.address;
+				reset(formData)
 			});
 		}
 	}, [id, reset]);
@@ -141,29 +149,36 @@ const CreateClient = () => {
 			firstname: data.firstname,
 			lastname: data.lastname,
 			address: {
+				id: data.id,
 				street: data.street,
 				streetNumber: data.streetNumber
 			},
 			email: data.email,
 			cellphone: data.cellphone,
 			type: data.type,
-			id: data.id
+			id: parseInt(id)
 		}
 
 		try {
 			await updateClient(newBody)
-			history.push(Path.clientList)
 		} catch (error) { }
+		finally {
+			dispatch(endLoading())
+		}
 
-		dispatch(endLoading())
 	};
 
+	function clientPricesAllowed() {
+		const isEditing = !!id;
+		const isPermanentClient = getValues().type === ClientType.Permanent;
+		const isAuthorizedUser = user?.roles.some(role => role === Role.Admin);
+		const notLoading = !loading;
+
+		return notLoading && isEditing && isPermanentClient && isAuthorizedUser;
+	}
+
 	return (
-		<Grid
-			container
-			alignItems='center'
-			flexDirection='column'
-		>
+		<Grid container alignItems='center' flexDirection='column'>
 			<Paper
 				elevation={2}
 				style={{
@@ -328,7 +343,7 @@ const CreateClient = () => {
 						<Controller
 							name='type'
 							control={control}
-							defaultValue={ClientType['disabled']}
+							defaultValue={ClientType.Permanent}
 							render={({ field }) => {
 								return (
 									<Select
@@ -338,9 +353,9 @@ const CreateClient = () => {
 										label='Tipo de Cliente'
 										{...field}
 									>
-										{Object.values(ClientType).filter((e) => e !== '').map((type, i) => (
+										{Object.values(ClientType).map((type, i) => (
 											<MenuItem value={type} key={i}>
-												{type}
+												{translations['es-ES'][type]}
 											</MenuItem>
 										))}
 									</Select>
@@ -364,16 +379,17 @@ const CreateClient = () => {
 						style={{ margin: '30px 0' }}
 						fullWidth
 					>
-						{id ? 'Editar' : 'Guardar'}
+						{id ? 'Actualizar' : 'Guardar'}
 					</Button>
 				</form>
 			</Paper>
-			{id &&
+			{clientPricesAllowed() &&
 				<ClientPrices
 					id={id}
-					prices={prices}
-					setPrices={setPrices}
-				/>}
+					prices={getValues().prices}
+					setPrices={prices => reset({ prices })}
+				/>
+			}
 		</Grid>
 	);
 };

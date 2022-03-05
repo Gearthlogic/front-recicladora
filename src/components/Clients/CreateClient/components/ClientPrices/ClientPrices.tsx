@@ -12,7 +12,7 @@ import transalations from '../../../../../assets/translations.json';
 interface ClientPricesProps {
    id: string;
    prices?: ClientPrice[]
-   setPrices: (value: SetStateAction<never[]>) => void
+   setPrices: (value: ClientPrice[]) => void
 }
 
 const ClientPrices = ({ id, prices = [], setPrices }: ClientPricesProps) => {
