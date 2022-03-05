@@ -1,0 +1,14 @@
+{
+    "es-ES":{
+        "veneer":"Chapa",
+        "Iron": "Hierro",
+        "Permanent": "Permanente",
+        "Temporary": "Temporario"
+    },
+    "en-EN":{
+        "veneer":"veneer",
+        "Iron": "iron",
+        "Permanent": "permanent",
+        "Temporary": "temporary"
+    }
+}

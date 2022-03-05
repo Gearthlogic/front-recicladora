@@ -14,7 +14,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useHistory, useParams } from 'react-router-dom';
 import { Path } from '../../../constants/enums/path.enum';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	getClientDetails,
 	updateClient,
@@ -90,20 +90,22 @@ interface ParamTypes {
 const CreateClient = () => {
 	const dispatch = useDispatch()
 	const history = useHistory();
-
+	const [prices, setPrices] = useState([])
 	const { id } = useParams<ParamTypes>();
 
 	const {
 		handleSubmit,
 		control,
-		getValues,
 		formState: { errors },
 		reset,
 	} = useForm<FormData>({ resolver: yupResolver(schema) });
 
 	useEffect(() => {
 		if (id) {
-			getClientDetails(id).then((res) => reset(res.data));
+			getClientDetails(id).then((res) => {
+				reset(res.data)
+				setPrices(res.data.__prices__);
+			});
 		}
 	}, [id, reset]);
 
@@ -159,7 +161,6 @@ const CreateClient = () => {
 	return (
 		<Grid
 			container
-			// justifyContent="center"
 			alignItems='center'
 			flexDirection='column'
 		>
@@ -370,7 +371,8 @@ const CreateClient = () => {
 			{id &&
 				<ClientPrices
 					id={id}
-					prices={getValues().prices}
+					prices={prices}
+					setPrices={setPrices}
 				/>}
 		</Grid>
 	);

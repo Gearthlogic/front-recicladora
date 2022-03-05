@@ -1,5 +1,5 @@
-import {privateAxiosInstance} from '../axios';
-import {ClientType} from '../../constants/enums/client.enum';
+import { privateAxiosInstance } from '../axios';
+import { ClientType } from '../../constants/enums/client.enum';
 
 export interface CreateClientDTO {
 	alias: string;
@@ -9,16 +9,21 @@ export interface CreateClientDTO {
 	cellphone: string;
 	type: ClientType;
 }
+
 interface CreateClientPrices {
-   clientId: number
-   prices: Prices[]
-
-}
-interface Prices {
-   price: number;
-   material: string;
+	clientId: number
+	prices: CreatePrices[]
 }
 
+interface CreatePrices {
+	price: number;
+	material: string;
+}
+
+interface UpdatePrice {
+	price: number;
+	id: number;
+}
 
 export interface UpdateClientDTO extends CreateClientDTO {
 	id: string;
@@ -37,7 +42,7 @@ export const createNewClient = (body: CreateClientDTO) => {
 };
 
 export const updateClient = (body: UpdateClientDTO) => {
-	
+
 	return privateAxiosInstance.put('/client', body);
 };
 
@@ -45,6 +50,11 @@ export const changeClientState = async (id: number) => {
 	return await privateAxiosInstance.patch(`client/${id}/state`);
 };
 
-export const createClientPrices = async (body: CreateClientPrices)=>{
+export const createClientPrices = async (body: CreateClientPrices) => {
 	return privateAxiosInstance.post('/client/prices', body)
+}
+
+
+export const updateClientPrices = async (body: UpdatePrice[]) => {
+	return privateAxiosInstance.put('/client/prices', body)
 }

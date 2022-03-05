@@ -7,36 +7,43 @@ const columns: GridColDef[] = [
 		field: 'alias',
 		headerName: 'Alias',
 		headerAlign: 'center',
+		sortable: false,
 		width: 150,
 	},
 	{
 		field: 'firstname',
 		headerName: 'Nombre',
 		headerAlign: 'center',
+		sortable: false,
 		width: 150,
 	},
 	{
 		field: 'lastname',
 		headerName: 'Apellido',
 		headerAlign: 'center',
+		sortable: false,
 		width: 150,
 	},
 	{
 		field: 'email',
 		headerName: 'Email',
 		headerAlign: 'center',
+		sortable: false,
 		width: 250,
 	},
 	{
 		field: 'cellphone',
 		headerName: 'Telefono',
 		headerAlign: 'center',
+		sortable: false,
 		width: 150,
 	},
 	{
 		field: 'type',
 		headerName: 'Tipo',
 		headerAlign: 'center',
+		filterable: false,
+		disableColumnMenu: true,
 		width: 150,
 	},
 	{
@@ -45,6 +52,8 @@ const columns: GridColDef[] = [
 		headerAlign: 'center',
 		align: 'center',
 		width: 150,
+		filterable: false,
+		disableColumnMenu: true,
 		renderCell: (params) => (
 			<ChangeState
 				active={params.row.active}
@@ -58,6 +67,8 @@ const columns: GridColDef[] = [
 		headerAlign: 'center',
 		align: 'center',
 		width: 150,
+		sortable: false,
+		disableColumnMenu: true,
 		renderCell: (params) => <EditAction id={params.row.id} />,
 	},
 ];
