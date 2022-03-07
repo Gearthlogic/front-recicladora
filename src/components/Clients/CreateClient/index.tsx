@@ -112,7 +112,7 @@ const CreateClient = () => {
 			getClientDetails(id).then((res) => {
 				const formData = { ...res.data, ...res.data.address };
 				delete formData.address;
-				reset(formData)
+				reset(formData);
 			});
 		}
 	}, [id, reset]);

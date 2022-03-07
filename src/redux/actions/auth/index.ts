@@ -1,6 +1,7 @@
 import {Dispatch} from 'redux';
 import {login, profile} from '../../../services/api/auth';
 import {AuthType} from '../../types';
+import { setMessage } from '../message';
 import {endLoading, startLoading} from '../loading/loading';
 
 export const actionLogin =
@@ -16,11 +17,13 @@ export const actionLogin =
 					user: data.user,
 				},
 			});
+
+			callback();
 		} catch (error) {
-			// console.log(error);
+			dispatch(setMessage({message: 'Usuario o contraseña incorrecta'}));
+		}finally{
+			dispatch(endLoading());
 		}
-		dispatch(endLoading());
-		callback();
 	};
 
 export const actionLogOut = (callback: () => any) => (dispatch: Dispatch) => {
