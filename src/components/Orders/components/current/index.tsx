@@ -1,13 +1,12 @@
 import { useState, useEffect, memo } from 'react';
-import { setMessage } from '../../../redux/actions/message';
+import { setMessage } from '../../../../redux/actions/message';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
 
 import CurrentOrderstable from './components/table'
-import { getOrders } from '../../../services/api/orders';
-import { OrderState } from '../../../constants/enums/orderStates.enum';
-import { startLoading, endLoading } from '../../../redux/actions/loading/loading';
-import { number } from 'yup/lib/locale';
+import { getOrders } from '../../../../services/api/orders';
+import { OrderState } from '../../../../constants/enums/orderStates.enum';
+import { startLoading, endLoading } from '../../../../redux/actions/loading/loading';
 
 interface OrdersData {
     orders: any[];

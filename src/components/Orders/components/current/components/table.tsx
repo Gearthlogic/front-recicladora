@@ -58,6 +58,10 @@ function CurrentOrdersTable({ orders }: CurrentOrdersTableProps) {
 
     return (
         <DataGrid
+            components={{
+                NoRowsOverlay: () => <div> No hay registros </div>,
+            }}
+            hideFooterPagination
             rows={orders}
             columns={columns}
         />

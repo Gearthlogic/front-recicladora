@@ -1,14 +1,17 @@
 import { SyntheticEvent, useState } from "react";
-import { Box, Tab, Grid } from "@material-ui/core";
+import { Box, Tab, Grid, Button } from "@material-ui/core";
 import TabPanel from '@mui/lab/TabPanel';
 import TabList from '@mui/lab/TabList';
 import TabContext from '@mui/lab/TabContext';
 
-import OrderHistory from './history';
-import CurrentOrders from './current';
+import OrderHistory from './components/history';
+import CurrentOrders from './components/current';
+import { useHistory } from "react-router-dom";
+import { Path } from "../../constants/enums/path.enum";
 
 function OrderList() {
     const [value, setValue] = useState('1');
+    const history = useHistory();
 
     const handleChange = (event: SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -17,15 +20,20 @@ function OrderList() {
     return (
         <TabContext value={value}>
             <Grid padding={5} container flexDirection="column">
-                <Grid container flexDirection="row" item>
-                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider', paddingBottom: 2 }}>
+                    <Grid container justifyContent="space-between" flexDirection="row" item>
                         <TabList onChange={handleChange} aria-label="tabs de ordenes">
                             <Tab label="En curso" value="1" />
                             <Tab label="Historial" value="2" />
                         </TabList>
-                    </Box>
-                </Grid>
-                <Grid container  item>
+                        <Button
+                            onClick={() => history.push(Path.createOrder)}
+                            variant="contained" >
+                            Crear orden
+                        </Button>
+                    </Grid>
+                </Box>
+                <Grid container item>
                     <TabPanel value="1">
                         <CurrentOrders />
                     </TabPanel>
