@@ -6,6 +6,7 @@ import NotFound from '../../NotFound';
 import CreateUser from '../../Users/create';
 import CreateClient from '../../Clients/CreateClient';
 import ClientList from '../../Clients';
+import OrderList from '../../Orders';
 
 import { Path } from '../../../constants/enums/path.enum';
 import { Role } from '../../../constants/enums/role.enum';
@@ -70,7 +71,12 @@ export const routes: Array<Route> = [
 		[Role.Admin, Role.Purchaser]
 	),
 	new Route(
-		{ path: Path.notFound ,component: NotFound }
+		{ component: OrderList, path: Path.orderList },
+		{ name: 'Ordenes' },
+		[Role.Admin, Role.Purchaser]
+	),
+	new Route(
+		{ path: Path.notFound, component: NotFound }
 	)
 ];
 
