@@ -1,14 +1,23 @@
 import { Role } from "../../constants/enums/role.enum";
 import { privateAxiosInstance } from "../axios";
 
-export const createUser = async (
+
+export const getUsers = async () => {
+    const response = await privateAxiosInstance.get('/user');
+
+    return response.data;
+}
+
+
+interface CreateUserDTO {
     username: String,
     password: String,
     roles:  Role[]
-) => {
-    const response = await privateAxiosInstance.post('/user', {
-        username, password, roles
-    });
+}
+
+export const createUser = async (data : CreateUserDTO) => {
+    debugger
+    const response = await privateAxiosInstance.post('/user', data);
 
     return response.data;
 }
