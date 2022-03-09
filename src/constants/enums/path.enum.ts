@@ -3,7 +3,7 @@ export enum Path {
 	login = '/login',
 	usersList = '/users',
 	createUser = '/users/create',
-	editUser = '/users/edit/:id',
+	editUser = '/users/edit',
 	clientList = '/clients',
 	createClient = '/clients/create',
 	editClient = '/clients/edit/:id',

@@ -1,27 +1,31 @@
 import { useEffect, useState } from "react";
 
 import Table from './components/Table';
-import {getUsers} from '../../services/api/user';
+import { getUsers } from '../../services/api/user';
 import { useDispatch } from "react-redux";
 import { endLoading, startLoading } from "../../redux/actions/loading/loading";
 import { setMessage } from "../../redux/actions/message";
+import { Role } from "../../constants/enums/role.enum";
+
+export interface UserTableRow {
+	id: number;
+	username: string;
+	roles: Role[];
+}
 
 function UsersList() {
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState<UserTableRow[]>([]);
     const dispatch = useDispatch();
 
-    useEffect(() =>{
+    useEffect(() => {
         dispatch(startLoading())
         getUsers()
             .then(res => setUsers(res))
-            .catch(error=> setMessage({message: error?.message}))
-            .finally(()=> dispatch(endLoading()))
+            .catch(error => setMessage({ message: error?.message }))
+            .finally(() => dispatch(endLoading()))
     }, [])
 
-    console.log('users',users)
-    return(
-        <Table rows={users}  />
-    )
+    return <Table rows={users} setRows={setUsers} />
 }
 
-export default  UsersList;
+export default UsersList;
