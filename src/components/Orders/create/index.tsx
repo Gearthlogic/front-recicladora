@@ -64,8 +64,8 @@ const OrdersHistory = () => {
             month: pickupDate?.getMonth(),
             day: pickupDate?.getDate(),
         }
-        const DateToSend = `${year}-${month <= 9 ? '0' : ''}${month + 1}-${day <= 9 ? '0' : ''}${day}`
-        const newBody = { ...data, pickupDate: DateToSend }
+        const dateToSend = `${year}-${month <= 9 ? '0' : ''}${month + 1}-${day <= 9 ? '0' : ''}${day}`
+        const newBody = { ...data, pickupDate: dateToSend }
 
         try {
             await createNewOrder(newBody);
