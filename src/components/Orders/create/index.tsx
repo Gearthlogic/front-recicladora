@@ -9,6 +9,7 @@ import * as yup from "yup";
 import { createNewOrder, getAvailableClientsList } from "../../../services/api/clients";
 import { useDispatch } from "react-redux";
 import { endLoading, startLoading } from "../../../redux/actions/loading/loading";
+import { setMessage } from "../../../redux/actions/message";
 
 interface OrderFormData {
     clientId: number;
@@ -21,13 +22,11 @@ interface DateFormat {
     day: any;
 }
 
-
-
-// const schema = yup
-//     .object({
-//         clientId: yup.number().required("El alias es requerida."),
-//         // pickupDate: yup.string().required("La fecha es requerida."),
-//     }).required();
+const schema = yup
+    .object({
+        clientId: yup.number().min(1).required("Seleccione un Alias"),
+        // pickupDate: yup.string().required("La fecha es requerida."),
+    }).required();
 
 const paperStyle = {
     padding: 30,
@@ -54,7 +53,7 @@ const OrdersHistory = () => {
         control,
         formState: { errors },
     } = useForm<OrderFormData>({
-        // resolver: yupResolver(schema),
+        resolver: yupResolver(schema),
     });
 
     const onSubmit: SubmitHandler<OrderFormData> = async data => {
@@ -65,16 +64,15 @@ const OrdersHistory = () => {
             month: pickupDate?.getMonth(),
             day: pickupDate?.getDate(),
         }
-
         const sendData = `${year}-${month <= 9 ? '0' : ''}${month + 1}-${day <= 9 ? '0' : ''}${day}`
         const newBody = { ...data, pickupDate: sendData }
-        console.log(newBody)
 
         try {
             await createNewOrder(newBody);
-        } catch (error) {
-            console.log('Ocurrió un error.')
-        }finally{
+            dispatch(setMessage({ action: 'Orden creada exitosamente.'}))
+        } catch (error: any) {
+            dispatch(setMessage({ action: 'ERROR al crear orden.'} ))
+        } finally {
             dispatch(endLoading())
         }
     };
@@ -120,14 +118,16 @@ const OrdersHistory = () => {
                                     )
                                 }}
                             />
-                            {/* {errors.clientId && (
-							<Typography
-								variant='subtitle2'
-								style={{ color: 'red' }}
-							>
-								{errors.clientId.message}
-							</Typography>
-						)} */}
+                            {errors.clientId && (
+                                <Typography
+                                    variant='subtitle2'
+                                    style={{ color: 'red' }}
+                                >{errors.clientId.type === 'min' ?
+                                    'Seleccione un Alias'
+                                    :
+                                    errors.clientId.message}
+                                </Typography>
+                            )}
                         </FormControl>
 
                         <section style={{ margin: '20px 0px', scale: '1.15' }}>
