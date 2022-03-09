@@ -10,17 +10,20 @@ import { startLoading, endLoading } from '../../../../redux/actions/loading/load
 
 interface OrdersData {
     orders: any[];
+    client: any[];
     count: number;
+}
+interface OrdersClient {
+    client: any[];
 }
 
 const initialstate: OrdersData = {
     orders: [],
+    client: [],
     count: 0
 }
 
-
-function CurrentOrders() {
-    
+const CurrentOrders = () => {
 
     const [page, setPage] = useState(1);
     const [clientsList, setClientsList] = useState<OrdersData>(initialstate);
@@ -33,12 +36,24 @@ function CurrentOrders() {
             pickupDate: moment().format("YYYY-MM-DD"),
             state: [OrderState.Created, OrderState.PendingToSetTemporaryClientPrice]
         })
-            .then(res => setClientsList(res.data))
-            .catch(() => dispatch(setMessage({ message: "Error al cargar la información" })))
+            .then(res => {
+                const test = res?.data
+                const data = res?.data.orders.map((client: any) => {
+                    return {
+                        alias: client.client.alias,
+                        state: client.state,
+                        id: client.client.id,
+                        address: `${client.client.address.street} ${client.client.address.streetNumber}`,
+                        type: client.client.type,
+                    }
+                })
+                setClientsList({ orders: data, client: [], count: res.data.count })
+            })
+            .catch(() => dispatch(setMessage({ action: "Error al cargar la información" }, 'error')))
             .finally(() => dispatch(endLoading()))
 
     }, [page])
-console.log(clientsList.orders)
+
     return (
         <div>
             <CurrentOrderstable orders={clientsList.orders} />

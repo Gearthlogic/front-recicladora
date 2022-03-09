@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { endLoading, startLoading } from "../../../redux/actions/loading/loading";
 import { setMessage } from "../../../redux/actions/message";
 
+
 interface OrderFormData {
     clientId: number;
     pickupDate: string | Date;
@@ -69,9 +70,9 @@ const OrdersHistory = () => {
 
         try {
             await createNewOrder(newBody);
-            dispatch(setMessage({ action: 'Orden creada exitosamente.'}))
+            dispatch(setMessage({ action: 'Orden creada exitosamente.' }))
         } catch (error: any) {
-            dispatch(setMessage({ action: 'ERROR al crear orden.'} ))
+            dispatch(setMessage({ action: 'ERROR al crear orden.' }, 'error'))
         } finally {
             dispatch(endLoading())
         }
@@ -141,7 +142,7 @@ const OrdersHistory = () => {
                                             {...field}
                                             label="Custom input"
                                             // TODO Set default value as 'tomorrow' date.
-                                            value={pickupDate} 
+                                            value={pickupDate}
                                             onChange={(newValue) => {
                                                 setPickupDate(newValue);
                                             }}

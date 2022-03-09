@@ -1,4 +1,5 @@
 import { DataGrid, GridColDef } from '@material-ui/data-grid';
+import ViewOrder from '../../common/ViewOrder';
 
 interface CurrentOrdersTableProps {
     orders: any[];
@@ -10,63 +11,64 @@ const defaultColumns: GridColDef[] = [
         field: 'alias',
         headerName: 'Alias',
         headerAlign: 'center',
+        align: 'center',
         sortable: false,
         width: 150,
     },
     {
-        field: 'firstname',
-        headerName: 'Nombre',
+        field: 'state',
+        headerName: 'Estado',
         headerAlign: 'center',
-        sortable: false,
+        align: 'center',
+        filterable: false,
+        disableColumnMenu: true,
         width: 150,
     },
     {
-        field: 'lastname',
-        headerName: 'Apellido',
+        field: 'address',
+        headerName: 'Dirección',
         headerAlign: 'center',
-        sortable: false,
-        width: 150,
-    },
-    {
-        field: 'email',
-        headerName: 'Email',
-        headerAlign: 'center',
-        sortable: false,
-        width: 250,
-    },
-    {
-        field: 'cellphone',
-        headerName: 'Telefono',
-        headerAlign: 'center',
-        sortable: false,
+        align: 'center',
+        filterable: false,
+        disableColumnMenu: true,
         width: 150,
     },
     {
         field: 'type',
         headerName: 'Tipo',
         headerAlign: 'center',
-        filterable: false,
-        disableColumnMenu: true,
+        align: 'center',
+        sortable: false,
         width: 150,
     },
-
+    {
+        field: 'Actions',
+        headerName: 'Acciones',
+        headerAlign: 'center',
+        align: 'center',
+        width: 150,
+        sortable: false,
+        disableColumnMenu: true,
+        renderCell: (params) => <ViewOrder id={params.row.id} />,
+    },
 ];
 
 const CurrentOrdersTable = ({ orders, columns = defaultColumns }: CurrentOrdersTableProps) => {
-console.log(columns)
+    console.log(orders)
+
     return (
         <DataGrid
             rows={orders}
             columns={columns}
-            components={{
-                NoRowsOverlay: () => <div> No hay registros </div>,
-            }}
+            // components={{
+            //     NoRowsOverlay: () => <div> No hay registros </div>,
+            // }}
             // hideFooterPagination
             style={{
-				justifyContent: 'center',
-                width:'90vw',
-				height: '80vh',
-			}}
+                justifyContent: 'center',
+                width: '90vw',
+                height: '80vh',
+            }}
         />
     );
 }

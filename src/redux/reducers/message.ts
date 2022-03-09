@@ -1,11 +1,9 @@
-import { SnackbarProps } from '@mui/material'
-
-import { LoadingDispatchTypes } from '../actions/message/types';
+import { LoadingDispatchTypes, Snackbar } from '../actions/message/types';
 import { SET_MESSAGE, RESET_MESSAGE } from '../types/message';
 
-type MessageState = SnackbarProps | null
+type MessageState = Snackbar | null
 
-const initialState: SnackbarProps | null = null;
+const initialState: Snackbar | null = null;
 
 export function messageReducer(
     state: MessageState = initialState,

@@ -12,6 +12,7 @@ import CreateOrder from '../../Orders/create';
 import { Path } from '../../../constants/enums/path.enum';
 import { Role } from '../../../constants/enums/role.enum';
 import { User } from '../../../constants/types/user.type';
+import Order from '../../Orders/components/order/Order';
 
 export class Route {
 	constructor(
@@ -79,6 +80,11 @@ export const routes: Array<Route> = [
 	new Route(
 		{ component: OrderList, path: Path.orderList, exact: true  },
 		{ name: 'Ordenes' },
+		[Role.Admin, Role.Purchaser]
+	),
+	new Route(
+		{ component: Order, path: Path.viewOrder},
+		undefined,
 		[Role.Admin, Role.Purchaser]
 	),
 	new Route(
