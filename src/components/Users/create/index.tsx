@@ -1,10 +1,15 @@
-import { Button, Grid, Paper, TextField, Typography } from "@mui/material";
+import { Button, Grid, MenuItem, OutlinedInput, Paper, Select, TextField, Typography } from "@mui/material";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 import { createUser } from '../../../services/api/user';
 import { Role } from '../../../constants/enums/role.enum';
+import { useDispatch } from "react-redux";
+import { endLoading, startLoading } from "../../../redux/actions/loading/loading";
+import { useHistory } from "react-router-dom";
+import { Path } from "../../../constants/enums/path.enum";
+import { setMessage } from "../../../redux/actions/message";
 
 interface UserFormData {
   username: string;
@@ -24,7 +29,7 @@ const schema = yup
 
 const paperStyle = {
   padding: 30,
-  height: "50vh",
+  margin: 10,
   width: 300,
 };
 
@@ -42,12 +47,18 @@ const CreateUser = () => {
     resolver: yupResolver(schema),
   });
 
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   const onSubmit: SubmitHandler<UserFormData> = async (data) => {
-    const { username, password, roles } = data;
+    dispatch(startLoading())
     try {
-      await createUser(username, password, roles);
+      await createUser(data);
+      history.push(Path.usersList);
     } catch (error) {
-      
+      dispatch(setMessage({message: "Hubo un error"}))
+    }finally{
+      dispatch(endLoading())
     }
   };
 
@@ -56,21 +67,20 @@ const CreateUser = () => {
       container
       alignItems="center"
       justifyContent="center"
-      style={{ minHeight: "100vh" }}
     >
       <Paper elevation={10} style={paperStyle}>
-        <Typography align="center" variant="h4" margin={4}>
-          Registro
+        <Typography align="center" variant="h4" margin={2}>
+          Crear usuario
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
             name="username"
             control={control}
-            defaultValue="a"
+            defaultValue=""
             render={({ field }) => (
               <TextField
-                label="Usuario"
-                placeholder="Ingrese su usuario"
+                label="Nombre de usuario"
+                placeholder="Ingrese el nombre de usuario"
                 fullWidth
                 margin="normal"
                 {...field}
@@ -85,7 +95,7 @@ const CreateUser = () => {
           <Controller
             name="password"
             control={control}
-            defaultValue="a"
+            defaultValue=""
             render={({ field }) => (
               <TextField
                 label="Contraseña"
@@ -102,6 +112,33 @@ const CreateUser = () => {
               {errors.password.message}
             </Typography>
           )}
+          <Controller
+            name="roles"
+            control={control}
+            defaultValue={[]}
+            render={({ field }) => (
+              <Select
+                fullWidth
+                labelId="roles-select-label"
+                id="roles-select"
+                multiple
+                defaultValue={[Role.Purchaser]}
+                input={<OutlinedInput id="roles-imput" label="Roles" />}
+                {...field}
+              >
+                {Object.values(Role).map((name) => (
+                  <MenuItem key={name} value={name}>
+                    {name}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          />
+          {errors.roles?.map(error => (
+            <Typography variant="subtitle2" style={{ color: "red" }}>
+              {error.message}
+            </Typography>
+          ))}
           <Button
             type="submit"
             color="primary"
@@ -113,7 +150,7 @@ const CreateUser = () => {
           </Button>
         </form>
       </Paper>
-    </Grid>
+    </Grid >
   );
 };
 

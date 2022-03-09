@@ -3,12 +3,14 @@ import { RouteProps } from 'react-router-dom';
 import Landing from '../../Landing/Landing';
 import LogIn from '../../Login/LogIn';
 import NotFound from '../../NotFound';
-import CreateUser from '../../Users/create';
 import CreateClient from '../../Clients/CreateClient';
 import ClientList from '../../Clients';
 import OrderList from '../../Orders';
 import CreateOrder from '../../Orders/create';
 import ClientAccounts from '../../Accounts';
+import UsersList from '../../Users';
+import CreateUser from '../../Users/create';
+import EditUser from '../../Users/edit';
 
 import { Path } from '../../../constants/enums/path.enum';
 import { Role } from '../../../constants/enums/role.enum';
@@ -53,11 +55,6 @@ export const routes: Array<Route> = [
 		{ path: Path.login, component: LogIn, exact: true },
 	),
 	new Route(
-		{ component: CreateUser, path: Path.createUser, exact: true },
-		undefined,
-		[Role.Admin]
-	),
-	new Route(
 		{ component: ClientList, path: Path.clientList, exact: true },
 		{ name: 'Clientes' },
 		[Role.Admin, Role.Purchaser]
@@ -73,19 +70,34 @@ export const routes: Array<Route> = [
 		[Role.Admin, Role.Purchaser]
 	),
 	new Route(
-		{ component: CreateOrder, path: Path.createOrder},
+		{ component: CreateOrder, path: Path.createOrder },
 		undefined,
 		[Role.Admin, Role.Purchaser]
 	),
 	new Route(
-		{ component: OrderList, path: Path.orderList, exact: true  },
+		{ component: OrderList, path: Path.orderList, exact: true },
 		{ name: 'Ordenes' },
 		[Role.Admin, Role.Purchaser]
 	),
 	new Route(
-		{ component: ClientAccounts, path: Path.clientAccounts, exact: true  },
+		{ component: ClientAccounts, path: Path.clientAccounts, exact: true },
 		{ name: 'Cuentas' },
 		[Role.Admin, Role.Purchaser]
+	),
+	new Route(
+		{ component: UsersList, path: Path.usersList, exact: true },
+		{ name: 'Usuarios' },
+		[Role.Admin]
+	),
+	new Route(
+		{ component: CreateUser, path: Path.createUser, exact: true },
+		undefined,
+		[Role.Admin]
+	),
+	new Route(
+		{ component: EditUser, path: Path.editUser, exact: true },
+		undefined,
+		[Role.Admin]
 	),
 	new Route(
 		{ path: Path.notFound, component: NotFound }
