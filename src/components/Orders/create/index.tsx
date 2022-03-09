@@ -140,7 +140,7 @@ const OrdersHistory = () => {
                                         <DesktopDatePicker
                                             {...field}
                                             label="Custom input"
-                                            // TODO Make default value be the 'tomorrow' date.
+                                            // TODO Set default value as 'tomorrow' date.
                                             value={pickupDate} 
                                             onChange={(newValue) => {
                                                 setPickupDate(newValue);
