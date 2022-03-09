@@ -8,6 +8,7 @@ import CreateClient from '../../Clients/CreateClient';
 import ClientList from '../../Clients';
 import OrderList from '../../Orders';
 import CreateOrder from '../../Orders/create';
+import ClientAccounts from '../../Accounts';
 
 import { Path } from '../../../constants/enums/path.enum';
 import { Role } from '../../../constants/enums/role.enum';
@@ -79,6 +80,11 @@ export const routes: Array<Route> = [
 	new Route(
 		{ component: OrderList, path: Path.orderList, exact: true  },
 		{ name: 'Ordenes' },
+		[Role.Admin, Role.Purchaser]
+	),
+	new Route(
+		{ component: ClientAccounts, path: Path.clientAccounts, exact: true  },
+		{ name: 'Cuentas' },
 		[Role.Admin, Role.Purchaser]
 	),
 	new Route(

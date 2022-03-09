@@ -7,5 +7,6 @@ export enum Path {
 	editClient = '/clients/edit/:id',
 	orderList = '/orders',
 	createOrder = '/orders/create',
+	clientAccounts = "/accounts",
 	notFound = '/*'
 };
