@@ -1,10 +1,11 @@
 import { DataGrid, GridColDef } from '@material-ui/data-grid';
 
 interface CurrentOrdersTableProps {
-    orders: any[]
+    orders: any[];
+    columns?: any[];
 }
 
-const columns: GridColDef[] = [
+const defaultColumns: GridColDef[] = [
     {
         field: 'alias',
         headerName: 'Alias',
@@ -51,19 +52,21 @@ const columns: GridColDef[] = [
 
 ];
 
-
-
-function CurrentOrdersTable({ orders }: CurrentOrdersTableProps) {
-
-
+const CurrentOrdersTable = ({ orders, columns = defaultColumns }: CurrentOrdersTableProps) => {
+console.log(columns)
     return (
         <DataGrid
+            rows={orders}
+            columns={columns}
             components={{
                 NoRowsOverlay: () => <div> No hay registros </div>,
             }}
-            hideFooterPagination
-            rows={orders}
-            columns={columns}
+            // hideFooterPagination
+            style={{
+				justifyContent: 'center',
+                width:'90vw',
+				height: '80vh',
+			}}
         />
     );
 }

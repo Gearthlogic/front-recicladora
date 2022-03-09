@@ -85,7 +85,7 @@ export default function ClientsTable({ rows }: any) {
 
 		return { ...row, type };
 	});
-
+console.log(columns)
 	return (
 		<DataGrid
 			rows={translatedRows}

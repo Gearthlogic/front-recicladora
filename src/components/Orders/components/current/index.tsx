@@ -13,32 +13,36 @@ interface OrdersData {
     count: number;
 }
 
-const initialstate : OrdersData = {
+const initialstate: OrdersData = {
     orders: [],
     count: 0
 }
 
 
 function CurrentOrders() {
+    
+
     const [page, setPage] = useState(1);
-    const [data, setData] = useState<OrdersData>(initialstate);
+    const [clientsList, setClientsList] = useState<OrdersData>(initialstate);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(startLoading());
         getOrders({
             page,
-            pickupDate: moment().toISOString(),
+            pickupDate: moment().format("YYYY-MM-DD"),
             state: [OrderState.Created, OrderState.PendingToSetTemporaryClientPrice]
         })
-            .then(res => setData(res.data))
+            .then(res => setClientsList(res.data))
             .catch(() => dispatch(setMessage({ message: "Error al cargar la información" })))
             .finally(() => dispatch(endLoading()))
 
     }, [page])
-
+console.log(clientsList.orders)
     return (
-        <CurrentOrderstable orders={data.orders} />
+        <div>
+            <CurrentOrderstable orders={clientsList.orders} />
+        </div>
     )
 }
 
