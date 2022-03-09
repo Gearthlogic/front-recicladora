@@ -31,7 +31,7 @@ const schema = yup
 const paperStyle = {
     padding: 30,
     height: "auto",
-    width: '30vw',
+    width: 'auto',
 };
 
 const btnstyle = {
