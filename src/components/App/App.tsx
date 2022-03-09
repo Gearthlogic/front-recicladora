@@ -25,7 +25,7 @@ function App() {
 	}, [dispatch])
 
 	const userRoutes = useMemo(() => createUserRoutes(user), [user])
-	console.log(snackbar)
+
 	return (
 		<BrowserRouter>
 			{loading && <Loader />}
