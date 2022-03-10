@@ -12,9 +12,15 @@ interface Props {
   width?: string;
 }
 
-const AccordionCustom = ({width = 'fit-content', text = 'Titulo', children = 'Contenido' }: Props) => {
+const AccordionCustom = ({
+  width = 'fit-content',
+  text = 'Titulo',
+  children = 'Contenido'
+}: Props) => {
+
+
   return (
-    <div style={{width: width}}>
+    <div style={{ width: width }}>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
