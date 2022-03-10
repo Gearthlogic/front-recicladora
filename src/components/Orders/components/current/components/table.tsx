@@ -1,69 +1,80 @@
 import { DataGrid, GridColDef } from '@material-ui/data-grid';
+import { Link } from '@mui/material';
+import ViewOrderBtn from '../../common/ViewOrderBtn';
 
 interface CurrentOrdersTableProps {
-    orders: any[]
+    orders: any[];
+    columns?: any[];
 }
 
-const columns: GridColDef[] = [
+const defaultColumns: GridColDef[] = [
     {
         field: 'alias',
         headerName: 'Alias',
         headerAlign: 'center',
+        align: 'center',
         sortable: false,
+        width: 150,
+        renderCell: (params) =>
+            <Link id={params.row.id} href={`/clients/edit/${params.row.id}`}>
+                <span style={{ fontWeight: 600, cursor: 'pointer' }}>
+                    {params.row.alias}
+                </span>
+            </Link>,
+    },
+    {
+        field: 'state',
+        headerName: 'Estado',
+        headerAlign: 'center',
+        align: 'center',
+        filterable: false,
+        disableColumnMenu: true,
         width: 150,
     },
     {
-        field: 'firstname',
-        headerName: 'Nombre',
+        field: 'address',
+        headerName: 'Dirección',
         headerAlign: 'center',
-        sortable: false,
-        width: 150,
-    },
-    {
-        field: 'lastname',
-        headerName: 'Apellido',
-        headerAlign: 'center',
-        sortable: false,
-        width: 150,
-    },
-    {
-        field: 'email',
-        headerName: 'Email',
-        headerAlign: 'center',
-        sortable: false,
-        width: 250,
-    },
-    {
-        field: 'cellphone',
-        headerName: 'Telefono',
-        headerAlign: 'center',
-        sortable: false,
+        align: 'center',
+        filterable: false,
+        disableColumnMenu: true,
         width: 150,
     },
     {
         field: 'type',
         headerName: 'Tipo',
         headerAlign: 'center',
-        filterable: false,
-        disableColumnMenu: true,
+        align: 'center',
+        sortable: false,
         width: 150,
     },
-
+    {
+        field: 'Actions',
+        headerName: 'Acciones',
+        headerAlign: 'center',
+        align: 'center',
+        width: 150,
+        sortable: false,
+        disableColumnMenu: true,
+        renderCell: (params) => <ViewOrderBtn id={params.row.id} />,
+    },
 ];
 
-
-
-function CurrentOrdersTable({ orders }: CurrentOrdersTableProps) {
-
+const CurrentOrdersTable = ({ orders, columns = defaultColumns }: CurrentOrdersTableProps) => {
 
     return (
         <DataGrid
-            components={{
-                NoRowsOverlay: () => <div> No hay registros </div>,
-            }}
-            hideFooterPagination
             rows={orders}
             columns={columns}
+            components={{
+                // NoRowsOverlay: () => <div> No hay registros </div>,
+            }}
+            hideFooterPagination
+            style={{
+                justifyContent: 'center',
+                width: '90vw',
+                height: '80vh',
+            }}
         />
     );
 }

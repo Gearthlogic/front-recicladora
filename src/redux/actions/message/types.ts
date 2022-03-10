@@ -1,16 +1,20 @@
-import { SnackbarProps } from '@material-ui/core';
-import { SET_MESSAGE, RESET_MESSAGE } from '../../types/message'
+import {SnackbarProps} from '@material-ui/core';
+import { AlertColor } from '@mui/material';
+import {SET_MESSAGE, RESET_MESSAGE} from '../../types/message';
+
+export interface Snackbar {
+	snackbarProps: SnackbarProps;
+	messagetype?: AlertColor;
+	action: string;
+}
 
 export interface IactionSetMessage {
-    type: typeof SET_MESSAGE;
-    payload: SnackbarProps;
+	type: typeof SET_MESSAGE;
+	payload: Snackbar;
 }
 
 export interface IactionResetMessage {
-    type: typeof RESET_MESSAGE;
+	type: typeof RESET_MESSAGE;
 }
 
-export type LoadingDispatchTypes =
-    | IactionSetMessage
-    | IactionResetMessage
-
+export type LoadingDispatchTypes = IactionSetMessage | IactionResetMessage;

@@ -10,35 +10,54 @@ import { startLoading, endLoading } from '../../../../redux/actions/loading/load
 
 interface OrdersData {
     orders: any[];
+    client: any[];
     count: number;
 }
+interface OrdersClient {
+    client: any[];
+}
 
-const initialstate : OrdersData = {
+const initialstate: OrdersData = {
     orders: [],
+    client: [],
     count: 0
 }
 
+const CurrentOrders = () => {
 
-function CurrentOrders() {
     const [page, setPage] = useState(1);
-    const [data, setData] = useState<OrdersData>(initialstate);
+    const [clientsList, setClientsList] = useState<OrdersData>(initialstate);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(startLoading());
         getOrders({
             page,
-            pickupDate: moment().toISOString(),
+            pickupDate: moment().format("YYYY-MM-DD"),
             state: [OrderState.Created, OrderState.PendingToSetTemporaryClientPrice]
         })
-            .then(res => setData(res.data))
-            .catch(() => dispatch(setMessage({ message: "Error al cargar la información" })))
+            .then(res => {
+                const test = res?.data
+                const data = res?.data.orders.map((client: any) => {
+                    return {
+                        alias: client.client.alias,
+                        state: client.state,
+                        id: client.client.id,
+                        address: `${client.client.address.street} ${client.client.address.streetNumber}`,
+                        type: client.client.type,
+                    }
+                })
+                setClientsList({ orders: data, client: [], count: res.data.count })
+            })
+            .catch(() => dispatch(setMessage({ action: "Error al cargar la información" }, 'error')))
             .finally(() => dispatch(endLoading()))
 
     }, [page])
 
     return (
-        <CurrentOrderstable orders={data.orders} />
+        <div>
+            <CurrentOrderstable orders={clientsList.orders} />
+        </div>
     )
 }
 

@@ -1,4 +1,4 @@
-import { RouteProps } from 'react-router-dom';
+import {RouteProps} from 'react-router-dom';
 
 import Landing from '../../Landing/Landing';
 import LogIn from '../../Login/LogIn';
@@ -11,19 +11,20 @@ import UsersList from '../../Users';
 import CreateUser from '../../Users/create';
 import EditUser from '../../Users/edit';
 
-import { Path } from '../../../constants/enums/path.enum';
-import { Role } from '../../../constants/enums/role.enum';
-import { User } from '../../../constants/types/user.type';
+import {Path} from '../../../constants/enums/path.enum';
+import {Role} from '../../../constants/enums/role.enum';
+import {User} from '../../../constants/types/user.type';
+import Order from '../../Orders/components/order/Order';
 
 export class Route {
 	constructor(
 		public readonly routeProps: CustomRouteProps,
 		public readonly layoutProps?: LayoutProps,
 		public readonly allowedRoles?: Role[]
-	) { }
+	) {}
 
 	isAllowedTo(userRoles: Role[]) {
-		return this.allowedRoles?.some(role => userRoles.includes(role))
+		return this.allowedRoles?.some((role) => userRoles.includes(role));
 	}
 
 	isPrivate(): Boolean {
@@ -31,77 +32,74 @@ export class Route {
 	}
 
 	isInLayout(): Boolean {
-		return !!this.layoutProps
+		return !!this.layoutProps;
 	}
-
 }
 
 export interface LayoutProps {
 	name?: string;
 	icon?: React.ComponentType;
-};
+}
 
 export interface CustomRouteProps extends RouteProps {
-	path: Path
+	path: Path;
 }
 
 export const routes: Array<Route> = [
 	new Route(
-		{ path: Path.index, component: Landing, exact: true },
-		{ name: 'Inicio' },
+		{path: Path.index, component: Landing, exact: true},
+		{name: 'Inicio'}
 	),
+	new Route({path: Path.login, component: LogIn, exact: true}),
 	new Route(
-		{ path: Path.login, component: LogIn, exact: true },
-	),
-	new Route(
-		{ component: ClientList, path: Path.clientList, exact: true },
-		{ name: 'Clientes' },
+		{component: ClientList, path: Path.clientList, exact: true},
+		{name: 'Clientes'},
 		[Role.Admin, Role.Purchaser]
 	),
 	new Route(
-		{ component: CreateClient, exact: true, path: Path.editClient },
+		{component: CreateClient, exact: true, path: Path.editClient},
 		undefined,
 		[Role.Admin, Role.Purchaser]
 	),
 	new Route(
-		{ component: CreateClient, path: Path.createClient, exact: true },
+		{component: CreateClient, path: Path.createClient, exact: true},
 		undefined,
 		[Role.Admin, Role.Purchaser]
 	),
+	new Route({component: CreateOrder, path: Path.createOrder}, undefined, [
+		Role.Admin,
+		Role.Purchaser,
+	]),
 	new Route(
-		{ component: CreateOrder, path: Path.createOrder },
-		undefined,
+		{component: OrderList, path: Path.orderList, exact: true},
+		{name: 'Ordenes'},
 		[Role.Admin, Role.Purchaser]
 	),
+	new Route({component: Order, path: Path.viewOrder}, undefined, [
+		Role.Admin,
+		Role.Purchaser,
+	]),
 	new Route(
-		{ component: OrderList, path: Path.orderList, exact: true },
-		{ name: 'Ordenes' },
-		[Role.Admin, Role.Purchaser]
-	),
-	new Route(
-		{ component: UsersList, path: Path.usersList, exact: true },
-		{ name: 'Usuarios' },
+		{component: UsersList, path: Path.usersList, exact: true},
+		{name: 'Usuarios'},
 		[Role.Admin]
 	),
 	new Route(
-		{ component: CreateUser, path: Path.createUser, exact: true },
-		undefined,
-		[Role.Admin]
-	),
-	new Route(
-		{ component: EditUser, path: Path.editUser, exact: true },
+		{component: CreateUser, path: Path.createUser, exact: true},
 		undefined,
 		[Role.Admin]
 	),
 	new Route(
-		{ path: Path.notFound, component: NotFound }
-	)
+		{component: EditUser, path: Path.editUser, exact: true},
+		undefined,
+		[Role.Admin]
+	),
+	new Route({path: Path.notFound, component: NotFound}),
 ];
 
 export const createUserRoutes = (user?: User) => {
-	const userRoutes = routes.filter(route =>
+	const userRoutes = routes.filter((route) =>
 		user ? route.isAllowedTo(user.roles) : !route.isPrivate()
-	)
-
+	);
 	return userRoutes;
-}
+};

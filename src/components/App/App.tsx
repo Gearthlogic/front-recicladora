@@ -10,6 +10,7 @@ import { createUserRoutes } from './routes/routes';
 import { RootStore } from '../../redux';
 import Loader from '../common/Loader/Loader';
 import { resetMessage } from '../../redux/actions/message';
+import { Alert } from '@mui/material';
 
 function App() {
 	const [initializing, setInitializing] = useState(true);
@@ -35,12 +36,16 @@ function App() {
 					<Router userRoutes={userRoutes} />
 				</>
 			)}
-			< Snackbar
-				autoHideDuration={2000}
+			<Snackbar
+				autoHideDuration={3000}
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
 				onClose={() => dispatch(resetMessage())}
 				{...snackbar}
-			/>
+			>
+				<Alert severity={snackbar?.messagetype}>
+					{snackbar?.action}
+				</Alert>
+			</Snackbar>
 		</BrowserRouter>
 	);
 }
