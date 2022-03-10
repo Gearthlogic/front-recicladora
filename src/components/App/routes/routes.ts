@@ -7,7 +7,7 @@ import CreateClient from '../../Clients/CreateClient';
 import ClientList from '../../Clients';
 import OrderList from '../../Orders';
 import CreateOrder from '../../Orders/create';
-import ClientAccounts from '../../Accounts';
+import ClientAccount from '../../Accounts';
 import UsersList from '../../Users';
 import CreateUser from '../../Users/create';
 import EditUser from '../../Users/edit';
@@ -80,8 +80,8 @@ export const routes: Array<Route> = [
 		[Role.Admin, Role.Purchaser]
 	),
 	new Route(
-		{ component: ClientAccounts, path: Path.clientAccounts, exact: true },
-		{ name: 'Cuentas' },
+		{ component: ClientAccount, path: Path.clientAccount, exact: true },
+		undefined,
 		[Role.Admin, Role.Purchaser]
 	),
 	new Route(
