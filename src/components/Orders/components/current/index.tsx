@@ -37,7 +37,6 @@ const CurrentOrders = () => {
             state: [OrderState.Created, OrderState.PendingToSetTemporaryClientPrice]
         })
             .then(res => {
-                const test = res?.data
                 const data = res?.data.orders.map((client: any) => {
                     return {
                         alias: client.client.alias,
