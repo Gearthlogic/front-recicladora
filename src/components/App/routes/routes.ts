@@ -101,6 +101,5 @@ export const createUserRoutes = (user?: User) => {
 	const userRoutes = routes.filter((route) =>
 		user ? route.isAllowedTo(user.roles) : !route.isPrivate()
 	);
-
 	return userRoutes;
 };

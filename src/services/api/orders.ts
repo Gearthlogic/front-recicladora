@@ -8,6 +8,5 @@ export interface GetOrdersQueryDTO extends PaginateAttributes {
 }
 
 export const getOrders = (params: GetOrdersQueryDTO) => {
-	// console.log({params})
 	return privateAxiosInstance.get('/orders', {params});
 };

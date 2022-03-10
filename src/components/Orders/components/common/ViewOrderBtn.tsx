@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 import { Path } from '../../../../constants/enums/path.enum';
 
-const ViewOrder = ({ id }: any) => {
+const ViewOrderBtn = ({ id }: any) => {
 
     const history = useHistory()
 
@@ -15,4 +15,4 @@ const ViewOrder = ({ id }: any) => {
     )
 }
 
-export default ViewOrder
+export default ViewOrderBtn

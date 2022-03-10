@@ -1,5 +1,6 @@
 import { DataGrid, GridColDef } from '@material-ui/data-grid';
-import ViewOrder from '../../common/ViewOrder';
+import { Link } from '@mui/material';
+import ViewOrderBtn from '../../common/ViewOrderBtn';
 
 interface CurrentOrdersTableProps {
     orders: any[];
@@ -14,6 +15,12 @@ const defaultColumns: GridColDef[] = [
         align: 'center',
         sortable: false,
         width: 150,
+        renderCell: (params) =>
+            <Link id={params.row.id} href={`/clients/edit/${params.row.id}`}>
+                <span style={{ fontWeight: 600, cursor: 'pointer' }}>
+                    {params.row.alias}
+                </span>
+            </Link>,
     },
     {
         field: 'state',
@@ -49,21 +56,20 @@ const defaultColumns: GridColDef[] = [
         width: 150,
         sortable: false,
         disableColumnMenu: true,
-        renderCell: (params) => <ViewOrder id={params.row.id} />,
+        renderCell: (params) => <ViewOrderBtn id={params.row.id} />,
     },
 ];
 
 const CurrentOrdersTable = ({ orders, columns = defaultColumns }: CurrentOrdersTableProps) => {
-    console.log(orders)
 
     return (
         <DataGrid
             rows={orders}
             columns={columns}
-            // components={{
-            //     NoRowsOverlay: () => <div> No hay registros </div>,
-            // }}
-            // hideFooterPagination
+            components={{
+                // NoRowsOverlay: () => <div> No hay registros </div>,
+            }}
+            hideFooterPagination
             style={{
                 justifyContent: 'center',
                 width: '90vw',
