@@ -10,22 +10,27 @@ interface Props {
   children?: any;
   text?: string;
   width?: string;
+  expanded?: boolean;
+  onClick?: void | any;
 }
 
 const AccordionCustom = ({
   width = 'fit-content',
   text = 'Titulo',
-  children = 'Contenido'
+  children = 'Contenido',
+  expanded = false,
+  onClick = () => { }
 }: Props) => {
 
 
   return (
     <div style={{ width: width }}>
-      <Accordion>
+      <Accordion expanded={expanded} >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           id="panel1a-header"
+          onClick={onClick}
         >
           <Typography>{text}</Typography>
         </AccordionSummary>

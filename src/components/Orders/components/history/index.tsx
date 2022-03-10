@@ -17,6 +17,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { Button } from '@mui/material';
 
 
 interface OrdersData {
@@ -61,16 +62,18 @@ const OrdersHistory = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
 
-    const [selectedStates, setsSelectedStates] = useState<string[]>([]);
+    const [selectedStates, setSelectedStates] = useState<string[]>([]);
     const [page, setPage] = useState(1);
     const [clientsList, setClientsList] = useState<OrdersData>(initialstate);
+    const [refreshFilter, setRefreshFilter] = useState<boolean>(true)
+    const [toggleFilterAccordion, setToggleFilterAccordion] = useState<boolean>(false)
 
     useEffect(() => {
         dispatch(startLoading());
         getOrders({
             page,
             // pickupDate: moment().format("YYYY-MM-DD"),
-            state: [OrderState.Created, OrderState.PendingToSetTemporaryClientPrice]
+            state: selectedStates
         })
             .then(res => {
                 const data = res?.data.orders.map((client: any) => {
@@ -92,37 +95,59 @@ const OrdersHistory = () => {
             .catch(() => dispatch(setMessage({ action: "Error al cargar la información" }, 'error')))
             .finally(() => dispatch(endLoading()))
 
-    }, [page])
+    }, [page, refreshFilter])
+
+    const handleChange = (event: SelectChangeEvent<typeof selectedStates>) => {
+        const {
+            target: { value },
+        } = event;
+        setSelectedStates(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    };
+
+    const handleFilterSubmit = () => {
+        setRefreshFilter(!refreshFilter)
+        setToggleFilterAccordion(false)
+    }
 
     return (
         <div>
-            <AccordionCustom text='Filtrar' >
-                <div style={{ display: 'flex' }}>
-                    <FormControl sx={{ m: 1, width: 300 }}>
+            <AccordionCustom
+                text='Filtrar'
+                expanded={toggleFilterAccordion}
+                onClick={() => setToggleFilterAccordion(!toggleFilterAccordion)}
+            >
+                <div style={{ display: 'flex', width: 'auto', alignItems: 'center' }}>
+                    <FormControl sx={{ m: 1, width: 200 }}>
                         <InputLabel id="state-selector">Estados</InputLabel>
                         <Select
                             labelId="state-selector"
                             id="demo-multiple-name"
                             multiple
-                            value={['1', '2', '3']}
-                            // onChange={handleChange}
+                            value={selectedStates}
+                            onChange={handleChange}
                             input={<OutlinedInput label="Estados" />}
                             MenuProps={MenuProps}
                         >
                             {states.map((state: any) => {
-                                const text: OrderState = state
-                                console.log(text)
-                                return (<MenuItem
-                                    key={state}
-                                    value={state}
-                                    style={getStyles(state, selectedStates, theme)}
-                                >
-                                    {transalations['es-ES']['Iron']}
-                                    {/* {state} */}
-                                </MenuItem>)
+                                const stateFormat: OrderState = state
+                                return (
+                                    <MenuItem
+                                        key={state}
+                                        value={state}
+                                        style={getStyles(state, selectedStates, theme)}
+                                    >
+                                        {transalations['es-ES'][stateFormat]}
+                                    </MenuItem>)
                             })}
                         </Select>
                     </FormControl>
+
+                    <div style={{ maxHeight: '30px' }}>
+                        <Button variant='outlined' onClick={handleFilterSubmit}>Filtrar Lista</Button>
+                    </div>
                 </div>
             </AccordionCustom>
 
