@@ -40,9 +40,9 @@ function RolesForm({ id, roles }: RolesFormProps) {
             await updateUserRoles({
                 ...data, id
             });
-            dispatch(setMessage({ message: "Actualización exitosa" }))
+            dispatch(setMessage({ action: "Actualización exitosa" }))
         } catch (error) {
-            dispatch(setMessage({ message: "Hubo un error" }))
+            dispatch(setMessage({ action: "Hubo un error" }, 'error'))
         } finally {
             dispatch(endLoading())
         }

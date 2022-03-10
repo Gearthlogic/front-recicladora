@@ -29,6 +29,7 @@ import {
 } from '../../../services/api/clients';
 import { RootStore } from '../../../redux';
 import { Role } from '../../../constants/enums/role.enum';
+import { setMessage } from '../../../redux/actions/message';
 
 interface FormData {
 	alias: string;
@@ -93,7 +94,7 @@ interface ParamTypes {
 const CreateClient = () => {
 	const dispatch = useDispatch()
 	const history = useHistory();
-	const {loading, user} = useSelector((state: RootStore) => ({
+	const { loading, user } = useSelector((state: RootStore) => ({
 		user: state.auth.user,
 		loading: state.loader.loading
 	}))
@@ -132,9 +133,10 @@ const CreateClient = () => {
 
 		try {
 			const response = await createNewClient(newBody)
-
 			history.push(Path.editClient.replace(':id', response.data.id))
+			dispatch(setMessage({ action: 'Creado correctamente.' }))
 		} catch (error) {
+			dispatch(setMessage({ action: 'ERROR' }, 'error'))
 			console.log(error)
 		}
 

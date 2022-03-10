@@ -56,8 +56,8 @@ const CreateUser = () => {
       await createUser(data);
       history.push(Path.usersList);
     } catch (error) {
-      dispatch(setMessage({message: "Hubo un error"}))
-    }finally{
+      dispatch(setMessage({ action: "Hubo un error" }, 'error'))
+    } finally {
       dispatch(endLoading())
     }
   };
