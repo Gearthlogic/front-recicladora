@@ -8,9 +8,9 @@ import { setMessage } from "../../redux/actions/message";
 import { Role } from "../../constants/enums/role.enum";
 
 export interface UserTableRow {
-	id: number;
-	username: string;
-	roles: Role[];
+    id: number;
+    username: string;
+    roles: Role[];
 }
 
 function UsersList() {
@@ -21,7 +21,7 @@ function UsersList() {
         dispatch(startLoading())
         getUsers()
             .then(res => setUsers(res))
-            .catch(error => setMessage({ message: error?.message }))
+            .catch(error => setMessage({ action: error?.message }, 'error'))
             .finally(() => dispatch(endLoading()))
     }, [])
 

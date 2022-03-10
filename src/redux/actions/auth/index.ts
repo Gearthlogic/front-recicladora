@@ -20,7 +20,7 @@ export const actionLogin =
 
 			callback();
 		} catch (error) {
-			dispatch(setMessage({message: 'Usuario o contraseña incorrecta'}));
+			dispatch(setMessage({action: 'Usuario o contraseña incorrecta'}, 'error'));
 		}finally{
 			dispatch(endLoading());
 		}

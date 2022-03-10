@@ -13,7 +13,7 @@ import { GridRowData } from '@material-ui/data-grid';
 
 interface UserActionsProps {
     data: GridRowData;
-	setRows: React.Dispatch<React.SetStateAction<UserTableRow[]>>
+    setRows: React.Dispatch<React.SetStateAction<UserTableRow[]>>
 }
 
 const UserActions = ({ data, setRows }: UserActionsProps) => {
@@ -25,7 +25,7 @@ const UserActions = ({ data, setRows }: UserActionsProps) => {
             await deleteUser(data.id);
             setRows((prev: UserTableRow[]) => prev.filter(row => row.id !== data.id))
         } catch (error) {
-            dispatch(setMessage({ message: "Hubo un error" }))
+            dispatch(setMessage({ action: "Hubo un error" }, 'error'))
         } finally {
             dispatch(endLoading());
         }
