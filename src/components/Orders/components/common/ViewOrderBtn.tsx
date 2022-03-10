@@ -1,15 +1,15 @@
 import { InfoOutlined } from '@mui/icons-material';
 import { Button } from '@mui/material';
-import { useHistory } from 'react-router-dom';
 
 import { Path } from '../../../../constants/enums/path.enum';
+import { useAddQueryParamData } from '../../../../hooks/useQueryParamData';
 
-const ViewOrderBtn = ({ id }: any) => {
+const ViewOrderBtn = ({ data }: any) => {
 
-    const history = useHistory()
+    const navigateview = useAddQueryParamData(data, Path.viewOrder)
 
     return (
-        <Button onClick={() => history.push(Path.viewOrder.replace(':id', id))} >
+        <Button onClick={navigateview} >
             <InfoOutlined />
         </Button>
     )

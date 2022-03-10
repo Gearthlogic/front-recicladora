@@ -1,50 +1,24 @@
-import { useState, useReducer, useEffect } from 'react';
-import { dataFetchReducer, TYPES } from './reducer';
+import { AxiosResponse } from 'axios';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { endLoading, startLoading } from '../../redux/actions/loading/loading';
+import { setMessage } from '../../redux/actions/message';
 
-export const axiosDataExtractionStrategy = async (response: { data: any }) => response.data;
-export const fetchDataExtractionStrategy = async (response: { json: () => any }) => response.json();
-
-interface UseFetch {
-	initialRequest?: Function;
-	initialData?: any;
-	dataExtractionStrategy?: Function;
-}
-
-const useFetch = ({ initialRequest, initialData = null, dataExtractionStrategy = fetchDataExtractionStrategy }: UseFetch) => {
-	const [request, setRequest] = useState(initialRequest);
-	const [state, dispatch] = useReducer(dataFetchReducer, {
-		isLoading: false,
-		isError: false,
-		data: initialData,
-	});
+const useFetch = <T>(requestPromise: Promise<AxiosResponse<any, any>>) => {
+	const [data, setData] = useState<T>();
+	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (request) {
-			let didCancel = false;
-			const fetchData = async () => {
-				if (!didCancel) dispatch({ type: TYPES.FETCH_INIT });
-				try {
-					const result = await request;
-					//console.log(result)
-					const data = await dataExtractionStrategy(result);
-					if (!didCancel) dispatch({ type: TYPES.FETCH_SUCCESS, payload: data });
-				} catch (error) {
-					console.error(error);
-					if (!didCancel) dispatch({ type: TYPES.FETCH_FAILURE });
-				}
-			};
-			fetchData();
-			return () => {
-				didCancel = true;
-			};
-		}
-	}, [request, dataExtractionStrategy]);
+		dispatch(startLoading());
 
-	const setData = (data: any) => {
-		dispatch({ type: TYPES.FETCH_SUCCESS, payload: data });
-	};
+		requestPromise
+			.then(res => setData(res.data))
+			.catch(() => setMessage({ message: 'Error al cargar la información' }, 'error'))
+			.finally(() => dispatch(endLoading()))
 
-	return [state, setRequest, setData];
+	}, [dispatch, requestPromise]);
+
+	return { data, setData };
 };
 
 export default useFetch;

@@ -56,7 +56,7 @@ const defaultColumns: GridColDef[] = [
         width: 150,
         sortable: false,
         disableColumnMenu: true,
-        renderCell: (params) => <ViewOrderBtn id={params.row.id} />,
+        renderCell: (params) => <ViewOrderBtn data={params.row} />,
     },
 ];
 

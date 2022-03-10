@@ -68,7 +68,7 @@ const OrdersHistory = () => {
             ...data,
             pickupDate: moment(data.pickupDate).format("YYYY-MM-DD")
         }
-
+        
         try {
             await createNewOrder(newBody);
             dispatch(setMessage({ action: 'Orden creada exitosamente.' }))
@@ -139,7 +139,7 @@ const OrdersHistory = () => {
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <DesktopDatePicker
                                         {...field}
-                                        minDate={new Date}
+                                        minDate={new Date()}
                                         label="Fecha de retiro"
                                         renderInput={(params) => (
                                             <TextField

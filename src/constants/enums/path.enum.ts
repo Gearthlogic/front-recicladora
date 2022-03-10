@@ -8,7 +8,7 @@ export enum Path {
 	createClient = '/clients/create',
 	editClient = '/clients/edit/:id',
 	orderList = '/orders',
-	viewOrder ='/orders/view-order',
+	viewOrder ='/orders/view',
 	createOrder = '/orders/create',
 	notFound = '/*'
 };

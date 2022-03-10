@@ -15,7 +15,7 @@ export function useAddQueryParamData<T>(data: T, path: Path) {
     }
 }
 
-export function useExctractQueryParamData() {
+export function useExtractQueryParamData() {
     const query = useQuery();
 
     return useMemo(() => {

@@ -6,6 +6,7 @@ import NotFound from '../../NotFound';
 import CreateClient from '../../Clients/CreateClient';
 import ClientList from '../../Clients';
 import OrderList from '../../Orders';
+import OrderView from '../../Orders/view';
 import CreateOrder from '../../Orders/create';
 import UsersList from '../../Users';
 import CreateUser from '../../Users/create';
@@ -14,7 +15,6 @@ import EditUser from '../../Users/edit';
 import {Path} from '../../../constants/enums/path.enum';
 import {Role} from '../../../constants/enums/role.enum';
 import {User} from '../../../constants/types/user.type';
-import Order from '../../Orders/components/order/Order';
 
 export class Route {
 	constructor(
@@ -75,7 +75,7 @@ export const routes: Array<Route> = [
 		{name: 'Ordenes'},
 		[Role.Admin, Role.Purchaser]
 	),
-	new Route({component: Order, path: Path.viewOrder}, undefined, [
+	new Route({component: OrderView, path: Path.viewOrder}, undefined, [
 		Role.Admin,
 		Role.Purchaser,
 	]),
