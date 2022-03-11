@@ -1,5 +1,6 @@
 import { DataGrid, GridColDef } from '@material-ui/data-grid';
 import { Link } from '@mui/material';
+import { memo } from 'react';
 import ViewOrderBtn from '../../common/ViewOrderBtn';
 
 interface CurrentOrdersTableProps {
@@ -79,9 +80,4 @@ const CurrentOrdersTable = ({ orders, columns = defaultColumns }: CurrentOrdersT
     );
 }
 
-
-
-
-
-
-export default CurrentOrdersTable;
+export default memo(CurrentOrdersTable);

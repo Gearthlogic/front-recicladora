@@ -1,6 +1,5 @@
 export enum Path {
 	index = '/',
-	login = '/login',
 	usersList = '/users',
 	createUser = '/users/create',
 	editUser = '/users/edit',
@@ -10,5 +9,6 @@ export enum Path {
 	orderList = '/orders',
 	viewOrder ='/orders/view',
 	createOrder = '/orders/create',
+	controllingOrderList = '/orders/control',
 	notFound = '/*'
 };

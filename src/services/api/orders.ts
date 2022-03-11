@@ -12,7 +12,6 @@ export const getOrders = (params: GetOrdersQueryDTO) => {
 	return privateAxiosInstance.get('/orders', { params });
 };
 
-
 export const getOrderItems = (id: number) => {
 	return privateAxiosInstance.get(`/orders/${id}/items`);
 };
