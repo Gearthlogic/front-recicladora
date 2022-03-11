@@ -3,7 +3,7 @@ import { setMessage } from '../../../../redux/actions/message';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
 
-import CurrentOrderstable from './components/table'
+
 import { getOrders } from '../../../../services/api/orders';
 import { OrderState } from '../../../../constants/enums/orderStates.enum';
 import { startLoading, endLoading } from '../../../../redux/actions/loading/loading';
@@ -18,16 +18,15 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Button } from '@mui/material';
+import HistoryOrdersTable from './components/HistoryOrdersTable';
 
 
 interface OrdersData {
     orders: any[];
-    client: any[];
     count: number;
 }
 const initialstate: OrdersData = {
     orders: [],
-    client: [],
     count: 0
 }
 
@@ -63,8 +62,12 @@ const OrdersHistory = () => {
     const dispatch = useDispatch();
 
     const [selectedStates, setSelectedStates] = useState<string[]>([]);
+    const [pageToShow, setPageToShow] = useState<number>(0)
+    const [pageSize, setPageSize] = useState<number>(20)
+
     const [page, setPage] = useState(1);
     const [clientsList, setClientsList] = useState<OrdersData>(initialstate);
+
     const [refreshFilter, setRefreshFilter] = useState<boolean>(true)
     const [toggleFilterAccordion, setToggleFilterAccordion] = useState<boolean>(false)
 
@@ -73,24 +76,25 @@ const OrdersHistory = () => {
         getOrders({
             page,
             // pickupDate: moment().format("YYYY-MM-DD"),
-            state: selectedStates
+            state: selectedStates,
         })
             .then(res => {
                 const data = res?.data.orders.map((client: any) => {
                     const typeFormat: ClientType = client.client.type
                     const stateFormat: ClientType = client.state
+
                     return {
                         type: transalations['es-ES'][typeFormat],
                         state: transalations['es-ES'][stateFormat],
                         alias: client.client.alias,
-                        id: client.client.id,
+                        id: client.id,
                         payableAmount: client.payableAmount,
                         cellphone: client.client.cellphone,
                         email: client.client.email,
                         pickupDate: moment(client.pickupDate).format("DD-MM/YYYY")
                     }
                 })
-                setClientsList({ orders: data, client: [], count: res.data.count })
+                setClientsList({ orders: data, count: res.data.count })
             })
             .catch(() => dispatch(setMessage({ action: "Error al cargar la información" }, 'error')))
             .finally(() => dispatch(endLoading()))
@@ -111,6 +115,8 @@ const OrdersHistory = () => {
         setRefreshFilter(!refreshFilter)
         setToggleFilterAccordion(false)
     }
+
+    // console.log(clientsList.orders)
 
     return (
         <div>
@@ -152,7 +158,16 @@ const OrdersHistory = () => {
             </AccordionCustom>
 
             <div>
-                <CurrentOrderstable orders={clientsList.orders} />
+                <HistoryOrdersTable
+                    orders={clientsList.orders}
+
+                    page={pageToShow}
+                    pageSize={pageSize}
+                    onPageSizeChange={(newPage: number) => setPageSize(newPage)}
+                    onPageChange={(e: number) => {
+                        setPageToShow(e)
+                    }}
+                />
             </div>
         </div>
     )

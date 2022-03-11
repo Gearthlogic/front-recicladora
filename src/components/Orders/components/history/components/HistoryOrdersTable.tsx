@@ -5,6 +5,10 @@ import ViewOrderBtn from '../../common/ViewOrderBtn';
 interface CurrentOrdersTableProps {
     orders: any[];
     columns?: any[];
+    page?: number;
+    onPageChange?: void | any;
+    onPageSizeChange?: void | any;
+    pageSize?: number;
 }
 
 const defaultColumns: GridColDef[] = [
@@ -49,7 +53,7 @@ const defaultColumns: GridColDef[] = [
         width: 150,
         disableColumnMenu: true,
         sortable: true,
-    }, 
+    },
     {
         field: 'pickupDate',
         headerName: 'Fecha',
@@ -89,16 +93,27 @@ const defaultColumns: GridColDef[] = [
     },
 ];
 
-const CurrentOrdersTable = ({ orders, columns = defaultColumns }: CurrentOrdersTableProps) => {
+const HistoryOrdersTable = ({
+    pageSize,
+    onPageSizeChange,
+    onPageChange,
+    page,
+    orders,
+    columns = defaultColumns
+}: CurrentOrdersTableProps) => {
 
     return (
         <DataGrid
             rows={orders}
             columns={columns}
-            components={{
-                // NoRowsOverlay: () => <div> No hay registros </div>,
-            }}
-            // hideFooterPagination
+
+            pagination
+            rowsPerPageOptions={[5, 10, 20, 30, 40]}
+            pageSize={pageSize}
+            onPageSizeChange={onPageSizeChange}
+            page={page}
+            onPageChange={onPageChange}
+         
             style={{
                 justifyContent: 'center',
                 width: '90vw',
@@ -113,4 +128,4 @@ const CurrentOrdersTable = ({ orders, columns = defaultColumns }: CurrentOrdersT
 
 
 
-export default CurrentOrdersTable;
+export default HistoryOrdersTable;
