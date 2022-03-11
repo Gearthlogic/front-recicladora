@@ -14,12 +14,13 @@ import EditUser from '../../Users/edit';
 import { Path } from '../../../constants/enums/path.enum';
 import { Role } from '../../../constants/enums/role.enum';
 import { User } from '../../../constants/types/user.type';
+import ControllingOrderList from '../../Orders/control';
 
 export class Route {
 	constructor(
 		public readonly routeProps: CustomRouteProps,
-		public readonly layoutProps?: LayoutProps,
-		public readonly allowedRoles?: Role[]
+		public readonly allowedRoles?: Role[],
+		public readonly layoutProps?: LayoutProps
 	) { }
 
 	isAllowedTo(userRoles: Role[]) {
@@ -50,45 +51,45 @@ export const routes: Array<Route> = [
 	),
 	new Route(
 		{ component: ClientList, path: Path.clientList, exact: true },
-		{ name: 'Clientes' },
-		[Role.Admin, Role.Purchaser]
+		[Role.Admin, Role.Purchaser],
+		{ name: 'Clientes' }
 	),
 	new Route(
 		{ component: CreateClient, exact: true, path: Path.editClient },
-		undefined,
 		[Role.Admin, Role.Purchaser]
 	),
 	new Route(
 		{ component: CreateClient, path: Path.createClient, exact: true },
-		undefined,
 		[Role.Admin, Role.Purchaser]
 	),
-	new Route({ component: CreateOrder, path: Path.createOrder }, undefined, [
-		Role.Admin,
-		Role.Purchaser,
-	]),
+	new Route(
+		{ component: CreateOrder, path: Path.createOrder },
+		[Role.Admin, Role.Purchaser]
+	),
 	new Route(
 		{ component: OrderList, path: Path.orderList, exact: true },
+		[Role.Admin, Role.Purchaser],
 		{ name: 'Ordenes' },
+	),
+	new Route(
+		{ component: OrderView, path: Path.viewOrder },
 		[Role.Admin, Role.Purchaser]
 	),
-	new Route({ component: OrderView, path: Path.viewOrder }, undefined, [
-		Role.Admin,
-		Role.Purchaser,
-	]),
+	new Route(
+		{ component: ControllingOrderList, path: Path.controllingOrderList, exact: true },
+		[Role.EntryController]
+	),
 	new Route(
 		{ component: UsersList, path: Path.usersList, exact: true },
-		{ name: 'Usuarios' },
-		[Role.Admin]
+		[Role.Admin],
+		{ name: 'Usuarios' }
 	),
 	new Route(
 		{ component: CreateUser, path: Path.createUser, exact: true },
-		undefined,
 		[Role.Admin]
 	),
 	new Route(
 		{ component: EditUser, path: Path.editUser, exact: true },
-		undefined,
 		[Role.Admin]
 	),
 	new Route({ path: Path.notFound, component: NotFound }),

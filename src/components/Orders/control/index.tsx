@@ -12,7 +12,7 @@ function ControllingOrderList() {
         pickupDate: moment().format("YYYY-MM-DD"),
         state: [OrderState.Controlling]
     }), []))
-    
+    debugger
     return (
         <Table orders={data?.orders} />
     )
