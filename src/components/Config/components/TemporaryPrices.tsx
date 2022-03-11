@@ -3,20 +3,13 @@ import { useDispatch } from 'react-redux';
 
 import { endLoading, startLoading } from '../../../redux/actions/loading/loading';
 import { Controller, useForm } from 'react-hook-form';
-import { createClientPrices, createClientTemporaryPrices, updateClientPrices } from '../../../services/api/clients';
+import { createClientTemporaryPrices } from '../../../services/api/clients';
 import { Material } from '../../../constants/enums/material.enum';
-import { ClientPrice } from '../../../constants/types/clientPrices.type';
-import { useEffect, memo, SetStateAction, useState } from 'react';
+import { memo } from 'react';
 import transalations from '../../../assets/translations.json';
 import { setMessage } from '../../../redux/actions/message';
 
-interface ClientPricesProps {
-   id?: string;
-   prices?: ClientPrice[]
-   setPrices?: (value: ClientPrice[]) => void
-}
-
-const TemporaryPrices = ({ id, prices = [], setPrices }: ClientPricesProps) => {
+const TemporaryPrices = () => {
    const dispatch = useDispatch();
    const { control, handleSubmit, reset } = useForm()
 
