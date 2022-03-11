@@ -15,6 +15,7 @@ import {Path} from '../../../constants/enums/path.enum';
 import {Role} from '../../../constants/enums/role.enum';
 import {User} from '../../../constants/types/user.type';
 import Order from '../../Orders/components/order/Order';
+import Config from '../../Config';
 
 export class Route {
 	constructor(
@@ -82,6 +83,11 @@ export const routes: Array<Route> = [
 	new Route(
 		{component: UsersList, path: Path.usersList, exact: true},
 		{name: 'Usuarios'},
+		[Role.Admin]
+	),
+	new Route(
+		{component: Config, path: Path.config, exact: true},
+		{name: 'Configuración'},
 		[Role.Admin]
 	),
 	new Route(
