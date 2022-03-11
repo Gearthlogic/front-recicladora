@@ -79,19 +79,19 @@ const OrdersHistory = () => {
             state: selectedStates,
         })
             .then(res => {
-                const data = res?.data.orders.map((client: any) => {
-                    const typeFormat: ClientType = client.client.type
-                    const stateFormat: ClientType = client.state
+                const data = res?.data.orders.map((order: any) => {
+                    const typeFormat: ClientType = order.client.type
+                    const stateFormat: ClientType = order.state
 
                     return {
                         type: transalations['es-ES'][typeFormat],
                         state: transalations['es-ES'][stateFormat],
-                        alias: client.client.alias,
-                        id: client.id,
-                        payableAmount: client.payableAmount,
-                        cellphone: client.client.cellphone,
-                        email: client.client.email,
-                        pickupDate: moment(client.pickupDate).format("DD-MM/YYYY")
+                        alias: order.client.alias,
+                        id: order.id,
+                        payableAmount: order.payableAmount,
+                        cellphone: order.client.cellphone,
+                        email: order.client.email,
+                        pickupDate: moment(order.pickupDate).format("DD-MM/YYYY")
                     }
                 })
                 setClientsList({ orders: data, count: res.data.count })
