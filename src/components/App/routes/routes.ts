@@ -48,7 +48,8 @@ export interface CustomRouteProps extends RouteProps {
 export const routes: Array<Route> = [
 	new Route(
 		{path: Path.index, component: Landing, exact: true},
-		{name: 'Inicio'}
+		undefined,
+		Object.values(Role)
 	),
 	new Route({path: Path.login, component: LogIn, exact: true}),
 	new Route(
