@@ -5,7 +5,7 @@ import { privateAxiosInstance } from '../axios';
 
 export interface GetOrdersQueryDTO extends PaginateAttributes {
 	pickupDate?: string;
-	state?: OrderState[];
+	state?: OrderState[] | string[];
 }
 
 export const getOrders = (params: GetOrdersQueryDTO) => {

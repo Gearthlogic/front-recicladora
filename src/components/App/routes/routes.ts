@@ -10,11 +10,13 @@ import CreateOrder from '../../Orders/create';
 import UsersList from '../../Users';
 import CreateUser from '../../Users/create';
 import EditUser from '../../Users/edit';
+import ControllingOrderList from '../../Orders/control';
+import Config from '../../Config';
 
 import { Path } from '../../../constants/enums/path.enum';
 import { Role } from '../../../constants/enums/role.enum';
 import { User } from '../../../constants/types/user.type';
-import ControllingOrderList from '../../Orders/control';
+
 
 export class Route {
 	constructor(
@@ -83,6 +85,11 @@ export const routes: Array<Route> = [
 		{ component: UsersList, path: Path.usersList, exact: true },
 		[Role.Admin],
 		{ name: 'Usuarios' }
+	),
+	new Route(
+		{ component: Config, path: Path.config, exact: true },
+		[Role.Admin],
+		{ name: 'Configuración' }
 	),
 	new Route(
 		{ component: CreateUser, path: Path.createUser, exact: true },
