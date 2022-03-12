@@ -1,16 +1,17 @@
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@material-ui/core";
-
 import { memo, useMemo, useState } from "react";
-import { Material } from "../../../../constants/enums/material.enum";
-import translations from '../../../../assets/translations.json'
+import { useDispatch } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
-import { ClientType } from "../../../../constants/enums/client.enum";
 import { AddOutlined } from "@mui/icons-material";
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
-import { createOrderItems, OrderItemDTO } from "../../../../services/api/orders";
 import { useHistory } from "react-router-dom";
+
+import { Material } from "../../../../constants/enums/material.enum";
+import translations from '../../../../assets/translations.json'
+import { ClientType } from "../../../../constants/enums/client.enum";
+import { createOrderItems } from "../../../../services/api/orders";
 import { Path } from "../../../../constants/enums/path.enum";
-import { useDispatch } from "react-redux";
+import { OrderMaterialItemDTO } from '../../../../constants/dto/order.dto'
 import { endLoading, startLoading } from "../../../../redux/actions/loading/loading";
 
 interface CreateItemsFormProps {
@@ -36,8 +37,8 @@ function CreateItemsForm({ id, type }: CreateItemsFormProps) {
     const history = useHistory();
     const dispatch = useDispatch()
 
-    const { control, handleSubmit, formState: { errors } } = useForm<OrderItemDTO>();
-    const [itemList, setItemList] = useState<OrderItemDTO[]>([]);
+    const { control, handleSubmit, formState: { errors } } = useForm<OrderMaterialItemDTO>();
+    const [itemList, setItemList] = useState<OrderMaterialItemDTO[]>([]);
 
     const isPriceVisible = useMemo(() => type === ClientType.Temporary, [type])
     const allowedMaterials = useMemo(
@@ -53,7 +54,7 @@ function CreateItemsForm({ id, type }: CreateItemsFormProps) {
         });
     }
 
-    function submitAddItem(data: OrderItemDTO) {
+    function submitAddItem(data: OrderMaterialItemDTO) {
         setItemList(prev => prev.concat(data));
     }
 
@@ -67,7 +68,7 @@ function CreateItemsForm({ id, type }: CreateItemsFormProps) {
             history.push(Path.orderList);
         } catch (error) {
 
-        }finally {
+        } finally {
             dispatch(endLoading())
         }
     }
@@ -125,7 +126,7 @@ function CreateItemsForm({ id, type }: CreateItemsFormProps) {
             </Grid>
             <Grid item xs={6}>
                 <DataGrid
-                    style={{height: 300}}
+                    style={{ height: 300 }}
                     columns={materialsTableColumns}
                     rows={itemList.map(item => ({ ...item, id: item.material }))}
                     hideFooterPagination

@@ -1,49 +1,45 @@
-import moment from "moment";
 import { Accordion, AccordionSummary, Grid, Paper, Typography } from "@material-ui/core";
 import { AccordionDetails } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import Items from './components/items'
 import useFetch from "../../../hooks/useFetch";
-import { OrderState } from "../../../constants/enums/orderStates.enum";
-import { getOrders } from "../../../services/api/orders";
+import { getControllingOrders } from "../../../services/api/orders";
+import { useMemo } from "react";
 
 const paperStyles = {
-    minHeight : '85vh',
+    minHeight: '85vh',
     padding: 10,
     width: '60%'
 }
-const orderRequest = getOrders({ 
-    pickupDate: moment().format("YYYY-MM-DD"),
-    state: [OrderState.Controlling]
-});
 
 function ControllingOrderList() {
-    const { data } = useFetch<{ orders: any[] }>( orderRequest )
-    
+    const { data } = useFetch<any[]>(useMemo(() => getControllingOrders(), []))
+
     return (
-        <Grid container  justifyContent="center">
+        <Grid container justifyContent="center">
             <Paper style={paperStyles}>
                 <Typography textAlign="center" variant="h4"  >
                     Ordenes por controlar
                 </Typography>
-                {(data?.orders?.length || 0 )> 0 ?
-                    data?.orders.map(order => (
+                {(data?.length || 0) > 0 ?
+                    data?.map(order => (
                         <Accordion key={order.orderId}>
-                            <AccordionSummary           
-                            expandIcon={<ExpandMoreIcon />}>
-                                {order.client.alias}
+                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                                <Typography variant="h6"  >
+                                    #{order.id} - {order.client.alias}
+                                </Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <Items />
+                                <Items items={order.items} />
                             </AccordionDetails>
                         </Accordion>
                     )) : <Typography textAlign="center"   >
-                       No hay ordenes por controlar
+                        No hay ordenes por controlar
                     </Typography>
                 }
             </Paper>
-        </Grid>
+        </Grid >
     )
 }
 

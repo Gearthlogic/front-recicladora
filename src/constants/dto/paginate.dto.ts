@@ -1,5 +1,5 @@
 
-export interface PaginateAttributes {
+export interface PaginateDTO {
     limit?: number;
     page?: number;
 }
