@@ -1,14 +1,22 @@
 {
-    "es-ES":{
-        "veneer":"Chapa",
+    "es-ES": {
+        "veneer": "Chapa",
         "Iron": "Hierro",
         "Permanent": "Permanente",
-        "Temporary": "Temporario"
+        "Temporary": "Temporario",
+        "Created": "Creado",
+        "Controlling": "Controlando",
+        "PendingToSetTemporaryClientPrice": "Pendiente Precio",
+        "Closed": "Cerrado"
     },
-    "en-EN":{
-        "veneer":"veneer",
-        "Iron": "iron",
-        "Permanent": "permanent",
-        "Temporary": "temporary"
+    "en-EN": {
+        "veneer": "Veneer",
+        "Iron": "Iron",
+        "Permanent": "Permanent",
+        "Temporary": "Temporary",
+        "Created": "Created",
+        "Controlling": "Controlling",
+        "PendingToSetTemporaryClientPrice": "Pending price",
+        "Closed": "Closed"
     }
 }
