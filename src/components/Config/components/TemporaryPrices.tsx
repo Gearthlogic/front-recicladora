@@ -35,7 +35,7 @@ const TemporaryPrices = () => {
       const inputHasText = () => {
          let isText: boolean = true
          for (const key in data) {
-            if (/^[0-9]+$/.test(data[key])) {
+            if (/^\d+$/.test(data[key]) || data[key] === '') {
                isText = false
             } else {
                isText = true
@@ -51,7 +51,8 @@ const TemporaryPrices = () => {
          const isEditingPrices = () => {
             let isEditing: boolean = false
             for (let i = 0; i < temporaryPrices.length; i++) {
-               if (temporaryPrices[i].price !== '' || temporaryPrices[i].price !== '0') {
+               if (temporaryPrices[i].price !== '' ||
+                  temporaryPrices[i].price !== '0') {
                   isEditing = true
                   break;
                }
@@ -90,9 +91,7 @@ const TemporaryPrices = () => {
             dispatch(endLoading())
          }
       } else {
-         dispatch(endLoading())
          dispatch(setMessage({ action: 'ERROR - Ingrese solamente Números' }, 'error'))
-
       }
 
    };
