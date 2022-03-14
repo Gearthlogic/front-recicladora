@@ -1,4 +1,4 @@
-import { GetOrdersQueryDTO , CreateOrderItemsDTO} from '../../constants/dto/order.dto';
+import { GetOrdersQueryDTO , CreateOrderItemsDTO, ControlOrderItemsDTO} from '../../constants/dto/order.dto';
 import { privateAxiosInstance } from '../axios';
 
 export const getOrders = (params: GetOrdersQueryDTO) => {
@@ -15,4 +15,12 @@ export const getOrderItems = (id: number) => {
 
 export const createOrderItems = (data: CreateOrderItemsDTO) => {
 	return privateAxiosInstance.post(`/orders/items`, data);
+};
+
+export const controlOrderItem = (data: ControlOrderItemsDTO) => {
+	return privateAxiosInstance.patch(`/orders/items/actions/control`, data);
+};
+
+export const endControlling = (id: number) => {
+	return privateAxiosInstance.patch(`/orders/${id}/actions/end_controlling`);
 };
