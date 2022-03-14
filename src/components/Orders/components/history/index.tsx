@@ -61,7 +61,7 @@ const OrdersHistory = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
 
-    const [selectedStates, setSelectedStates] = useState<string[]>([]);
+    const [selectedStates, setSelectedStates] = useState<OrderState[]>([]);
     const [pageToShow, setPageToShow] = useState<number>(0)
     const [pageSize, setPageSize] = useState<number>(20)
 
@@ -75,7 +75,6 @@ const OrdersHistory = () => {
         dispatch(startLoading());
         getOrders({
             page,
-            // pickupDate: moment().format("YYYY-MM-DD"),
             state: selectedStates,
         })
             .then(res => {
@@ -91,7 +90,7 @@ const OrdersHistory = () => {
                         payableAmount: order.payableAmount,
                         cellphone: order.client.cellphone,
                         email: order.client.email,
-                        pickupDate: moment(order.pickupDate).format("DD-MM/YYYY")
+                        pickupDate: moment(order.pickupDate).format("DD-MM-YYYY")
                     }
                 })
                 setClientsList({ orders: data, count: res.data.count })
@@ -102,12 +101,10 @@ const OrdersHistory = () => {
     }, [page, refreshFilter])
 
     const handleChange = (event: SelectChangeEvent<typeof selectedStates>) => {
-        const {
-            target: { value },
-        } = event;
+        const { target: { value } } = event;
         setSelectedStates(
             // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',') : value,
+            typeof value === 'string' ? value.split(',') as OrderState[] : value,
         );
     };
 
@@ -116,11 +113,10 @@ const OrdersHistory = () => {
         setToggleFilterAccordion(false)
     }
 
-    // console.log(clientsList.orders)
-
     return (
         <div>
             <AccordionCustom
+                
                 text='Filtrar'
                 expanded={toggleFilterAccordion}
                 onClick={() => setToggleFilterAccordion(!toggleFilterAccordion)}
@@ -138,7 +134,7 @@ const OrdersHistory = () => {
                             MenuProps={MenuProps}
                         >
                             {states.map((state: any) => {
-                                const stateFormat: OrderState = state
+                                const stateFormat: OrderState = state 
                                 return (
                                     <MenuItem
                                         key={state}
@@ -160,7 +156,6 @@ const OrdersHistory = () => {
             <div>
                 <HistoryOrdersTable
                     orders={clientsList.orders}
-
                     page={pageToShow}
                     pageSize={pageSize}
                     onPageSizeChange={(newPage: number) => setPageSize(newPage)}

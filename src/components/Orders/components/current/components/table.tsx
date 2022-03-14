@@ -1,5 +1,6 @@
 import { DataGrid, GridColDef } from '@material-ui/data-grid';
 import { Link } from '@mui/material';
+import { memo } from 'react';
 import ViewOrderBtn from '../../common/ViewOrderBtn';
 
 interface CurrentOrdersTableProps {
@@ -56,7 +57,7 @@ const defaultColumns: GridColDef[] = [
         width: 150,
         sortable: false,
         disableColumnMenu: true,
-        renderCell: (params) => <ViewOrderBtn id={params.row.id} />,
+        renderCell: (params) => <ViewOrderBtn data={params.row} />,
     },
 ];
 
@@ -71,17 +72,11 @@ const CurrentOrdersTable = ({ orders, columns = defaultColumns }: CurrentOrdersT
             }}
             hideFooterPagination
             style={{
-                justifyContent: 'center',
-                width: '90vw',
-                height: '80vh',
+                width: '95vw',
+                height: '70vh',
             }}
         />
     );
 }
 
-
-
-
-
-
-export default CurrentOrdersTable;
+export default memo(CurrentOrdersTable);

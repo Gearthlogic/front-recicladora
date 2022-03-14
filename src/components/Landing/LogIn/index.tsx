@@ -44,12 +44,7 @@ const LogIn = () => {
   };
 
   return (
-    <Grid
-      container
-      alignItems="center"
-      justifyContent="center"
-      style={{ minHeight: "100vh" }}
-    >
+    <Grid container justifyContent="center">
       <Paper elevation={10} style={paperStyle}>
         <Typography align="center" variant="h4" margin={4}>
           Login

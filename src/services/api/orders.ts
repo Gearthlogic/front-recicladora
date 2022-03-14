@@ -1,12 +1,18 @@
-import {OrderState} from '../../constants/enums/orderStates.enum';
-import {PaginateAttributes} from '../../constants/types/paginate';
-import {privateAxiosInstance} from '../axios';
-
-export interface GetOrdersQueryDTO extends PaginateAttributes {
-	pickupDate?: string;
-	state?: OrderState[] | string[];
-}
+import { GetOrdersQueryDTO , CreateOrderItemsDTO} from '../../constants/dto/order.dto';
+import { privateAxiosInstance } from '../axios';
 
 export const getOrders = (params: GetOrdersQueryDTO) => {
-	return privateAxiosInstance.get('/orders', {params});
+	return privateAxiosInstance.get('/orders', { params });
+};
+
+export const getControllingOrders = () => {
+	return privateAxiosInstance.get('/orders/controlling');
+};
+
+export const getOrderItems = (id: number) => {
+	return privateAxiosInstance.get(`/orders/${id}/items`);
+};
+
+export const createOrderItems = (data: CreateOrderItemsDTO) => {
+	return privateAxiosInstance.post(`/orders/items`, data);
 };

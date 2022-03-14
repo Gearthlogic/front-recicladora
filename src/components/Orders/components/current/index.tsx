@@ -13,9 +13,6 @@ interface OrdersData {
     client: any[];
     count: number;
 }
-interface OrdersClient {
-    client: any[];
-}
 
 const initialstate: OrdersData = {
     orders: [],
@@ -37,8 +34,10 @@ const CurrentOrders = () => {
             state: [OrderState.Created, OrderState.PendingToSetTemporaryClientPrice]
         })
             .then(res => {
+                
                 const data = res?.data.orders.map((order: any) => {
                     return {
+                        orderId: order.id,
                         alias: order.client.alias,
                         state: order.state,
                         id: order.client.id,
@@ -51,7 +50,7 @@ const CurrentOrders = () => {
             .catch(() => dispatch(setMessage({ action: "Error al cargar la información" }, 'error')))
             .finally(() => dispatch(endLoading()))
 
-    }, [page])
+    }, [page, dispatch])
 
     return (
         <div>
