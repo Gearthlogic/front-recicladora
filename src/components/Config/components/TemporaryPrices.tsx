@@ -12,7 +12,6 @@ const TemporaryPrices = () => {
    const dispatch = useDispatch();
    const { control, handleSubmit, reset } = useForm()
    const [temporaryPrices, setTemporaryPrices] = useState<any>([])
-   const [refreshPrices, setRefreshPrices] = useState<boolean>(true)
 
    useEffect(() => {
       getTemporaryPrices().then(res => setTemporaryPrices(res.data))
@@ -30,7 +29,7 @@ const TemporaryPrices = () => {
          return auxObj
       }
       reset(pricesInputDefault())
-   }, [temporaryPrices, refreshPrices])
+   }, [temporaryPrices])
 
    const onSubmit = async (data: any) => {
       const inputHasText = () => {
