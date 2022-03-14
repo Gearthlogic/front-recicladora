@@ -36,8 +36,6 @@ const TemporaryPrices = () => {
       const inputHasText = () => {
          let isText: boolean = true
          for (const key in data) {
-            console.log(/^\d+$/.test(data[key]), data[key] !== '')
-
             if (/^\d+$/.test(data[key]) || data[key] === '') {
                isText = false
             } else {
@@ -54,7 +52,8 @@ const TemporaryPrices = () => {
          const isEditingPrices = () => {
             let isEditing: boolean = false
             for (let i = 0; i < temporaryPrices.length; i++) {
-               if (temporaryPrices[i].price !== '' || temporaryPrices[i].price !== '0') {
+               if (temporaryPrices[i].price !== '' ||
+                  temporaryPrices[i].price !== '0') {
                   isEditing = true
                   break;
                }
