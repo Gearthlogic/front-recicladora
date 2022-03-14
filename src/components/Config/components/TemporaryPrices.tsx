@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { endLoading, startLoading } from '../../../redux/actions/loading/loading';
 import { Controller, useForm } from 'react-hook-form';
-import { createClientTemporaryPrices, getTemporaryPrices } from '../../../services/api/clients';
+import { createClientTemporaryPrices, getTemporaryPrices, upDateClientTemporaryPrices } from '../../../services/api/clients';
 import { Material } from '../../../constants/enums/material.enum';
 import { memo, useEffect, useState } from 'react';
 import transalations from '../../../assets/translations.json';
@@ -19,38 +19,63 @@ const TemporaryPrices = () => {
       getTemporaryPrices().then(res => setTemporaryPrices(res.data))
    }, [])
 
+   // console.log('lo que trae el back ', temporaryPrices)
+
    useEffect(() => {
-      const resetPrices = () => {
+      const pricesInputDefault = () => {
          let auxObj = {}
          for (let i = 0; i < temporaryPrices.length; i++) {
             auxObj = {
                ...auxObj,
-               [temporaryPrices[i].material]: temporaryPrices[i].price
+               [temporaryPrices[i].material]: temporaryPrices[i].price,
             }
          }
          return auxObj
       }
-      reset(resetPrices())
+      reset(pricesInputDefault())
    }, [temporaryPrices])
 
    const onSubmit = async (data: any) => {
-      // dispatch(startLoading())
+      dispatch(startLoading())
 
-      const toSend = {
+      const isEditingPrices = () => {
+         let isEditing: boolean = false
+         for (let i = 0; i < temporaryPrices.length; i++) {
+            if (temporaryPrices[i].price !== '' || temporaryPrices[i].price !== '0') {
+               isEditing = true
+               break;
+            }
+         }
+         return isEditing
+      }
+
+      const editedPrices = () => {
+         let editedPrices: any = []
+         for (let i = 0; i < temporaryPrices.length; i++) {
+            editedPrices.push({ id: temporaryPrices[i].id, price: data[temporaryPrices[i].material] })
+         }
+         return editedPrices
+      }
+ 
+      const creatingPrices = {
          prices: Object.values(Material).map(material => ({
             material, price: parseFloat(data[material])
          }))
       };
-      console.log(toSend)
-      // try {
-      //    await createClientTemporaryPrices(toSend)
-      //    dispatch(setMessage({ action: 'Precios establecidos correctamente.' }))
-      // } catch (error) {
-      //    console.log(error)
-      //    dispatch(setMessage({ action: 'ERROR al establecer precios.' }, 'error'))
-      // } finally {
-      //    dispatch(endLoading())
-      // }
+
+      try {
+         if (isEditingPrices()) {
+            await upDateClientTemporaryPrices(editedPrices())
+         } else {
+            await createClientTemporaryPrices(creatingPrices)
+         }
+         dispatch(setMessage({ action: 'Precios establecidos correctamente.' }))
+      } catch (error) {
+         console.log(error)
+         dispatch(setMessage({ action: 'ERROR al establecer precios.' }, 'error'))
+      } finally {
+         dispatch(endLoading())
+      }
    };
 
    const buildForm = (temporaryPrices: any) => {

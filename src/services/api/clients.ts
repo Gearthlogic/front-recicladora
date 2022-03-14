@@ -17,7 +17,7 @@ interface CreateClientPrices {
 	clientId: number
 	prices: CreatePrices[]
 }
-interface CreateClientTemporaryPrices {
+interface ClientTemporaryPrices {
 	prices: CreatePrices[]
 }
 
@@ -71,8 +71,12 @@ export const changeClientState = async (id: number) => {
 export const createClientPrices = async (body: CreateClientPrices) => {
 	return privateAxiosInstance.post('/client/prices', body)
 }
-export const createClientTemporaryPrices = async (body: CreateClientTemporaryPrices) => {
+export const createClientTemporaryPrices = async (body: ClientTemporaryPrices) => {
 	return privateAxiosInstance.post('/client/temporary_prices', body)
+}
+
+export const upDateClientTemporaryPrices = async (body: ClientTemporaryPrices) => {
+	return privateAxiosInstance.put('/client/temporary_prices', body)
 }
 
 export const updateClientPrices = async (body: UpdatePrice[]) => {
