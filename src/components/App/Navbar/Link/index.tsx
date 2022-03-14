@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Link } from 'react-router-dom'; 
+import { NavLink } from 'react-router-dom'; 
 import { Path } from '../../../../constants/enums/path.enum';
 
 import {  LayoutProps } from '../../routes/routes';
@@ -11,10 +11,10 @@ interface CustomLinkProps {
 }
 
 const CustomLink: FC<CustomLinkProps> = ({to, layoutProps}) => {
-	return <Link to={to} className={styles.link}>
+	return <NavLink activeClassName={styles.active}  to={to} className={styles.link}>
 		{layoutProps?.icon}
 		{layoutProps?.name}
-	</Link>;
+	</NavLink>;
 };
 
 export default CustomLink;

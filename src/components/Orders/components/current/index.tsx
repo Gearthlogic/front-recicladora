@@ -10,35 +10,52 @@ import { startLoading, endLoading } from '../../../../redux/actions/loading/load
 
 interface OrdersData {
     orders: any[];
+    client: any[];
     count: number;
 }
 
-const initialstate : OrdersData = {
+const initialstate: OrdersData = {
     orders: [],
+    client: [],
     count: 0
 }
 
+const CurrentOrders = () => {
 
-function CurrentOrders() {
     const [page, setPage] = useState(1);
-    const [data, setData] = useState<OrdersData>(initialstate);
+    const [clientsList, setClientsList] = useState<OrdersData>(initialstate);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(startLoading());
         getOrders({
             page,
-            pickupDate: moment().toISOString(),
+            pickupDate: moment().format("YYYY-MM-DD"),
             state: [OrderState.Created, OrderState.PendingToSetTemporaryClientPrice]
         })
-            .then(res => setData(res.data))
-            .catch(() => dispatch(setMessage({ message: "Error al cargar la información" })))
+            .then(res => {
+                
+                const data = res?.data.orders.map((order: any) => {
+                    return {
+                        orderId: order.id,
+                        alias: order.client.alias,
+                        state: order.state,
+                        id: order.client.id,
+                        address: `${order.client.address.street} ${order.client.address.streetNumber}`,
+                        type: order.client.type,
+                    }
+                })
+                setClientsList({ orders: data, client: [], count: res.data.count })
+            })
+            .catch(() => dispatch(setMessage({ action: "Error al cargar la información" }, 'error')))
             .finally(() => dispatch(endLoading()))
 
-    }, [page])
+    }, [page, dispatch])
 
     return (
-        <CurrentOrderstable orders={data.orders} />
+        <div>
+            <CurrentOrderstable orders={clientsList.orders} />
+        </div>
     )
 }
 

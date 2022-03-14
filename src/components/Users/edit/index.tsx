@@ -1,5 +1,5 @@
 import { Grid, Paper, Typography } from "@mui/material";
-import { useExctractQueryParamData } from "../../../hooks/useQueryParamData";
+import { useExtractQueryParamData } from "../../../hooks/useQueryParamData";
 
 import PasswordForm from './components/passwordForm';
 import RolesForm from './components/rolesEditForm';
@@ -11,7 +11,7 @@ const paperStyle = {
 };
 
 const EditUser = () => {
-    const data = useExctractQueryParamData();
+    const data = useExtractQueryParamData();
     
     return (
         <Grid container alignItems="center" justifyContent="center">

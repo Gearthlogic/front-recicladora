@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useExctractQueryParamData } from "../../hooks/useQueryParamData";
+import { useExtractQueryParamData } from "../../hooks/useQueryParamData";
 import { endLoading, startLoading } from "../../redux/actions/loading/loading";
 import { getAccount } from "../../services/api/account";
 
 function ClientAccount() {
     const [account, setAccount] = useState()
-    const data = useExctractQueryParamData();
+    const data = useExtractQueryParamData();
 
     const dispatch = useDispatch();
     console.log(account)

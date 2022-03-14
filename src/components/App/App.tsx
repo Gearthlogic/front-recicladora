@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Snackbar } from '@material-ui/core'
+import { Grid, Snackbar } from '@material-ui/core'
 
 import Navbar from './Navbar';
 import Router from './Router';
@@ -10,6 +10,7 @@ import { createUserRoutes } from './routes/routes';
 import { RootStore } from '../../redux';
 import Loader from '../common/Loader/Loader';
 import { resetMessage } from '../../redux/actions/message';
+import { Alert } from '@mui/material';
 
 function App() {
 	const [initializing, setInitializing] = useState(true);
@@ -32,15 +33,21 @@ function App() {
 			{!initializing && (
 				<>
 					<Navbar userRoutes={userRoutes} />
-					<Router userRoutes={userRoutes} />
+					<Grid container padding={2}>
+						<Router userRoutes={userRoutes} />
+					</Grid>
 				</>
 			)}
-			< Snackbar
-				autoHideDuration={2000}
+			<Snackbar
+				autoHideDuration={3000}
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
 				onClose={() => dispatch(resetMessage())}
 				{...snackbar}
-			/>
+			>
+				<Alert severity={snackbar?.messagetype}>
+					{snackbar?.action}
+				</Alert>
+			</Snackbar>
 		</BrowserRouter>
 	);
 }
