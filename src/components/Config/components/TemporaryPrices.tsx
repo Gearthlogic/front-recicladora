@@ -34,52 +34,76 @@ const TemporaryPrices = () => {
    const onSubmit = async (data: any) => {
       dispatch(startLoading())
 
-      const isEditingPrices = () => {
-         let isEditing: boolean = false
-         for (let i = 0; i < temporaryPrices.length; i++) {
-            if (temporaryPrices[i].price !== '' || temporaryPrices[i].price !== '0') {
-               isEditing = true
+
+      const inputHasText = () => {
+         let isText: boolean = true
+
+         for (const key in data) {
+            if (/^[0-9]+$/.test(data[key])) {
+               isText = false
+
+            } else {
+               isText = true
                break;
             }
          }
-         return isEditing
+         return isText
       }
 
-      const editedPrices = () => {
-         let editedPrices: any = []
-         for (let i = 0; i < temporaryPrices.length; i++) {
-            editedPrices.push({
-               id: temporaryPrices[i].id,
-               price: data[temporaryPrices[i].material]
-            })
-         }
-         return editedPrices
-      }
+      if (!inputHasText()) {
 
-      const creatingPrices = {
-         prices: Object.values(Material).map(material => ({
-            material, price: parseFloat(data[material])
-         }))
-      };
-
-      try {
-         if (isEditingPrices()) {
-            await upDateClientTemporaryPrices(editedPrices())
-         } else {
-            await createClientTemporaryPrices(creatingPrices)
+         const isEditingPrices = () => {
+            let isEditing: boolean = false
+            for (let i = 0; i < temporaryPrices.length; i++) {
+               if (temporaryPrices[i].price !== '' || temporaryPrices[i].price !== '0') {
+                  isEditing = true
+                  break;
+               }
+            }
+            return isEditing
          }
-         dispatch(setMessage({ action: 'Precios establecidos correctamente.' }))
-      } catch (error) {
-         console.log(error)
-         dispatch(setMessage({ action: 'ERROR al establecer precios.' }, 'error'))
-      } finally {
+
+         const editedPrices = () => {
+            let editedPrices: any = []
+            for (let i = 0; i < temporaryPrices.length; i++) {
+               editedPrices.push({
+                  id: temporaryPrices[i].id,
+                  price: data[temporaryPrices[i].material]
+               })
+            }
+            return editedPrices
+         }
+
+         const creatingPrices = {
+            prices: Object.values(Material).map(material => ({
+               material, price: parseFloat(data[material])
+            }))
+         };
+
+         try {
+            if (isEditingPrices()) {
+               await upDateClientTemporaryPrices(editedPrices())
+            } else {
+               await createClientTemporaryPrices(creatingPrices)
+            }
+            dispatch(setMessage({ action: 'Precios establecidos correctamente.' }))
+         } catch (error) {
+            console.log(error)
+            dispatch(setMessage({ action: 'ERROR al establecer precios.' }, 'error'))
+         } finally {
+            dispatch(endLoading())
+         }
+      } else {
          dispatch(endLoading())
+         dispatch(setMessage({ action: 'ERROR - Ingrese solamente Números' }, 'error'))
+
       }
+
    };
 
    const buildForm = (temporaryPrices: any) => {
       const inputs = Object.values(Material).map(material => {
-        
+
          return (
             <Grid key={material} item xs={6}>
                <Controller
@@ -88,7 +112,7 @@ const TemporaryPrices = () => {
                   defaultValue={''}
                   render={({ field }) => (
                      <TextField
-                        type="number"
+                        type="text"
                         label={transalations['es-ES'][material]}
                         placeholder='Precio'
                         margin='normal'
