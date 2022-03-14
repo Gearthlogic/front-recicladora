@@ -19,8 +19,14 @@ function OrderList() {
 
     return (
         <TabContext value={value}>
-            <Grid padding={5} container flexDirection="column">
-                <Box sx={{ borderBottom: 1, borderColor: 'divider', paddingBottom: 2 }}>
+            <Grid container flexDirection="column">
+                <Box
+                    sx={{
+                        borderBottom: 1,
+                        borderColor: 'divider',
+                        paddingBottom: 2
+                    }}
+                >
                     <Grid container justifyContent="space-between" flexDirection="row" item>
                         <TabList onChange={handleChange} aria-label="tabs de ordenes">
                             <Tab label="En curso" value="1" />
@@ -34,7 +40,7 @@ function OrderList() {
                     </Grid>
                 </Box>
                 <Grid container item>
-                    <TabPanel value="1">
+                    <TabPanel  value="1">
                         <CurrentOrders />
                     </TabPanel>
                     <TabPanel value="2">

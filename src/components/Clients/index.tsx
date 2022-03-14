@@ -17,7 +17,7 @@ const ClientList = () => {
     }, [])
 
     return (
-        <Grid padding={2} container>
+        <Grid container>
             <Grid
                 container
                 margin={2}

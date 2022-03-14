@@ -77,51 +77,53 @@ function CreateItemsForm({ id, type }: CreateItemsFormProps) {
         <Grid container>
             <Grid item xs={8} marginBottom={5}>
                 <form onSubmit={handleSubmit(submitAddItem)}>
-                    <Controller
-                        name="material"
-                        control={control}
-                        defaultValue={Material.Iron}
-                        render={({ field }) => (
-                            <FormControl>
-                                <InputLabel id="material-select" >Material </InputLabel>
-                                <Select
-                                    sx={{ width: 150 }}
-                                    labelId="material-select"
-                                    {...field} >
-                                    {allowedMaterials.map(material => (
-                                        <MenuItem key={material} value={material} >
-                                            {translations['es-ES'][material]}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        )}
-                    />
-                    <Controller
-                        name="quantity"
-                        control={control}
-                        render={({ field }) => (
-                            <TextField
-                                type="number"
-                                label="Peso"
-                                {...field}
-                            />
-                        )}
-                    />
-                    {isPriceVisible &&
+                    <Grid container alignItems="center">
                         <Controller
-                            name="price"
+                            name="material"
+                            control={control}
+                            defaultValue={Material.Iron}
+                            render={({ field }) => (
+                                <FormControl>
+                                    <InputLabel id="material-select" >Material </InputLabel>
+                                    <Select
+                                        sx={{ width: 150, marginRight: 2 }}
+                                        labelId="material-select"
+                                        {...field} >
+                                        {allowedMaterials.map(material => (
+                                            <MenuItem key={material} value={material} >
+                                                {translations['es-ES'][material]}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            )}
+                        />
+                        <Controller
+                            name="quantity"
                             control={control}
                             render={({ field }) => (
                                 <TextField
                                     type="number"
-                                    label="precio"
+                                    label="Peso"
                                     {...field}
                                 />
                             )}
                         />
-                    }
-                    <Button type="submit"> <AddOutlined /> </Button>
+                        {isPriceVisible &&
+                            <Controller
+                                name="price"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        type="number"
+                                        label="precio"
+                                        {...field}
+                                    />
+                                )}
+                            />
+                        }
+                        <Button type="submit"> <AddOutlined /> </Button>
+                    </Grid>
                 </form>
             </Grid>
             <Grid item xs={6}>

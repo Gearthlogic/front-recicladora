@@ -22,7 +22,6 @@ const Order = () => {
     useMemo(() =>  getOrderItems(data.orderId), [data.orderId])
   );
 
-  console.log(data.orderId)
   return (
     <Grid container>
       {items?.length === 0 &&

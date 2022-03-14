@@ -81,11 +81,9 @@ const OrdersHistory = () => {
 
     return (
         <Grid
-            marginY={5}
             container
             alignItems="center"
             justifyContent="center"
-            style={{ display: 'flex', flexDirection: 'column', justifyContent: 'start' }}
         >
             <Paper elevation={10} style={paperStyle} >
                 <Typography align="center" variant="h4" margin={5} width={'auto'}>

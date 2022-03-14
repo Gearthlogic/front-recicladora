@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Snackbar } from '@material-ui/core'
+import { Grid, Snackbar } from '@material-ui/core'
 
 import Navbar from './Navbar';
 import Router from './Router';
@@ -33,7 +33,9 @@ function App() {
 			{!initializing && (
 				<>
 					<Navbar userRoutes={userRoutes} />
-					<Router userRoutes={userRoutes} />
+					<Grid container padding={2}>
+						<Router userRoutes={userRoutes} />
+					</Grid>
 				</>
 			)}
 			<Snackbar
