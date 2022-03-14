@@ -72,9 +72,8 @@ const CurrentOrdersTable = ({ orders, columns = defaultColumns }: CurrentOrdersT
             }}
             hideFooterPagination
             style={{
-                justifyContent: 'center',
-                width: '90vw',
-                height: '80vh',
+                width: '95vw',
+                height: '70vh',
             }}
         />
     );

@@ -106,18 +106,15 @@ const HistoryOrdersTable = ({
         <DataGrid
             rows={orders}
             columns={columns}
-
             pagination
             rowsPerPageOptions={[5, 10, 20, 30, 40]}
             pageSize={pageSize}
             onPageSizeChange={onPageSizeChange}
             page={page}
             onPageChange={onPageChange}
-         
             style={{
-                justifyContent: 'center',
-                width: '90vw',
-                height: '60vh',
+                width: '95vw',
+                height: '70vh',
             }}
         />
     );

@@ -24,7 +24,7 @@ const AccordionCustom = ({
 
 
   return (
-    <div style={{ width: width }}>
+    <div style={{ width: width, margin:'10px 0' }}>
       <Accordion expanded={expanded} >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}

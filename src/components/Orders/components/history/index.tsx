@@ -116,6 +116,7 @@ const OrdersHistory = () => {
     return (
         <div>
             <AccordionCustom
+                
                 text='Filtrar'
                 expanded={toggleFilterAccordion}
                 onClick={() => setToggleFilterAccordion(!toggleFilterAccordion)}
@@ -133,7 +134,7 @@ const OrdersHistory = () => {
                             MenuProps={MenuProps}
                         >
                             {states.map((state: any) => {
-                                const stateFormat: OrderState = state
+                                const stateFormat: OrderState = state 
                                 return (
                                     <MenuItem
                                         key={state}
@@ -155,7 +156,6 @@ const OrdersHistory = () => {
             <div>
                 <HistoryOrdersTable
                     orders={clientsList.orders}
-
                     page={pageToShow}
                     pageSize={pageSize}
                     onPageSizeChange={(newPage: number) => setPageSize(newPage)}

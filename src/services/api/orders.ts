@@ -1,8 +1,5 @@
-import { Material } from '../../constants/enums/material.enum';
 import { GetOrdersQueryDTO , CreateOrderItemsDTO} from '../../constants/dto/order.dto';
 import { privateAxiosInstance } from '../axios';
-
-
 
 export const getOrders = (params: GetOrdersQueryDTO) => {
 	return privateAxiosInstance.get('/orders', { params });
@@ -11,7 +8,6 @@ export const getOrders = (params: GetOrdersQueryDTO) => {
 export const getControllingOrders = () => {
 	return privateAxiosInstance.get('/orders/controlling');
 };
-
 
 export const getOrderItems = (id: number) => {
 	return privateAxiosInstance.get(`/orders/${id}/items`);

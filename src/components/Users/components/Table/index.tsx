@@ -51,7 +51,7 @@ export default function ClientsTable({ rows, setRows }: ClientsTableProps) {
 	const history = useHistory();
 
 	return (
-		<Grid container padding={5}>
+		<Grid container>
 			<Grid paddingBottom={2} container justifyContent="flex-end" >
 				<Button
 					onClick={() => history.push(Path.createUser)}
@@ -62,7 +62,7 @@ export default function ClientsTable({ rows, setRows }: ClientsTableProps) {
 			<DataGrid
 				rows={rows}
 				columns={columns}
-				style={{ height: '80vh' }}
+				style={{ height: '80vh', width: '95vh' }}
 				hideFooterPagination
 			/>
 		</Grid>
