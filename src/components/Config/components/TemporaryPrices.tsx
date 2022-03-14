@@ -32,16 +32,11 @@ const TemporaryPrices = () => {
    }, [temporaryPrices])
 
    const onSubmit = async (data: any) => {
-      dispatch(startLoading())
-
-
       const inputHasText = () => {
          let isText: boolean = true
-
          for (const key in data) {
             if (/^[0-9]+$/.test(data[key])) {
                isText = false
-
             } else {
                isText = true
                break;
@@ -51,6 +46,7 @@ const TemporaryPrices = () => {
       }
 
       if (!inputHasText()) {
+         dispatch(startLoading())
 
          const isEditingPrices = () => {
             let isEditing: boolean = false
@@ -74,7 +70,7 @@ const TemporaryPrices = () => {
             return editedPrices
          }
 
-         const creatingPrices = {
+         const newCreatedPrices = {
             prices: Object.values(Material).map(material => ({
                material, price: parseFloat(data[material])
             }))
@@ -84,12 +80,12 @@ const TemporaryPrices = () => {
             if (isEditingPrices()) {
                await upDateClientTemporaryPrices(editedPrices())
             } else {
-               await createClientTemporaryPrices(creatingPrices)
+               await createClientTemporaryPrices(newCreatedPrices)
             }
             dispatch(setMessage({ action: 'Precios establecidos correctamente.' }))
          } catch (error) {
             console.log(error)
-            dispatch(setMessage({ action: 'ERROR al establecer precios.' }, 'error'))
+            dispatch(setMessage({ action: 'ERROR - al establecer precios.' }, 'error'))
          } finally {
             dispatch(endLoading())
          }
