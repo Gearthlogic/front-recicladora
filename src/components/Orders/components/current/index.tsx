@@ -37,14 +37,13 @@ const CurrentOrders = () => {
             state: [OrderState.Created, OrderState.PendingToSetTemporaryClientPrice]
         })
             .then(res => {
-                const test = res?.data
-                const data = res?.data.orders.map((client: any) => {
+                const data = res?.data.orders.map((order: any) => {
                     return {
-                        alias: client.client.alias,
-                        state: client.state,
-                        id: client.client.id,
-                        address: `${client.client.address.street} ${client.client.address.streetNumber}`,
-                        type: client.client.type,
+                        alias: order.client.alias,
+                        state: order.state,
+                        id: order.client.id,
+                        address: `${order.client.address.street} ${order.client.address.streetNumber}`,
+                        type: order.client.type,
                     }
                 })
                 setClientsList({ orders: data, client: [], count: res.data.count })
