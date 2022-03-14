@@ -12,6 +12,7 @@ const TemporaryPrices = () => {
    const dispatch = useDispatch();
    const { control, handleSubmit, reset } = useForm()
    const [temporaryPrices, setTemporaryPrices] = useState<any>([])
+   const [refreshPrices, setRefreshPrices] = useState<boolean>(true)
 
    useEffect(() => {
       getTemporaryPrices().then(res => setTemporaryPrices(res.data))
@@ -29,13 +30,15 @@ const TemporaryPrices = () => {
          return auxObj
       }
       reset(pricesInputDefault())
-   }, [temporaryPrices])
+   }, [temporaryPrices, refreshPrices])
 
    const onSubmit = async (data: any) => {
       const inputHasText = () => {
          let isText: boolean = true
          for (const key in data) {
-            if (/^[0-9]+$/.test(data[key])) {
+            console.log(/^\d+$/.test(data[key]), data[key] !== '')
+
+            if (/^\d+$/.test(data[key]) || data[key] === '') {
                isText = false
             } else {
                isText = true
@@ -90,9 +93,7 @@ const TemporaryPrices = () => {
             dispatch(endLoading())
          }
       } else {
-         dispatch(endLoading())
          dispatch(setMessage({ action: 'ERROR - Ingrese solamente Números' }, 'error'))
-
       }
 
    };
