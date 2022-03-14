@@ -73,7 +73,7 @@ const OrdersHistory = () => {
             await createNewOrder(newBody);
             dispatch(setMessage({ action: 'Orden creada exitosamente.' }))
         } catch (error: any) {
-            dispatch(setMessage({ action: 'ERROR al crear orden.' }, 'error'))
+            dispatch(setMessage({ action: 'ERROR - al crear orden.' }, 'error'))
         } finally {
             dispatch(endLoading())
         }
