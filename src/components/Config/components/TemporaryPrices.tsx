@@ -79,10 +79,7 @@ const TemporaryPrices = () => {
 
    const buildForm = (temporaryPrices: any) => {
       const inputs = Object.values(Material).map(material => {
-         const eachMaterialPrice =
-            temporaryPrices
-               .filter((object: any) => object.material === material)
-               .map((material: any) => material.price)
+        
          return (
             <Grid key={material} item xs={6}>
                <Controller
@@ -144,7 +141,6 @@ const TemporaryPrices = () => {
                   style={{ margin: '30px 0' }}
                   fullWidth
                >
-                  {/* {isEditing ? 'Actualziar' : 'Crear'} Precios */}
                   Establecer Precios
                </Button>
             </form>
