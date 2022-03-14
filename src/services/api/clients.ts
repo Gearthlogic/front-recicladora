@@ -47,6 +47,10 @@ export const getClientDetails = async (id: string) => {
 	return await privateAxiosInstance.get(`/client/${id}`);
 };
 
+export const getTemporaryPrices = async () =>{
+	return await privateAxiosInstance.get('/client/temporary_prices/all')
+}
+
 export const createNewClient = (body: CreateClientDTO) => {
 	return privateAxiosInstance.post('/client', body);
 };

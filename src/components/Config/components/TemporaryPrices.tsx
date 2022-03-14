@@ -3,45 +3,69 @@ import { useDispatch } from 'react-redux';
 
 import { endLoading, startLoading } from '../../../redux/actions/loading/loading';
 import { Controller, useForm } from 'react-hook-form';
-import { createClientTemporaryPrices } from '../../../services/api/clients';
+import { createClientTemporaryPrices, getTemporaryPrices } from '../../../services/api/clients';
 import { Material } from '../../../constants/enums/material.enum';
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import transalations from '../../../assets/translations.json';
 import { setMessage } from '../../../redux/actions/message';
+import { objectTraps } from 'immer/dist/internal';
 
 const TemporaryPrices = () => {
    const dispatch = useDispatch();
    const { control, handleSubmit, reset } = useForm()
+   const [temporaryPrices, setTemporaryPrices] = useState<any>([])
+
+   useEffect(() => {
+      getTemporaryPrices().then(res => setTemporaryPrices(res.data))
+   }, [])
+
+   useEffect(() => {
+      const resetPrices = () => {
+         let auxObj = {}
+         for (let i = 0; i < temporaryPrices.length; i++) {
+            auxObj = {
+               ...auxObj,
+               [temporaryPrices[i].material]: temporaryPrices[i].price
+            }
+         }
+         return auxObj
+      }
+      reset(resetPrices())
+   }, [temporaryPrices])
 
    const onSubmit = async (data: any) => {
-      dispatch(startLoading())
+      // dispatch(startLoading())
 
       const toSend = {
          prices: Object.values(Material).map(material => ({
             material, price: parseFloat(data[material])
          }))
       };
-
-      try {
-         await createClientTemporaryPrices(toSend)
-         dispatch(setMessage({ action: 'Precios establecidos correctamente.' }))
-      } catch (error) {
-         console.log(error)
-         dispatch(setMessage({ action: 'ERROR al establecer precios.' }, 'error'))
-      } finally {
-         dispatch(endLoading())
-      }
+      console.log(toSend)
+      // try {
+      //    await createClientTemporaryPrices(toSend)
+      //    dispatch(setMessage({ action: 'Precios establecidos correctamente.' }))
+      // } catch (error) {
+      //    console.log(error)
+      //    dispatch(setMessage({ action: 'ERROR al establecer precios.' }, 'error'))
+      // } finally {
+      //    dispatch(endLoading())
+      // }
    };
 
-   const buildForm = () => {
-      const inputs = Object.values(Material).map(material => {
+   const buildForm = (temporaryPrices: any) => {
 
+      const inputs = Object.values(Material).map(material => {
+         const eachMaterialPrice =
+            temporaryPrices
+               .filter((object: any) => object.material === material)
+               .map((material: any) => material.price)
          return (
             <Grid key={material} item xs={6}>
                <Controller
                   name={material}
                   control={control}
-                  defaultValue=''
+                  defaultValue={''}
                   render={({ field }) => (
                      <TextField
                         type="number"
@@ -89,7 +113,7 @@ const TemporaryPrices = () => {
                onSubmit={handleSubmit(onSubmit)}
                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
             >
-               {buildForm()}
+               {buildForm(temporaryPrices)}
                <Button
                   type='submit'
                   color='primary'

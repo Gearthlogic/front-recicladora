@@ -5,7 +5,7 @@ const Config = () => {
 
   return (
     <div>
-      <TemporaryPrices /> 
+      <TemporaryPrices />
     </div>
   )
 }
