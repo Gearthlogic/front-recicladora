@@ -19,7 +19,6 @@ export interface GetOrdersQueryDTO extends PaginateDTO {
 }
 
 export interface OrderMaterialItemDTO {
-    id?: number;
     material: Material;
     quantity: number;
     price?: number;
@@ -36,6 +35,7 @@ export interface ControlOrderItemsDTO {
     material: Material;
     quantity: number;
     price?: number;
+    unit?: string;
 }
 
 export interface SetPriceOrderItemDTO {

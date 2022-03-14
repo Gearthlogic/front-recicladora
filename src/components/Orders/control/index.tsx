@@ -24,7 +24,7 @@ function ControllingOrderList() {
                 </Typography>
                 {(data?.length || 0) > 0 ?
                     data?.map(order => (
-                        <Accordion key={order.orderId}>
+                        <Accordion key={order.id}>
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                 <Typography variant="h6"  >
                                     #{order.id} - {order.client.alias}

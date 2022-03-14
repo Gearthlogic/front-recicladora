@@ -1,11 +1,11 @@
 import { Grid } from "@material-ui/core";
 import { memo } from "react";
 
-import { OrderMaterialItemDTO } from "../../../../../constants/dto/order.dto";
+import { ControlOrderItemsDTO } from "../../../../../constants/dto/order.dto";
 import Item from './item';
 
 interface ControlOrderItemsFormProps {
-    items: OrderMaterialItemDTO[]
+    items: ControlOrderItemsDTO[]
 }
 
 const ControlOrderItemsForm = ({items} : ControlOrderItemsFormProps ) => {
