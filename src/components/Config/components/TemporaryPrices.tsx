@@ -1,6 +1,5 @@
 import { Button, Grid, Paper, TextField, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
-
 import { endLoading, startLoading } from '../../../redux/actions/loading/loading';
 import { Controller, useForm } from 'react-hook-form';
 import { createClientTemporaryPrices, getTemporaryPrices, upDateClientTemporaryPrices } from '../../../services/api/clients';
@@ -8,7 +7,6 @@ import { Material } from '../../../constants/enums/material.enum';
 import { memo, useEffect, useState } from 'react';
 import transalations from '../../../assets/translations.json';
 import { setMessage } from '../../../redux/actions/message';
-import { objectTraps } from 'immer/dist/internal';
 
 const TemporaryPrices = () => {
    const dispatch = useDispatch();
@@ -18,8 +16,6 @@ const TemporaryPrices = () => {
    useEffect(() => {
       getTemporaryPrices().then(res => setTemporaryPrices(res.data))
    }, [])
-
-   // console.log('lo que trae el back ', temporaryPrices)
 
    useEffect(() => {
       const pricesInputDefault = () => {
@@ -52,11 +48,14 @@ const TemporaryPrices = () => {
       const editedPrices = () => {
          let editedPrices: any = []
          for (let i = 0; i < temporaryPrices.length; i++) {
-            editedPrices.push({ id: temporaryPrices[i].id, price: data[temporaryPrices[i].material] })
+            editedPrices.push({
+               id: temporaryPrices[i].id,
+               price: data[temporaryPrices[i].material]
+            })
          }
          return editedPrices
       }
- 
+
       const creatingPrices = {
          prices: Object.values(Material).map(material => ({
             material, price: parseFloat(data[material])
@@ -79,7 +78,6 @@ const TemporaryPrices = () => {
    };
 
    const buildForm = (temporaryPrices: any) => {
-
       const inputs = Object.values(Material).map(material => {
          const eachMaterialPrice =
             temporaryPrices
