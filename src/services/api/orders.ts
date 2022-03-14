@@ -20,3 +20,7 @@ export const createOrderItems = (data: CreateOrderItemsDTO) => {
 export const controlOrderItem = (data: ControlOrderItemsDTO) => {
 	return privateAxiosInstance.patch(`/orders/items/actions/control`, data);
 };
+
+export const endControlling = (id: number) => {
+	return privateAxiosInstance.patch(`/orders/${id}/actions/end_controlling`);
+};

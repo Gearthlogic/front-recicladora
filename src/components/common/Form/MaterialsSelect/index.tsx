@@ -11,7 +11,6 @@ function MaterialSelect(props: SelectProps) {
         <FormControl>
             <InputLabel id="material-select" >Material </InputLabel>
             <Select
-                sx={{ width: 150, marginRight: 2 }}
                 labelId="material-select"
                 {...props}
             >

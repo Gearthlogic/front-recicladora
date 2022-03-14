@@ -37,12 +37,16 @@ function ItemControlForm({ quantity, material, id, unit }: ControlOrderItemsDTO)
         } finally {
             dispatch(endLoading());
         }
-
     }
 
     return (
-        <form onSubmit={submitMaterialControl}>
-            <Grid container alignItems="center" flexDirection="row" >
+        <form style={{width: '100%'}}  onSubmit={submitMaterialControl}>
+            <Grid
+                container
+                justifyContent="space-between"
+                alignItems="center"
+                flexDirection="row"
+            >
                 <MaterialSelect
                     value={selectedMaterial}
                     onChange={event => setSelectedMaterial(event.target.value as Material)}
