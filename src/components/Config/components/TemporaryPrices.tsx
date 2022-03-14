@@ -1,39 +1,103 @@
 import { Button, Grid, Paper, TextField, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
-
 import { endLoading, startLoading } from '../../../redux/actions/loading/loading';
 import { Controller, useForm } from 'react-hook-form';
-import { createClientTemporaryPrices } from '../../../services/api/clients';
+import { createClientTemporaryPrices, getTemporaryPrices, upDateClientTemporaryPrices } from '../../../services/api/clients';
 import { Material } from '../../../constants/enums/material.enum';
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import transalations from '../../../assets/translations.json';
 import { setMessage } from '../../../redux/actions/message';
 
 const TemporaryPrices = () => {
    const dispatch = useDispatch();
    const { control, handleSubmit, reset } = useForm()
+   const [temporaryPrices, setTemporaryPrices] = useState<any>([])
+
+   useEffect(() => {
+      getTemporaryPrices().then(res => setTemporaryPrices(res.data))
+   }, [])
+
+   useEffect(() => {
+      const pricesInputDefault = () => {
+         let auxObj = {}
+         for (let i = 0; i < temporaryPrices.length; i++) {
+            auxObj = {
+               ...auxObj,
+               [temporaryPrices[i].material]: temporaryPrices[i].price,
+            }
+         }
+         return auxObj
+      }
+      reset(pricesInputDefault())
+   }, [temporaryPrices])
 
    const onSubmit = async (data: any) => {
-      dispatch(startLoading())
-
-      const toSend = {
-         prices: Object.values(Material).map(material => ({
-            material, price: parseFloat(data[material])
-         }))
-      };
-
-      try {
-         await createClientTemporaryPrices(toSend)
-         dispatch(setMessage({ action: 'Precios establecidos correctamente.' }))
-      } catch (error) {
-         console.log(error)
-         dispatch(setMessage({ action: 'ERROR al establecer precios.' }, 'error'))
-      } finally {
-         dispatch(endLoading())
+      const inputHasText = () => {
+         let isText: boolean = true
+         for (const key in data) {
+            if (/^[0-9]+$/.test(data[key])) {
+               isText = false
+            } else {
+               isText = true
+               break;
+            }
+         }
+         return isText
       }
+
+      if (!inputHasText()) {
+         dispatch(startLoading())
+
+         const isEditingPrices = () => {
+            let isEditing: boolean = false
+            for (let i = 0; i < temporaryPrices.length; i++) {
+               if (temporaryPrices[i].price !== '' || temporaryPrices[i].price !== '0') {
+                  isEditing = true
+                  break;
+               }
+            }
+            return isEditing
+         }
+
+         const editedPrices = () => {
+            let editedPrices: any = []
+            for (let i = 0; i < temporaryPrices.length; i++) {
+               editedPrices.push({
+                  id: temporaryPrices[i].id,
+                  price: data[temporaryPrices[i].material]
+               })
+            }
+            return editedPrices
+         }
+
+         const newCreatedPrices = {
+            prices: Object.values(Material).map(material => ({
+               material, price: parseFloat(data[material])
+            }))
+         };
+
+         try {
+            if (isEditingPrices()) {
+               await upDateClientTemporaryPrices(editedPrices())
+            } else {
+               await createClientTemporaryPrices(newCreatedPrices)
+            }
+            dispatch(setMessage({ action: 'Precios establecidos correctamente.' }))
+         } catch (error) {
+            console.log(error)
+            dispatch(setMessage({ action: 'ERROR - al establecer precios.' }, 'error'))
+         } finally {
+            dispatch(endLoading())
+         }
+      } else {
+         dispatch(endLoading())
+         dispatch(setMessage({ action: 'ERROR - Ingrese solamente Números' }, 'error'))
+
+      }
+
    };
 
-   const buildForm = () => {
+   const buildForm = (temporaryPrices: any) => {
       const inputs = Object.values(Material).map(material => {
 
          return (
@@ -41,10 +105,10 @@ const TemporaryPrices = () => {
                <Controller
                   name={material}
                   control={control}
-                  defaultValue=''
+                  defaultValue={''}
                   render={({ field }) => (
                      <TextField
-                        type="number"
+                        type="text"
                         label={transalations['es-ES'][material]}
                         placeholder='Precio'
                         margin='normal'
@@ -89,7 +153,7 @@ const TemporaryPrices = () => {
                onSubmit={handleSubmit(onSubmit)}
                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
             >
-               {buildForm()}
+               {buildForm(temporaryPrices)}
                <Button
                   type='submit'
                   color='primary'
@@ -97,7 +161,6 @@ const TemporaryPrices = () => {
                   style={{ margin: '30px 0' }}
                   fullWidth
                >
-                  {/* {isEditing ? 'Actualziar' : 'Crear'} Precios */}
                   Establecer Precios
                </Button>
             </form>
