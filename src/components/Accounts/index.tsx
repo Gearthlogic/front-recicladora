@@ -10,9 +10,10 @@ import CustomModal from "../common/Modal/CustomModal";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { setMessage } from "../../redux/actions/message";
+import TransactionsTable from "./components/TransactionsTable";
+import moment from "moment";
 
 interface TransactionFormData {
-    accountId?: number;
     amount: number;
     details?: string;
 }
@@ -32,13 +33,14 @@ const schema = yup
 const ClientAccount = () => {
     const dispatch = useDispatch();
 
-    const [account, setAccount] = useState<any>()
-    const [showModal, setShowModal] = useState<boolean>(false)
-    const data = useExtractQueryParamData();
+    const [account, setAccount] = useState<any>();
+    const [tableData, setTableData] = useState<any>();
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const userData = useExtractQueryParamData();
 
     useEffect(() => {
         dispatch(startLoading());
-        getAccount(data.id).then((response: any) => {
+        getAccount(userData.id).then((response: any) => {
             setAccount({
                 accountId: response[0].accountId,
                 balance: response[0].balance,
@@ -47,7 +49,25 @@ const ClientAccount = () => {
         })
             .catch(console.log)
             .finally(() => dispatch(endLoading()));
-    }, [data.id, dispatch])
+
+    }, [userData.id, dispatch])
+
+    useEffect(() => {
+        generateTableData()
+    }, [account])
+
+    const generateTableData = () => {
+        const data = account?.transactions.map((e: any) => {
+            return {
+                id: e.transactionId,
+                amount: e.amount,
+                details: e.details,
+                type: e.type,
+                createdAt: moment(e.updatedAt).format("DD-MM-YYYY")
+            }
+        })
+        setTableData(data)
+    }
 
     const { reset, handleSubmit, control, formState: { errors } } = useForm<TransactionFormData>({
         resolver: yupResolver(schema),
@@ -67,7 +87,8 @@ const ClientAccount = () => {
         const toSend = { ...data, accountId: account.accountId }
 
         try {
-            await postCurrentAccountTransaction(toSend)
+            const response = await postCurrentAccountTransaction(toSend)
+            console.log(response)
             dispatch(setMessage({ action: "Operación Exitosa" }))
         } catch (error) {
             dispatch(setMessage({ action: "ERROR - Operación incorrecta" }, 'error'))
@@ -85,13 +106,17 @@ const ClientAccount = () => {
                 <div style={{ display: 'flex' }}>
                     <div style={{ display: 'flex', margin: '5px' }}>
                         <Typography variant="h5">
-                            <span style={{ opacity: .5 }}>{`Alias: `}</span>{`${data?.alias}`}
+                            <span style={{ opacity: .5 }}>{`Alias: `}</span>{`${userData?.alias}`}
                         </Typography>
                     </div>
 
                     <div style={{ display: 'flex', margin: '5px 25px' }}>
                         <Typography variant="h5">
-                            <span style={{ opacity: .5 }}>{`Balance: `}</span>{`${account?.balance}`}
+                            <span style={{ opacity: .5 }}>{`Balance: `}</span>
+                            {account?.balance ?
+                                account?.balance :
+                                '0'
+                            }
                         </Typography>
                     </div>
                 </div>
@@ -104,6 +129,27 @@ const ClientAccount = () => {
                 </Button>
             </div>
 
+            <div style={{ marginTop: '20px' }}>
+                {account?.transactions.length > 0 && tableData?.length > 0 ?
+                    <TransactionsTable
+                        orders={tableData}
+                    // page={1}
+                    // pageSize={10}
+                    // onPageSizeChange={(newPage: number) => setPageSize(newPage)}
+                    // onPageChange={(e: number) => {
+                    //     setPageToShow(e)
+                    // }}
+                    />
+                    :
+                    <Typography variant="h5" style={{ margin: '5px 30px' }}>
+                        <span style={{ opacity: .5 }}>
+                            {`No hay registro de transacciones para ${userData?.alias}`}
+                        </span>
+
+                    </Typography>
+                }
+            </div>
+
             <CustomModal
                 open={showModal}
                 onClose={handleShowModal}
@@ -114,7 +160,8 @@ const ClientAccount = () => {
                     justifyContent: 'flex-Start',
                     alignItems: 'center',
                     width: '50vw',
-                    height: '50vh',
+                    height: 'auto',
+                    paddingBottom: '25px'
                 }}>
                     <form
                         onSubmit={handleSubmit(onSubmit)}
@@ -162,15 +209,21 @@ const ClientAccount = () => {
                             </Typography>
                         )}
 
-                        <Button
-                            variant="contained"
-                            type="submit"
-                            style={{ justifySelf: 'flex-end' }}
+                        <div
+                            style={{
+                                paddingTop: '5%',
+                                textAlign: 'center',
+                            }}
                         >
-                            Aceptar
-                        </Button>
+                            <Button
+                                variant="contained"
+                                type="submit"
+                                style={{ justifySelf: 'flex-end' }}
+                            >
+                                Aceptar
+                            </Button>
+                        </div>
                     </form>
-
                 </div>
             </CustomModal>
 

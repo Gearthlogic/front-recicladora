@@ -12,7 +12,7 @@ interface CurrentOrdersTableProps {
 
 const defaultColumns: GridColDef[] = [
     {
-        field: 'transactionId',
+        field: 'id',
         headerName: 'ID',
         headerAlign: 'center',
         align: 'center',
@@ -59,7 +59,7 @@ const defaultColumns: GridColDef[] = [
     }
 ];
 
-const HistoryOrdersTable = ({
+const TransactionsTable = ({
     pageSize,
     onPageSizeChange,
     onPageChange,
@@ -91,4 +91,4 @@ const HistoryOrdersTable = ({
 
 
 
-export default HistoryOrdersTable;
+export default TransactionsTable;
