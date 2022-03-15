@@ -22,7 +22,7 @@ const initialstate: OrdersData = {
 
 const CurrentOrders = () => {
 
-    const [page, setPage] = useState(1);
+    const [page] = useState(1);
     const [clientsList, setClientsList] = useState<OrdersData>(initialstate);
     const dispatch = useDispatch();
 
