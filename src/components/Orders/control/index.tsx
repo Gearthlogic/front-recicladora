@@ -14,7 +14,7 @@ const paperStyles = {
 }
 
 function ControllingOrderList() {
-    const { data } = useFetch<any[]>(useMemo(() => getControllingOrders(), []))
+    const { data, setData } = useFetch<any[]>(useMemo(() => getControllingOrders(), []))
 
     return (
         <Grid container justifyContent="center">
@@ -24,14 +24,14 @@ function ControllingOrderList() {
                 </Typography>
                 {(data?.length || 0) > 0 ?
                     data?.map(order => (
-                        <Accordion key={order.orderId}>
+                        <Accordion key={order.id}>
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                 <Typography variant="h6"  >
                                     #{order.id} - {order.client.alias}
                                 </Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <Items items={order.items} />
+                                <Items setData={setData} id={order.id} items={order.items} />
                             </AccordionDetails>
                         </Accordion>
                     )) : <Typography textAlign="center"   >

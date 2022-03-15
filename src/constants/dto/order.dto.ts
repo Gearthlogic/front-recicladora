@@ -22,6 +22,7 @@ export interface OrderMaterialItemDTO {
     material: Material;
     quantity: number;
     price?: number;
+    unit?: string
 }
 
 export interface CreateOrderItemsDTO {
@@ -34,6 +35,7 @@ export interface ControlOrderItemsDTO {
     material: Material;
     quantity: number;
     price?: number;
+    unit?: string;
 }
 
 export interface SetPriceOrderItemDTO {
