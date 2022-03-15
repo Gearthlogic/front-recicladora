@@ -12,7 +12,6 @@ import * as yup from "yup";
 import { setMessage } from "../../redux/actions/message";
 import TransactionsTable from "./components/TransactionsTable";
 import moment from "moment";
-import { Pages } from "@mui/icons-material";
 
 interface TransactionFormData {
     amount: number;
@@ -58,21 +57,20 @@ const ClientAccount = () => {
     }, [userData.id, dispatch])
 
     useEffect(() => {
+        const generateTableData = () => {
+            const data = account?.transactions.map((e: any) => {
+                return {
+                    id: e.transactionId,
+                    amount: e.amount,
+                    details: e.details,
+                    type: e.type,
+                    createdAt: moment(e.updatedAt).format("DD-MM-YYYY")
+                }
+            })
+            setTableData(data)
+        }
         generateTableData()
     }, [account])
-
-    const generateTableData = () => {
-        const data = account?.transactions.map((e: any) => {
-            return {
-                id: e.transactionId,
-                amount: e.amount,
-                details: e.details,
-                type: e.type,
-                createdAt: moment(e.updatedAt).format("DD-MM-YYYY")
-            }
-        })
-        setTableData(data)
-    }
 
     const { reset, handleSubmit, control, formState: { errors } } = useForm<TransactionFormData>({
         resolver: yupResolver(schema),
@@ -144,12 +142,12 @@ const ClientAccount = () => {
                 {account?.transactions.length > 0 && tableData?.length > 0 ?
                     <TransactionsTable
                         orders={tableData}
-                    page={pageToShow}
-                    pageSize={pageSize}
-                    onPageSizeChange={(newPage: number) => setPageSize(newPage)}
-                    onPageChange={(e: number) => {
-                        setPageToShow(e)
-                    }}
+                        page={pageToShow}
+                        pageSize={pageSize}
+                        onPageSizeChange={(newPage: number) => setPageSize(newPage)}
+                        onPageChange={(e: number) => {
+                            setPageToShow(e)
+                        }}
                     />
                     :
                     <Typography variant="h5" style={{ margin: '5px 30px' }}>
