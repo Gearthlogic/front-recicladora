@@ -28,7 +28,7 @@ function App() {
 	const userRoutes = useMemo(() => createUserRoutes(user), [user])
 
 	return (
-		<BrowserRouter>
+		<BrowserRouter basename={process.env.PUBLIC_URL}>
 			{loading && <Loader />}
 			{!initializing && (
 				<>
