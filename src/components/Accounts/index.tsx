@@ -179,6 +179,10 @@ const ClientAccount = () => {
                 open={showModal}
                 onClose={handleShowModal}
             >
+                <Typography variant="h3" style={{ margin: '20px' }}>
+                    Crear Transacción
+                </Typography>
+
                 <div style={{
                     display: 'flex',
                     flexDirection: 'column',
