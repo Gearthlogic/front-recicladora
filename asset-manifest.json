@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/front-recicladora/static/css/main.0b2c6a98.css",
-    "main.js": "/front-recicladora/static/js/main.b175a931.js",
+    "main.js": "/front-recicladora/static/js/main.de9f6643.js",
     "static/js/787.9d92302f.chunk.js": "/front-recicladora/static/js/787.9d92302f.chunk.js",
     "index.html": "/front-recicladora/index.html",
     "main.0b2c6a98.css.map": "/front-recicladora/static/css/main.0b2c6a98.css.map",
-    "main.b175a931.js.map": "/front-recicladora/static/js/main.b175a931.js.map",
+    "main.de9f6643.js.map": "/front-recicladora/static/js/main.de9f6643.js.map",
     "787.9d92302f.chunk.js.map": "/front-recicladora/static/js/787.9d92302f.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.0b2c6a98.css",
-    "static/js/main.b175a931.js"
+    "static/js/main.de9f6643.js"
   ]
 }
