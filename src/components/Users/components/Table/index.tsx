@@ -2,7 +2,6 @@ import { Button, Grid } from '@material-ui/core';
 import { DataGrid, GridColDef } from '@material-ui/data-grid';
 import { useHistory } from 'react-router-dom';
 import { Path } from '../../../../constants/enums/path.enum';
-import { Role } from '../../../../constants/enums/role.enum';
 import EditAction from './EditAction';
 import { UserTableRow } from '../..';
 

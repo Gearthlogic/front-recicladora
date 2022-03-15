@@ -29,7 +29,7 @@ const TemporaryPrices = () => {
          return auxObj
       }
       reset(pricesInputDefault())
-   }, [temporaryPrices])
+   }, [temporaryPrices, reset])
 
    const onSubmit = async (data: any) => {
       const inputHasText = () => {

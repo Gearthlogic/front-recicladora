@@ -37,7 +37,7 @@ function CreateItemsForm({ id, type }: CreateItemsFormProps) {
     const history = useHistory();
     const dispatch = useDispatch()
 
-    const { control, handleSubmit, formState: { errors } } = useForm<OrderMaterialItemDTO>();
+    const { control, handleSubmit } = useForm<OrderMaterialItemDTO>();
     const [itemList, setItemList] = useState<OrderMaterialItemDTO[]>([]);
 
     const isPriceVisible = useMemo(() => type === ClientType.Temporary, [type])

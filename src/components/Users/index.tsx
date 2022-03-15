@@ -23,7 +23,7 @@ function UsersList() {
             .then(res => setUsers(res))
             .catch(error => setMessage({ action: error?.message }, 'error'))
             .finally(() => dispatch(endLoading()))
-    }, [])
+    }, [dispatch])
 
     return <Table rows={users} setRows={setUsers} />
 }

@@ -6,7 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { createClientPrices, updateClientPrices } from '../../../../../services/api/clients';
 import { Material } from '../../../../../constants/enums/material.enum';
 import { ClientPrice } from '../../../../../constants/types/clientPrices.type';
-import { useEffect, memo, SetStateAction, useState } from 'react';
+import { useEffect, memo, useState } from 'react';
 import transalations from '../../../../../assets/translations.json';
 
 interface ClientPricesProps {
@@ -36,7 +36,7 @@ const ClientPrices = ({ id, prices = [], setPrices }: ClientPricesProps) => {
 
       seIsEditing(isEditing)
       setPricesIds(pricesIds);
-   }, [prices])
+   }, [prices, reset])
 
    async function submitCreate(data: any) {
       const toSend = {
