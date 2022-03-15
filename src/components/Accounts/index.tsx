@@ -12,6 +12,8 @@ import * as yup from "yup";
 import { setMessage } from "../../redux/actions/message";
 import TransactionsTable from "./components/TransactionsTable";
 import moment from "moment";
+import transalations from '../../assets/translations.json';
+import { TransactionType } from "../../constants/enums/transactionTypes.enum";
 
 interface TransactionFormData {
     amount: number;
@@ -61,11 +63,13 @@ const ClientAccount = () => {
     useEffect(() => {
         const generateTableData = () => {
             const data = account?.transactions.map((e: any) => {
+                const typeFormat: TransactionType = e.type
+
                 return {
                     id: e.transactionId,
                     amount: e.amount,
                     details: e.details,
-                    type: e.type,
+                    type: transalations['es-ES'][typeFormat],
                     createdAt: moment(e.updatedAt).format("DD-MM-YYYY")
                 }
             })
@@ -95,11 +99,12 @@ const ClientAccount = () => {
         try {
             const { data } = await postCurrentAccountTransaction(toSend);
 
+            const typeFormat: TransactionType = data.type
             setTableData((prev: any) => prev.concat({
                 id: data.transactionId,
                 amount: data.amount,
                 details: data.details,
-                type: data.type,
+                type: transalations['es-ES'][typeFormat],
                 createdAt: moment(data.updatedAt).format("DD-MM-YYYY")
             }));
             setAccount({
