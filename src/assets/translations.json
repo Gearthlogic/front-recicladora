@@ -1,0 +1,22 @@
+{
+    "es-ES": {
+        "veneer": "Chapa",
+        "Iron": "Hierro",
+        "Permanent": "Permanente",
+        "Temporary": "Temporario",
+        "Created": "Creado",
+        "Controlling": "Controlando",
+        "PendingToSetTemporaryClientPrice": "Pendiente Precio",
+        "Closed": "Cerrado"
+    },
+    "en-EN": {
+        "veneer": "Veneer",
+        "Iron": "Iron",
+        "Permanent": "Permanent",
+        "Temporary": "Temporary",
+        "Created": "Created",
+        "Controlling": "Controlling",
+        "PendingToSetTemporaryClientPrice": "Pending price",
+        "Closed": "Closed"
+    }
+}
