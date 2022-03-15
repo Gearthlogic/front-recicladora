@@ -93,7 +93,6 @@ const ClientAccount = () => {
 
         try {
             const { data } = await postCurrentAccountTransaction(toSend)
-            console.log(data)
             setTableData((prev: any) => prev.concat({
                 id: data.transactionId,
                 amount: data.amount,
