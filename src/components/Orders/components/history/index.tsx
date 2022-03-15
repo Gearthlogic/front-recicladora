@@ -65,7 +65,7 @@ const OrdersHistory = () => {
     const [pageToShow, setPageToShow] = useState<number>(0)
     const [pageSize, setPageSize] = useState<number>(20)
 
-    const [page, setPage] = useState(1);
+    const [page] = useState(1);
     const [clientsList, setClientsList] = useState<OrdersData>(initialstate);
 
     const [refreshFilter, setRefreshFilter] = useState<boolean>(true)
@@ -98,7 +98,7 @@ const OrdersHistory = () => {
             .catch(() => dispatch(setMessage({ action: "Error al cargar la información" }, 'error')))
             .finally(() => dispatch(endLoading()))
 
-    }, [page, refreshFilter])
+    }, [page, refreshFilter, dispatch,selectedStates])
 
     const handleChange = (event: SelectChangeEvent<typeof selectedStates>) => {
         const { target: { value } } = event;

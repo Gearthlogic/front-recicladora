@@ -9,11 +9,6 @@ import { useDispatch } from "react-redux";
 import { endLoading, startLoading } from "../../../../../redux/actions/loading/loading";
 import { setMessage } from "../../../../../redux/actions/message";
 
-interface ControlMaterialform {
-    waste: number;
-    material: Material;
-}
-
 function ItemControlForm({ quantity, material, id, unit }: ControlOrderItemsDTO) {
     const [selectedMaterial, setSelectedMaterial] = useState(material);
     const [waste, setWaste] = useState(0);
