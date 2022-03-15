@@ -73,7 +73,7 @@ const ClientAccount = () => {
             if (generateTableOnlyOnce) setTableData(data)
         }
         generateTableData()
-    }, [account])
+    }, [account, generateTableOnlyOnce])
 
     const { reset, handleSubmit, control, formState: { errors } } = useForm<TransactionFormData>({
         resolver: yupResolver(schema),
