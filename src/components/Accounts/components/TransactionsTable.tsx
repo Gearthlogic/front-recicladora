@@ -16,7 +16,7 @@ const defaultColumns: GridColDef[] = [
         headerName: 'ID',
         headerAlign: 'center',
         align: 'center',
-        sortable: false,
+        sortable: true,
         width: 150,
 
     },
@@ -26,7 +26,7 @@ const defaultColumns: GridColDef[] = [
         headerAlign: 'center',
         align: 'center',
         width: 150,
-        sortable: false,
+        sortable: true,
         filterable: false,
         disableColumnMenu: true,
     },

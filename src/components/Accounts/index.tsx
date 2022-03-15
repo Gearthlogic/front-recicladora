@@ -12,6 +12,7 @@ import * as yup from "yup";
 import { setMessage } from "../../redux/actions/message";
 import TransactionsTable from "./components/TransactionsTable";
 import moment from "moment";
+import { Pages } from "@mui/icons-material";
 
 interface TransactionFormData {
     amount: number;
@@ -36,6 +37,10 @@ const ClientAccount = () => {
     const [account, setAccount] = useState<any>();
     const [tableData, setTableData] = useState<any>();
     const [showModal, setShowModal] = useState<boolean>(false);
+
+    const [pageToShow, setPageToShow] = useState<number>(0)
+    const [pageSize, setPageSize] = useState<number>(20)
+
     const userData = useExtractQueryParamData();
 
     useEffect(() => {
@@ -87,8 +92,15 @@ const ClientAccount = () => {
         const toSend = { ...data, accountId: account.accountId }
 
         try {
-            const response = await postCurrentAccountTransaction(toSend)
-            console.log(response)
+            const { data } = await postCurrentAccountTransaction(toSend)
+            console.log(data)
+            setTableData((prev: any) => prev.concat({
+                id: data.transactionId,
+                amount: data.amount,
+                details: data.details,
+                type: data.type,
+                createdAt: moment(data.updatedAt).format("DD-MM-YYYY")
+            }))
             dispatch(setMessage({ action: "Operación Exitosa" }))
         } catch (error) {
             dispatch(setMessage({ action: "ERROR - Operación incorrecta" }, 'error'))
@@ -133,12 +145,12 @@ const ClientAccount = () => {
                 {account?.transactions.length > 0 && tableData?.length > 0 ?
                     <TransactionsTable
                         orders={tableData}
-                    // page={1}
-                    // pageSize={10}
-                    // onPageSizeChange={(newPage: number) => setPageSize(newPage)}
-                    // onPageChange={(e: number) => {
-                    //     setPageToShow(e)
-                    // }}
+                    page={pageToShow}
+                    pageSize={pageSize}
+                    onPageSizeChange={(newPage: number) => setPageSize(newPage)}
+                    onPageChange={(e: number) => {
+                        setPageToShow(e)
+                    }}
                     />
                     :
                     <Typography variant="h5" style={{ margin: '5px 30px' }}>
@@ -159,7 +171,7 @@ const ClientAccount = () => {
                     flexDirection: 'column',
                     justifyContent: 'flex-Start',
                     alignItems: 'center',
-                    width: '50vw',
+                    width: 'auto',
                     height: 'auto',
                     paddingBottom: '25px'
                 }}>
