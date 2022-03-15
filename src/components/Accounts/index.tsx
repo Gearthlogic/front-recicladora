@@ -22,12 +22,13 @@ const schema = yup
     .object({
         amount: yup
             .number()
+            .min(1, 'Por favor, establezca monto positivo.')
             .typeError('Ingrese números solamente, por favor.')
             .required("Ingrese un monto"),
         details: yup
             .string()
-            .min(5, 'La descripción es demaciado corta.')
-            .max(140, 'La descripción es demaciado larga.')
+            .min(5, 'Por favor, escriba una descripción.').required()
+            .max(140, 'La descripción es demaciado larga.').required()
     }).required();
 
 const ClientAccount = () => {
@@ -39,6 +40,7 @@ const ClientAccount = () => {
 
     const [pageToShow, setPageToShow] = useState<number>(0)
     const [pageSize, setPageSize] = useState<number>(20)
+    const [generateTableOnlyOnce, setGenerateTableOnlyOnce] = useState<boolean>(true);
 
     const userData = useExtractQueryParamData();
 
@@ -67,7 +69,8 @@ const ClientAccount = () => {
                     createdAt: moment(e.updatedAt).format("DD-MM-YYYY")
                 }
             })
-            setTableData(data)
+
+            if (generateTableOnlyOnce) setTableData(data)
         }
         generateTableData()
     }, [account])
@@ -84,20 +87,26 @@ const ClientAccount = () => {
         })
     }
 
-    const onSubmit: SubmitHandler<TransactionFormData> = async (data) => {
+    const onSubmit: SubmitHandler<TransactionFormData> = async (formData) => {
         dispatch(startLoading())
+        setGenerateTableOnlyOnce(false)
 
-        const toSend = { ...data, accountId: account.accountId }
-
+        const toSend = { ...formData, accountId: account.accountId }
         try {
-            const { data } = await postCurrentAccountTransaction(toSend)
+            const { data } = await postCurrentAccountTransaction(toSend);
+
             setTableData((prev: any) => prev.concat({
                 id: data.transactionId,
                 amount: data.amount,
                 details: data.details,
                 type: data.type,
                 createdAt: moment(data.updatedAt).format("DD-MM-YYYY")
-            }))
+            }));
+            setAccount({
+                ...account,
+                balance: account?.balance - data.amount
+            });
+
             dispatch(setMessage({ action: "Operación Exitosa" }))
         } catch (error) {
             dispatch(setMessage({ action: "ERROR - Operación incorrecta" }, 'error'))
@@ -106,6 +115,13 @@ const ClientAccount = () => {
             handleShowModal()
         }
     };
+
+    const handleAutoComplete = () => {
+        reset({
+            amount: account?.balance,
+            details: ''
+        })
+    }
 
     return (
         <Grid
@@ -176,26 +192,40 @@ const ClientAccount = () => {
                         onSubmit={handleSubmit(onSubmit)}
                         style={{ margin: '20px' }}
                     >
-                        <Controller
-                            name="amount"
-                            control={control}
-                            defaultValue={0}
-                            render={({ field }) => (
-                                <TextField
-                                    label="Monto de la transación"
-                                    placeholder="Ingrese Monto"
-                                    type="number"
-                                    fullWidth
-                                    margin="normal"
-                                    {...field}
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <div>
+                                <Controller
+                                    name="amount"
+                                    control={control}
+                                    defaultValue={0}
+                                    render={({ field }) => (
+                                        <TextField
+                                            label="Monto de la transación"
+                                            placeholder="Ingrese Monto"
+                                            type="number"
+                                            fullWidth
+                                            margin="normal"
+                                            {...field}
+                                        />
+                                    )}
                                 />
-                            )}
-                        />
-                        {errors.amount && (
-                            <Typography variant="subtitle2" style={{ color: "red" }}>
-                                {errors.amount.message}
-                            </Typography>
-                        )}
+                                {errors.amount && (
+                                    <Typography variant="subtitle2" style={{ color: "red" }}>
+                                        {errors.amount.message}
+                                    </Typography>
+                                )}
+                            </div>
+
+                            <div style={{ height: 'auto', margin: '0px 5px 0px 15px' }}>
+                                <Button
+                                    variant='contained'
+                                    onClick={handleAutoComplete}
+                                    disabled={account?.balance <= 0 && true}
+                                >
+                                    Max
+                                </Button>
+                            </div>
+                        </div>
 
                         <Controller
                             name="details"
