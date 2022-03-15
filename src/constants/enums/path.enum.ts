@@ -10,6 +10,7 @@ export enum Path {
 	orderList = '/orders',
 	viewOrder ='/orders/view',
 	createOrder = '/orders/create',
+	clientAccount = "/client/account",
 	controllingOrderList = '/orders/control',
 	notFound = '/*'
 };
