@@ -1,6 +1,5 @@
 import { DataGrid, GridColDef } from '@material-ui/data-grid';
 
-
 interface CurrentOrdersTableProps {
     orders: any[];
     columns?: any[];
@@ -18,7 +17,6 @@ const defaultColumns: GridColDef[] = [
         align: 'center',
         sortable: true,
         width: 150,
-
     },
     {
         field: 'amount',
@@ -38,6 +36,14 @@ const defaultColumns: GridColDef[] = [
         width: 150,
         disableColumnMenu: true,
         sortable: true,
+        renderCell: (params) => (
+            <p
+                title={String(params.getValue(params.id, 'details'))}
+                style={{ width:'100%' }}
+            >
+                {String(params.getValue(params.id, 'details'))}
+            </p>
+        ),
     },
     {
         field: 'type',
