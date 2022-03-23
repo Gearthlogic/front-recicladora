@@ -7,6 +7,7 @@ import ClientList from '../../Clients';
 import OrderList from '../../Orders';
 import OrderView from '../../Orders/view';
 import CreateOrder from '../../Orders/create';
+import ClientAccount from '../../Accounts';
 import UsersList from '../../Users';
 import CreateUser from '../../Users/create';
 import EditUser from '../../Users/edit';
@@ -16,7 +17,6 @@ import Config from '../../Config';
 import { Path } from '../../../constants/enums/path.enum';
 import { Role } from '../../../constants/enums/role.enum';
 import { User } from '../../../constants/types/user.type';
-
 
 export class Route {
 	constructor(
@@ -75,6 +75,10 @@ export const routes: Array<Route> = [
 	),
 	new Route(
 		{ component: OrderView, path: Path.viewOrder },
+		[Role.Admin, Role.Purchaser]
+	),
+	new Route(
+		{ component: ClientAccount, path: Path.clientAccount, exact: true },
 		[Role.Admin, Role.Purchaser]
 	),
 	new Route(

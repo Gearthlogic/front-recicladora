@@ -7,7 +7,9 @@
         "Created": "Creado",
         "Controlling": "Controlando",
         "PendingToSetTemporaryClientPrice": "Pendiente Precio",
-        "Closed": "Cerrado"
+        "Closed": "Cerrado",
+        "Debit": "Débito",
+        "Credit": "Crédito"
     },
     "en-EN": {
         "veneer": "Veneer",
@@ -17,6 +19,8 @@
         "Created": "Created",
         "Controlling": "Controlling",
         "PendingToSetTemporaryClientPrice": "Pending price",
-        "Closed": "Closed"
+        "Closed": "Closed",
+        "Debit": "Debit",
+        "Credit": "Credit"
     }
 }

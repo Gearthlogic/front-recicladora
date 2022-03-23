@@ -69,7 +69,11 @@ const columns: GridColDef[] = [
 		width: 150,
 		sortable: false,
 		disableColumnMenu: true,
-		renderCell: (params) => <EditAction id={params.row.id} />,
+		renderCell: (params) => (
+			<EditAction
+				alias={params.row.alias}
+				id={params.row.accountId} />
+		)
 	},
 ];
 
