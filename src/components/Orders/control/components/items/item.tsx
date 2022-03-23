@@ -2,30 +2,33 @@ import { Button, Grid, TextField } from "@material-ui/core";
 import { FormEventHandler, memo, useMemo, useState } from "react";
 
 import MaterialSelect from '../../../../common/Form/MaterialsSelect';
-import { ControlOrderItemsDTO } from "../../../../../constants/dto/order.dto";
+import { ControlOrderItemDTO } from "../../../../../constants/dto/order.dto";
 import { Material } from "../../../../../constants/enums/material.enum";
 import { controlOrderItem } from '../../../../../services/api/orders';
 import { useDispatch } from "react-redux";
 import { endLoading, startLoading } from "../../../../../redux/actions/loading/loading";
 import { setMessage } from "../../../../../redux/actions/message";
 
-function ItemControlForm({ quantity, material, id, unit }: ControlOrderItemsDTO) {
+function ItemControlForm({ quantity, material, id, unit, wastePercentage }: ControlOrderItemDTO) {
     const [selectedMaterial, setSelectedMaterial] = useState(material);
-    const [waste, setWaste] = useState(0);
+    const [selectedWastePercentage, setselectedWastePercentage] = useState(wastePercentage);
 
     const dispatch = useDispatch();
 
     const finalQuantity = useMemo(() => {
-        return (quantity * (1 - (waste / 100))).toFixed(2);
-    }, [quantity, waste])
+        return (quantity * (1 - (selectedWastePercentage / 100))).toFixed(2);
+    }, [quantity, selectedWastePercentage])
 
     const submitMaterialControl: FormEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault();
         dispatch(startLoading());
         try {
             await controlOrderItem({
-                id, material: selectedMaterial, quantity: parseFloat(finalQuantity)
+                id, 
+                material: selectedMaterial, 
+                wastePercentage: selectedWastePercentage
             });
+
             dispatch(setMessage({ message: "Actualziación axitosa" }));
         } catch {
             dispatch(setMessage({ message: "Error al actualizar. Vuelva a intentarlo" }));
@@ -54,8 +57,8 @@ function ItemControlForm({ quantity, material, id, unit }: ControlOrderItemsDTO)
                 <TextField
                     type="number"
                     label="Porcentaje de merma"
-                    value={waste}
-                    onChange={event => setWaste(parseInt(event.target.value))}
+                    value={selectedWastePercentage}
+                    onChange={event => setselectedWastePercentage(parseInt(event.target.value))}
                 />
                 <TextField
                     label="Pesada con merma"

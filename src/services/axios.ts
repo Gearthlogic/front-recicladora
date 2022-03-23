@@ -7,8 +7,7 @@ export interface Request<T> {
 
 export type ID = string | number;
 
-const baseURL =  'https://recicladora.herokuapp.com/' 
-//const baseURL = 'http://localhost:4000'
+const baseURL = process.env.REACT_APP_API_URL;
 
 const instancesData: AxiosRequestConfig = {
     baseURL,

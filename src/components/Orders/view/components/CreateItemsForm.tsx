@@ -11,7 +11,7 @@ import translations from '../../../../assets/translations.json'
 import { ClientType } from "../../../../constants/enums/client.enum";
 import { createOrderItems } from "../../../../services/api/orders";
 import { Path } from "../../../../constants/enums/path.enum";
-import { OrderMaterialItemDTO } from '../../../../constants/dto/order.dto'
+import { CreateOrderMaterialItemDTO } from '../../../../constants/dto/order.dto'
 import { endLoading, startLoading } from "../../../../redux/actions/loading/loading";
 
 interface CreateItemsFormProps {
@@ -37,8 +37,8 @@ function CreateItemsForm({ id, type }: CreateItemsFormProps) {
     const history = useHistory();
     const dispatch = useDispatch()
 
-    const { control, handleSubmit } = useForm<OrderMaterialItemDTO>();
-    const [itemList, setItemList] = useState<OrderMaterialItemDTO[]>([]);
+    const { control, handleSubmit } = useForm<CreateOrderMaterialItemDTO>();
+    const [itemList, setItemList] = useState<CreateOrderMaterialItemDTO[]>([]);
 
     const isPriceVisible = useMemo(() => type === ClientType.Temporary, [type])
     const allowedMaterials = useMemo(
@@ -54,7 +54,7 @@ function CreateItemsForm({ id, type }: CreateItemsFormProps) {
         });
     }
 
-    function submitAddItem(data: OrderMaterialItemDTO) {
+    function submitAddItem(data: CreateOrderMaterialItemDTO) {
         setItemList(prev => prev.concat(data));
     }
 

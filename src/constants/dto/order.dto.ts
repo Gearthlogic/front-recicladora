@@ -18,24 +18,36 @@ export interface GetOrdersQueryDTO extends PaginateDTO {
     state?: OrderState[];
 }
 
-export interface OrderMaterialItemDTO {
+export interface CreateOrderMaterialItemDTO {
     material: Material;
     quantity: number;
     price?: number;
     unit?: string
 }
 
-export interface CreateOrderItemsDTO {
+export interface UpdateOrderMaterialItemDTO extends CreateOrderMaterialItemDTO  {
     id: number;
-    items: OrderMaterialItemDTO[];
 }
 
-export interface ControlOrderItemsDTO {
+export interface CreateOrderItemsDTO {
+    id: number;
+    items: CreateOrderMaterialItemDTO[];
+}
+
+export interface ControlOrderItemDTO {
+    quantity: number,
+    unit: string;
+}
+
+export interface PatchControlOrderItemDTO {
     id: number;
     material: Material;
-    quantity: number;
-    price?: number;
-    unit?: string;
+    wastePercentage: number;
+}
+
+export interface ControlOrderItemDTO extends PatchControlOrderItemDTO {
+    quantity: number,
+    unit: string;
 }
 
 export interface SetPriceOrderItemDTO {

@@ -13,7 +13,7 @@ import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useHistory, useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Path } from '../../../constants/enums/path.enum';
@@ -107,12 +107,15 @@ const CreateClient = () => {
 		reset,
 		getValues
 	} = useForm<FormData>({ resolver: yupResolver(schema) });
+	const [prices, setPrices] = useState<ClientPrice[]>([]);
 
 	useEffect(() => {
 		if (id) {
 			getClientDetails(id).then((res) => {
 				const formData = { ...res.data, ...res.data.address };
 				delete formData.address;
+				setPrices(formData.prices);
+				delete formData.prices;
 				reset(formData);
 			});
 		}
@@ -388,8 +391,8 @@ const CreateClient = () => {
 			{clientPricesAllowed() &&
 				<ClientPrices
 					id={id}
-					prices={getValues().prices}
-					setPrices={prices => reset({ prices })}
+					prices={prices}
+					setPrices={setPrices}
 				/>
 			}
 		</Grid>

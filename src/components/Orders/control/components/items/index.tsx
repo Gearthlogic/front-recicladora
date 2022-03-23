@@ -2,7 +2,7 @@ import { Grid, Button } from "@material-ui/core";
 import { Dispatch, memo, SetStateAction } from "react";
 import { useDispatch } from "react-redux";
 
-import { ControlOrderItemsDTO } from "../../../../../constants/dto/order.dto";
+import { ControlOrderItemDTO } from "../../../../../constants/dto/order.dto";
 import { endLoading, startLoading } from "../../../../../redux/actions/loading/loading";
 import { setMessage } from "../../../../../redux/actions/message";
 import { endControlling } from "../../../../../services/api/orders";
@@ -10,7 +10,7 @@ import Item from './item';
 
 interface ControlOrderItemsFormProps {
     id: number;
-    items: ControlOrderItemsDTO[],
+    items: ControlOrderItemDTO[],
     setData: Dispatch<SetStateAction<any[] | undefined>>
 }
 
