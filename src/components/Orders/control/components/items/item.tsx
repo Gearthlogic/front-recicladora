@@ -44,6 +44,7 @@ function ItemControlForm({ quantity, material, id, unit, wastePercentage }: Cont
                 justifyContent="space-between"
                 alignItems="center"
                 flexDirection="row"
+                marginY={2}
             >
                 <MaterialSelect
                     value={selectedMaterial}
