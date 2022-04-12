@@ -12,5 +12,6 @@ export enum Path {
 	createOrder = '/orders/create',
 	clientAccount = "/client/account",
 	controllingOrderList = '/orders/control',
+	paymentSettlement = '/payment_settlement',
 	notFound = '/*'
 };

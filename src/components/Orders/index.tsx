@@ -17,6 +17,30 @@ function OrderList() {
         setValue(newValue);
     };
 
+    async function connectDevice() {
+        //@ts-ignore
+        const port = await navigator.serial.requestPort();
+
+        console.log(port);
+        await port.open({ baudRate: 2400 });
+
+        const textDecoder = new TextDecoderStream();
+        const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
+        const reader = textDecoder.readable.getReader();
+
+        // Listen to data coming from the serial device.
+        while (true) {
+            const { value, done } = await reader.read();
+            if (done) {
+                // Allow the serial port to be closed later.
+                reader.releaseLock();
+                break;
+            }
+            // value is a Uint8Array.
+            console.log(value);
+        }
+    }
+
     return (
         <TabContext value={value}>
             <Grid container flexDirection="column">
@@ -32,15 +56,25 @@ function OrderList() {
                             <Tab label="En curso" value="1" />
                             <Tab label="Historial" value="2" />
                         </TabList>
-                        <Button
-                            onClick={() => history.push(Path.createOrder)}
-                            variant="contained" >
-                            Crear orden
-                        </Button>
+                        <div>
+                            <Button
+                                style={{marginRight: 2}}
+                                onClick={connectDevice}
+                                variant="contained"
+                                color="success"
+                                >
+                                Conectar  balanza
+                            </Button>
+                            <Button
+                                onClick={() => history.push(Path.createOrder)}
+                                variant="contained" >
+                                Crear orden
+                            </Button>
+                        </div>
                     </Grid>
                 </Box>
                 <Grid container item>
-                    <TabPanel  value="1">
+                    <TabPanel value="1">
                         <CurrentOrders />
                     </TabPanel>
                     <TabPanel value="2">

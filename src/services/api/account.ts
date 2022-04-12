@@ -6,6 +6,12 @@ export const getAccount = async (id: number) => {
 	return response.data;
 };
 
+export const getPositiveBalanceAccounts = async () => {
+	const response = await privateAxiosInstance.get('/current_account/positive_balance');
+
+	return response.data;
+};
+
 export const postCurrentAccountTransaction = async (body: any) => {
 	return await privateAxiosInstance.post('/current_account/debit', body);
 };

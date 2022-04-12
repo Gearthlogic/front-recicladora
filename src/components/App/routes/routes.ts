@@ -13,6 +13,7 @@ import CreateUser from '../../Users/create';
 import EditUser from '../../Users/edit';
 import ControllingOrderList from '../../Orders/control';
 import Config from '../../Config';
+import PaymentSettlement from '../../PaymentSettlement';
 
 import { Path } from '../../../constants/enums/path.enum';
 import { Role } from '../../../constants/enums/role.enum';
@@ -76,6 +77,11 @@ export const routes: Array<Route> = [
 	new Route(
 		{ component: OrderView, path: Path.viewOrder },
 		[Role.Admin, Role.Purchaser]
+	),
+	new Route(
+		{ component: PaymentSettlement, path: Path.paymentSettlement, exact: true },
+		[Role.Admin],
+		{ name: 'Liquidaciones' }
 	),
 	new Route(
 		{ component: ClientAccount, path: Path.clientAccount, exact: true },
