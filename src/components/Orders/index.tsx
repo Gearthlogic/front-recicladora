@@ -24,19 +24,18 @@ function OrderList() {
         console.log(port);
         await port.open({ baudRate: 2400 });
 
-        const textDecoder = new TextDecoderStream();
-        const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
-        const reader = textDecoder.readable.getReader();
-        let count = 0 ;
+        const reader = port.readable.getReader();
+
+        let count = 0;
         // Listen to data coming from the serial device.
         while (count < 100) {
             const { value, done } = await reader.read();
 
             console.log('Done', done);
-            
+
             if (done) {
                 // Allow the serial port to be closed later.
-                reader.releaseLock();
+                reader.cancel()
                 break;
             }
             // value is a Uint8Array.
@@ -47,8 +46,7 @@ function OrderList() {
         console.log("Leaving port")
 
         reader.cancel();
-        await readableStreamClosed.catch(() => { /* Ignore the error */ });
-        
+
         await port.close();
         console.log("port closed")
     }
