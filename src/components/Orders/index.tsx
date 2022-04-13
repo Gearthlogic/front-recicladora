@@ -25,12 +25,15 @@ function OrderList() {
         await port.open({ baudRate: 2400 });
 
         const textDecoder = new TextDecoderStream();
-        port.readable.pipeTo(textDecoder.writable);
+        const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
         const reader = textDecoder.readable.getReader();
 
         // Listen to data coming from the serial device.
         while (true) {
             const { value, done } = await reader.read();
+
+            console.log('Done', done);
+            
             if (done) {
                 // Allow the serial port to be closed later.
                 reader.releaseLock();
@@ -39,6 +42,13 @@ function OrderList() {
             // value is a Uint8Array.
             console.log(value);
         }
+
+        console.log("Leaving port")
+
+        reader.cancel();
+        await readableStreamClosed.catch(() => { /* Ignore the error */ });
+
+        await port.close();
     }
 
     return (
@@ -58,11 +68,11 @@ function OrderList() {
                         </TabList>
                         <div>
                             <Button
-                                style={{marginRight: 2}}
+                                style={{ marginRight: 2 }}
                                 onClick={connectDevice}
                                 variant="contained"
                                 color="success"
-                                >
+                            >
                                 Conectar  balanza
                             </Button>
                             <Button
