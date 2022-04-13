@@ -27,9 +27,9 @@ function OrderList() {
         const textDecoder = new TextDecoderStream();
         const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
         const reader = textDecoder.readable.getReader();
-
+        let count = 0 ;
         // Listen to data coming from the serial device.
-        while (true) {
+        while (count < 100) {
             const { value, done } = await reader.read();
 
             console.log('Done', done);
@@ -40,6 +40,7 @@ function OrderList() {
                 break;
             }
             // value is a Uint8Array.
+            count++;
             console.log(value);
         }
 
@@ -47,8 +48,9 @@ function OrderList() {
 
         reader.cancel();
         await readableStreamClosed.catch(() => { /* Ignore the error */ });
-
+        
         await port.close();
+        console.log("port closed")
     }
 
     return (
