@@ -25,7 +25,7 @@ function OrderList() {
         await port.open({ baudRate: 2400 });
 
         const textDecoder = new TextDecoderStream();
-        const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
+        port.readable.pipeTo(textDecoder.writable);
         const reader = textDecoder.readable.getReader();
 
         // Listen to data coming from the serial device.

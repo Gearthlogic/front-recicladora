@@ -25,7 +25,7 @@ function PaymentSettlement() {
                 dispatch(endLoading())
             }
         })();
-    }, [])
+    }, [dispatch])
 
     return (
         <div>
