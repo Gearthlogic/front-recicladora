@@ -47,10 +47,7 @@ function OrderList() {
                         console.log("VALOR", value);
                         console.log("FINALIZADO", done);
 
-                        if (done) {
-                            reader.releaseLock();
-                            break;
-                        }
+                        if (done) break;
 
                         finalValue += value;
                         count++;
@@ -63,7 +60,7 @@ function OrderList() {
                         console.log("TIENE SALTO ", hasEndLine);
                         console.log("LLEGO AL LIMITE ", limit);
 
-                        if (hasEndLine || limit ) {
+                        if (hasEndLine || limit) {
                             console.log("CANDELANDO EL LECTOR");
                             keepReading = false;
 
@@ -77,6 +74,7 @@ function OrderList() {
                     console.error(error)
                 } finally {
                     console.log("SALIENDO DEL LOOP EXTERNO")
+                    reader.releaseLock();
                     await readableStreamClosed.catch(console.error);
                 }
             }
