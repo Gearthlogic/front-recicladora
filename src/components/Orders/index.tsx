@@ -11,6 +11,8 @@ import { Path } from "../../constants/enums/path.enum";
 
 function OrderList() {
     const [value, setValue] = useState('1');
+    const [port, setPort] = useState<SerialPort>();
+
     const history = useHistory();
 
     const handleChange = (event: SyntheticEvent, newValue: string) => {
@@ -18,37 +20,74 @@ function OrderList() {
     };
 
     async function connectDevice() {
-        //@ts-ignore
         const port = await navigator.serial.requestPort();
 
-        console.log(port);
-        await port.open({ baudRate: 2400 });
+        setPort(port);
+    }
 
-        const reader = port.readable.getReader();
+    async function ReadFromSerial2() {
+        if (port) {
+            await port.open({ baudRate: 2400 });
+            console.log("PUERTO ABIERTO")
+            let finalValue = '';~¬
+            let count = 1;
+            let keepReading = true
 
-        let count = 0;
-        // Listen to data coming from the serial device.
-        while (count < 100) {
-            const { value, done } = await reader.read();
+            while (port.readable && keepReading) {
+                console.log("ENTRANDO EN EL LOOP EXTERNO")
 
-            console.log('Done', done);
+                const textDecoder = new TextDecoderStream("utf-8");
+                const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
+                const reader = textDecoder.readable.getReader();
 
-            if (done) {
-                // Allow the serial port to be closed later.
-                reader.cancel()
-                break;
+                try {
+                    while (true) {
+                        console.log("PASADA", count)
+                        const { value, done } = await reader.read();
+                        console.log("VALOR", value);
+                        console.log("FINALIZADO", done);
+
+                        if (done) {
+                            reader.releaseLock();
+                            break;
+                        }
+
+                        finalValue += value;
+                        count++;
+
+                        console.log("VALOR CONCATENADO ", finalValue);
+
+                        const hasEndLine = finalValue.includes('\r\n')
+                        const limit = count === 100;
+
+                        console.log("TIENE SALTO ", hasEndLine);
+                        console.log("LLEGO AL LIMITE ", limit);
+
+                        if (hasEndLine || limit ) {
+                            console.log("CANDELANDO EL LECTOR");
+                            keepReading = false;
+
+                            reader.cancel();
+                        }
+
+                        console.log("SALIENDO DEL LOOP INTERNO")
+                    }
+
+                } catch (error) {
+                    console.error(error)
+                } finally {
+                    console.log("SALIENDO DEL LOOP EXTERNO")
+                    await readableStreamClosed.catch(console.error);
+                }
             }
-            // value is a Uint8Array.
-            count++;
-            console.log(value);
+
+            console.log("CERRANDO PUERTO")
+            console.log("Readable", port.readable)
+            console.log("Writable", port.writable)
+
+            await port.close();
+            console.log("PUERTO CERRADO")
         }
-
-        console.log("Leaving port")
-
-        reader.cancel();
-
-        await port.close();
-        console.log("port closed")
     }
 
     return (
@@ -67,14 +106,25 @@ function OrderList() {
                             <Tab label="Historial" value="2" />
                         </TabList>
                         <div>
-                            <Button
-                                style={{ marginRight: 2 }}
-                                onClick={connectDevice}
-                                variant="contained"
-                                color="success"
-                            >
-                                Conectar  balanza
-                            </Button>
+                            {!port ?
+                                <Button
+                                    style={{ marginRight: 2 }}
+                                    onClick={connectDevice}
+                                    variant="contained"
+                                    color="success"
+                                >
+                                    Conectar
+                                </Button>
+                                :
+                                <Button
+                                    style={{ marginRight: 2 }}
+                                    onClick={ReadFromSerial2}
+                                    variant="contained"
+                                    color="success"
+                                >
+                                    Pesar
+                                </Button>
+                            }
                             <Button
                                 onClick={() => history.push(Path.createOrder)}
                                 variant="contained" >
