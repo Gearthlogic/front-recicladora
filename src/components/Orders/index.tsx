@@ -29,7 +29,7 @@ function OrderList() {
         if (port) {
             await port.open({ baudRate: 2400 });
             console.log("PUERTO ABIERTO")
-            let finalValue = '';~¬
+            let finalValue = '';
             let count = 1;
             let keepReading = true
 
