@@ -16,19 +16,21 @@ const instancesData: AxiosRequestConfig = {
     }
 };
 
-export const privateAxiosInstance = axios.create(instancesData)
+const privateAxiosInstance = axios.create(instancesData)
 
-export const publicAxiosInstance = axios.create(instancesData);
+const publicAxiosInstance = axios.create(instancesData);
 
-// Add token to requests
 privateAxiosInstance.interceptors.request.use((config) => {
     const { auth: { token } } = store.getState();
-
+    
     if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`;
     }
 
     return config;
 });
+
+export { publicAxiosInstance, privateAxiosInstance };
+
 
 

@@ -1,16 +1,5 @@
 import { useState, useEffect, memo } from 'react';
-import { setMessage } from '../../../../redux/actions/message';
 import { useDispatch } from 'react-redux';
-import moment from 'moment';
-
-
-import { getOrders } from '../../../../services/api/orders';
-import { OrderState } from '../../../../constants/enums/orderStates.enum';
-import { startLoading, endLoading } from '../../../../redux/actions/loading/loading';
-import transalations from '../../../../assets/translations.json';
-import { ClientType } from '../../../../constants/enums/client.enum';
-import AccordionCustom from '../../../common/Accordion/AccordionCustom';
-
 import { Theme, useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -18,6 +7,17 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Button } from '@mui/material';
+import moment from 'moment';
+
+import { getOrders } from '../../services/api/orders';
+import { OrderState } from '../../constants/enums/orderStates.enum';
+import { startLoading, endLoading } from '../../redux/actions/loading/loading';
+import transalations from '../../assets/translations.json';
+import { ClientType } from '../../constants/enums/client.enum';
+import AccordionCustom from '../common/Accordion/AccordionCustom';
+import { setMessage } from '../../redux/actions/message';
+
+
 import HistoryOrdersTable from './components/HistoryOrdersTable';
 
 
@@ -116,7 +116,6 @@ const OrdersHistory = () => {
     return (
         <div>
             <AccordionCustom
-                
                 text='Filtrar'
                 expanded={toggleFilterAccordion}
                 onClick={() => setToggleFilterAccordion(!toggleFilterAccordion)}

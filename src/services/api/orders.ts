@@ -1,8 +1,17 @@
-import { GetOrdersQueryDTO , CreateOrderItemsDTO, PatchControlOrderItemDTO} from '../../constants/dto/order.dto';
+import {
+	GetOrdersQueryDTO,
+	CreateOrderItemsDTO,
+	PatchControlOrderItemDTO,
+	GetCurrentOrderDTO
+} from '../../constants/dto/order.dto';
 import { privateAxiosInstance } from '../axios';
 
 export const getOrders = (params: GetOrdersQueryDTO) => {
 	return privateAxiosInstance.get('/orders', { params });
+};
+
+export const getCurrentOrders = () => {
+	return privateAxiosInstance.get<GetCurrentOrderDTO[]>('/orders/current');
 };
 
 export const getControllingOrders = () => {

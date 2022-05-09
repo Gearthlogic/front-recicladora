@@ -11,7 +11,7 @@ import Item from './item';
 interface ControlOrderItemsFormProps {
     id: number;
     items: ControlOrderItemDTO[],
-    setData: Dispatch<SetStateAction<any[] | undefined>>
+    setData: Dispatch<SetStateAction<any[] | undefined >>
 }
 
 const ControlOrderItemsForm = ({items, id, setData} : ControlOrderItemsFormProps ) => {

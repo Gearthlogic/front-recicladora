@@ -1,7 +1,18 @@
 
+import { ClientType } from "../enums/client.enum";
 import { Material } from "../enums/material.enum";
 import { OrderState } from "../enums/orderStates.enum";
 import { PaginateDTO } from "./paginate.dto";
+
+export interface GetCurrentOrderDTO {
+    id: number,
+    client: {
+        alias: string,
+        type: ClientType
+    },
+    items: any[],
+    state: OrderState,
+}
 
 export interface CreateOrderDTO {
     clientId: number
@@ -20,12 +31,13 @@ export interface GetOrdersQueryDTO extends PaginateDTO {
 
 export interface CreateOrderMaterialItemDTO {
     material: Material;
-    quantity: number;
+    initialInputQuantity: number;
+    finalInputQuantity: number;
     price?: number;
     unit?: string
 }
 
-export interface UpdateOrderMaterialItemDTO extends CreateOrderMaterialItemDTO  {
+export interface UpdateOrderMaterialItemDTO extends CreateOrderMaterialItemDTO {
     id: number;
 }
 
@@ -49,6 +61,7 @@ export interface ControlOrderItemDTO extends PatchControlOrderItemDTO {
     quantity: number,
     unit: string;
 }
+
 
 export interface SetPriceOrderItemDTO {
     id: number;

@@ -1,147 +1,85 @@
-import { SyntheticEvent, useState } from "react";
-import { Box, Tab, Grid, Button } from "@material-ui/core";
-import TabPanel from '@mui/lab/TabPanel';
+import { SyntheticEvent, useMemo, useState } from "react";
+import { Box, Tab, Grid, Badge, Button } from "@material-ui/core";
 import TabList from '@mui/lab/TabList';
 import TabContext from '@mui/lab/TabContext';
 
-import OrderHistory from './components/history';
-import CurrentOrders from './components/current';
-import { useHistory } from "react-router-dom";
-import { Path } from "../../constants/enums/path.enum";
+import OrderList from './components/orderList';
+import CreatedOrderListHeader from "./components/createdOrderListHeader";
+import { getCurrentOrders } from '../../services/api/orders';
+import { OrderState } from "../../constants/enums/orderStates.enum";
+import { GetCurrentOrderDTO } from "../../constants/dto/order.dto";
+import useFetch from "../../hooks/useFetch";
 
-function OrderList() {
-    const [value, setValue] = useState('1');
-    const [port, setPort] = useState<SerialPort>();
-
-    const history = useHistory();
+function CurrentOrders() {
+    const [value, setValue] = useState<OrderState>(OrderState.Created);
 
     const handleChange = (event: SyntheticEvent, newValue: string) => {
-        setValue(newValue);
+        setValue(newValue as OrderState);
     };
 
-    async function connectDevice() {
-        const port = await navigator.serial.requestPort();
+    const { data, setData, fetchCallback } = useFetch<GetCurrentOrderDTO[]>(
+        useMemo(() => getCurrentOrders(), [])
+    );
 
-        setPort(port);
-    }
+    const ordersMap = useMemo(() => {
+        const ordersMap: { [key in OrderState]?: GetCurrentOrderDTO[] } = {};
 
-    async function ReadFromSerial2() {
-        if (port) {
-            await port.open({ baudRate: 2400 });
-            console.log("PUERTO ABIERTO")
-            let finalValue = '';
-            let count = 1;
-            let keepReading = true
+        Object.values(OrderState).forEach(state => {
+            ordersMap[state] = data?.filter(order => order.state === state)
+        });
 
-            while (port.readable && keepReading) {
-                console.log("ENTRANDO EN EL LOOP EXTERNO")
+        return ordersMap;
+    }, [data]);
 
-                const textDecoder = new TextDecoderStream("utf-8");
-                const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
-                const reader = textDecoder.readable.getReader();
 
-                try {
-                    while (true) {
-                        console.log("PASADA", count)
-                        const { value, done } = await reader.read();
-                        console.log("VALOR", value);
-                        console.log("FINALIZADO", done);
+    function createTabLabel(label: string, state: OrderState) {
+        const count = ordersMap[state]?.length || 0;
+        const active = value === state;
 
-                        if (done) break;
-
-                        finalValue += value;
-                        count++;
-
-                        console.log("VALOR CONCATENADO ", finalValue);
-
-                        const hasEndLine = finalValue.includes('\r\n')
-                        const limit = count === 100;
-
-                        console.log("TIENE SALTO ", hasEndLine);
-                        console.log("LLEGO AL LIMITE ", limit);
-
-                        if (hasEndLine || limit) {
-                            console.log("CANDELANDO EL LECTOR");
-                            keepReading = false;
-
-                            reader.cancel();
-                        }
-
-                        console.log("SALIENDO DEL LOOP INTERNO")
-                    }
-
-                } catch (error) {
-                    console.error(error)
-                } finally {
-                    console.log("SALIENDO DEL LOOP EXTERNO")
-                    reader.releaseLock();
-                    await readableStreamClosed.catch(console.error);
-                }
-            }
-
-            console.log("CERRANDO PUERTO")
-            console.log("Readable", port.readable)
-            console.log("Writable", port.writable)
-
-            await port.close();
-            console.log("PUERTO CERRADO")
-        }
+        return <div>
+            <span style={{ marginRight: 10 }}> {label} </span>
+            <Badge
+                color={active ? "primary" : undefined}
+                badgeContent={<span>{count}</span>}
+            />
+        </div>
     }
 
     return (
         <TabContext value={value}>
             <Grid container flexDirection="column">
-                <Box
-                    sx={{
-                        borderBottom: 1,
-                        borderColor: 'divider',
-                        paddingBottom: 2
-                    }}
-                >
-                    <Grid container justifyContent="space-between" flexDirection="row" item>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider', paddingBottom: 2, marginBottom: 2 }} >
+                    <Grid
+                        container
+                        justifyContent="space-between"
+                        flexDirection="row"
+                    >
                         <TabList onChange={handleChange} aria-label="tabs de ordenes">
-                            <Tab label="En curso" value="1" />
-                            <Tab label="Historial" value="2" />
+                            <Tab
+                                label={createTabLabel("Creadas", OrderState.Created)}
+                                value={OrderState.Created}
+                            />
+                            <Tab
+                                label={createTabLabel("Controlando", OrderState.Controlling)}
+                                value={OrderState.Controlling}
+                            />
+                            <Tab
+                                label={createTabLabel("Cerradas", OrderState.Closed)}
+                                value={OrderState.Closed}
+                            />
                         </TabList>
-                        <div>
-                            {!port ?
-                                <Button
-                                    style={{ marginRight: 2 }}
-                                    onClick={connectDevice}
-                                    variant="contained"
-                                    color="success"
-                                >
-                                    Conectar
-                                </Button>
-                                :
-                                <Button
-                                    style={{ marginRight: 2 }}
-                                    onClick={ReadFromSerial2}
-                                    variant="contained"
-                                    color="success"
-                                >
-                                    Pesar
-                                </Button>
-                            }
-                            <Button
-                                onClick={() => history.push(Path.createOrder)}
-                                variant="contained" >
-                                Crear orden
-                            </Button>
-                        </div>
+                        <Button onClick={fetchCallback} > Recargar ordenes </Button>
                     </Grid>
                 </Box>
                 <Grid container item>
-                    <TabPanel value="1">
-                        <CurrentOrders />
-                    </TabPanel>
-                    <TabPanel value="2">
-                        <OrderHistory />
-                    </TabPanel>
+                    {value === OrderState.Created &&
+                        <CreatedOrderListHeader setOrders={setData} />
+                    }
+                    <OrderList orders={ordersMap[value]} setOrders={setData} />
                 </Grid>
             </Grid >
         </TabContext>
     )
 }
 
-export default OrderList;
+export default CurrentOrders;

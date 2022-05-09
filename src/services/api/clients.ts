@@ -9,9 +9,9 @@ export interface CreateClientDTO {
 	cellphone: string;
 	type: ClientType;
 }
-interface CreateOrder{
+interface CreateOrder {
 	clientId: number;
-	pickupDate:string;
+	pickupDate?: string;
 }
 interface CreateClientPrices {
 	clientId: number
@@ -47,7 +47,7 @@ export const getClientDetails = async (id: string) => {
 	return await privateAxiosInstance.get(`/client/${id}`);
 };
 
-export const getTemporaryPrices = async () =>{
+export const getTemporaryPrices = async () => {
 	return await privateAxiosInstance.get('/client/temporary_prices/all')
 }
 
@@ -76,7 +76,7 @@ export const createClientTemporaryPrices = async (body: ClientTemporaryPrices) =
 }
 
 export const upDateClientTemporaryPrices = async (body: ClientTemporaryPrices) => {
-	return privateAxiosInstance.put('/client/temporary_prices', body)
+	return await privateAxiosInstance.put('/client/temporary_prices', body)
 }
 
 export const updateClientPrices = async (body: UpdatePrice[]) => {

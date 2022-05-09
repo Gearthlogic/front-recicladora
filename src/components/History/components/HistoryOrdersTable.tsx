@@ -1,8 +1,8 @@
 import { DataGrid, GridColDef } from '@material-ui/data-grid';
 import { Link } from '@mui/material';
-import ViewOrderBtn from '../../common/ViewOrderBtn';
+import ViewOrderBtn from './ViewOrderBtn';
 
-interface CurrentOrdersTableProps {
+interface OrdersHistoryTableProps {
     orders: any[];
     columns?: any[];
     page?: number;
@@ -100,7 +100,7 @@ const HistoryOrdersTable = ({
     page,
     orders,
     columns = defaultColumns
-}: CurrentOrdersTableProps) => {
+}: OrdersHistoryTableProps) => {
 
     return (
         <DataGrid

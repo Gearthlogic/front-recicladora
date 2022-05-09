@@ -5,8 +5,6 @@ import NotFound from '../../NotFound';
 import CreateClient from '../../Clients/CreateClient';
 import ClientList from '../../Clients';
 import OrderList from '../../Orders';
-import OrderView from '../../Orders/view';
-import CreateOrder from '../../Orders/create';
 import ClientAccount from '../../Accounts';
 import UsersList from '../../Users';
 import CreateUser from '../../Users/create';
@@ -66,17 +64,9 @@ export const routes: Array<Route> = [
 		[Role.Admin, Role.Purchaser]
 	),
 	new Route(
-		{ component: CreateOrder, path: Path.createOrder },
-		[Role.Admin, Role.Purchaser]
-	),
-	new Route(
 		{ component: OrderList, path: Path.orderList, exact: true },
 		[Role.Admin, Role.Purchaser],
 		{ name: 'Ordenes' },
-	),
-	new Route(
-		{ component: OrderView, path: Path.viewOrder },
-		[Role.Admin, Role.Purchaser]
 	),
 	new Route(
 		{ component: PaymentSettlement, path: Path.paymentSettlement, exact: true },
