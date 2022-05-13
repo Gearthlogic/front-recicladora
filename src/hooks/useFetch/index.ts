@@ -13,7 +13,7 @@ const useFetch = <T>(requestPromise: Promise<AxiosResponse<T, any>>) => {
 		try {
 			const res = await requestPromise;
 			// no borrar . deja de funcionar dios sabe por que
-			console.log(res.data);
+			console.log(res.data)
 			setData(res.data)
 		} catch (error) {
 			dispatch(setMessage({ message: 'Error al cargar la información' }, 'error'))

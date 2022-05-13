@@ -6,18 +6,20 @@ import OrderItem from './OrderItem';
 
 interface OrderListProps {
     orders?: GetCurrentOrderDTO[],
-    setOrders: React.Dispatch<React.SetStateAction<GetCurrentOrderDTO[] | undefined>>
+    setOrders: React.Dispatch<React.SetStateAction<GetCurrentOrderDTO[] | undefined>>,
+    readFromSerial: Function
 }
 
-const OrderList = ({ orders, setOrders }: OrderListProps) => {
+const OrderList = ({ orders, setOrders, readFromSerial }: OrderListProps) => {
 
     return (
         <Grid container>
             <Grid container >
                 {orders?.map(order => (
                     <OrderItem
+                        readFromSerial={readFromSerial}
                         key={order.id}
-                        setOrders ={setOrders}
+                        setOrders={setOrders}
                         item={order}
                     />
                 ))}

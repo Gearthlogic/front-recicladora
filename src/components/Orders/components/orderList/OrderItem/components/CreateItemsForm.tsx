@@ -9,7 +9,6 @@ import translations from '../../../../../../assets/translations.json'
 import { ClientType } from "../../../../../../constants/enums/client.enum";
 import { createOrderItems } from "../../../../../../services/api/orders";
 import { CreateOrderMaterialItemDTO, GetCurrentOrderDTO } from '../../../../../../constants/dto/order.dto'
-import { useSerialPort } from "../../../../../../hooks/useSerialPort";
 import { useGlobalLoader } from "../../../../../../hooks/UseGlobalLoader";
 import { OrderState } from "../../../../../../constants/enums/orderStates.enum";
 
@@ -17,6 +16,7 @@ interface CreateItemsFormProps {
     id: number;
     type: ClientType;
     setOrders: React.Dispatch<React.SetStateAction<GetCurrentOrderDTO[] | undefined>>
+    readFromSerial : Function
 }
 
 const materialsTableColumns: GridColDef[] = [
@@ -55,8 +55,7 @@ const materialsTableColumns: GridColDef[] = [
 
 type WeigthInputField = 'finalInputQuantity' | "initialInputQuantity";
 
-function CreateItemsForm({ id, type, setOrders }: CreateItemsFormProps) {
-    const { readFromSerial } = useSerialPort();
+function CreateItemsForm({ id, type, setOrders, readFromSerial }: CreateItemsFormProps) {
     const { control, handleSubmit, setValue } = useForm<CreateOrderMaterialItemDTO>();
     const [itemList, setItemList] = useState<CreateOrderMaterialItemDTO[]>([]);
 
@@ -81,8 +80,10 @@ function CreateItemsForm({ id, type, setOrders }: CreateItemsFormProps) {
                 <Controller
                     name={fieldName}
                     control={control}
+                    defaultValue={0}
                     render={({ field }) => (
                         <TextField
+                            id={label}
                             type="number"
                             label={label}
                             {...field}
@@ -91,10 +92,16 @@ function CreateItemsForm({ id, type, setOrders }: CreateItemsFormProps) {
                 />
                 <IconButton
                     onClick={async () => {
-                        const result = await readFromSerial();
-                        const newValue = result || 0;
-
-                        setValue(fieldName, newValue);
+                        try {
+                            const result = await readFromSerial();
+                            const newValue = result || 0;
+                            const input =  document.getElementById(label);
+    
+                            input?.focus()
+                            setValue(fieldName, newValue);
+                        }catch(error: any) {
+                            alert(error.message)
+                        }
                     }}
                 >
                     <Balance />

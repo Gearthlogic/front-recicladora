@@ -9,7 +9,7 @@ export const defaultSerialOptions: SerialOptions = {
 }
 
 export function defaultUnit8ArrayProccesser(data: Uint8Array) {
-    const textDecorder = new TextDecoder('ascci')
+    const textDecorder = new TextDecoder('ascii')
 
     const decodedValue = textDecorder.decode(data);
 
@@ -18,7 +18,7 @@ export function defaultUnit8ArrayProccesser(data: Uint8Array) {
     const value = parseInt(getMostFrequentElement(valuesArray));
 
     return {
-        value, done: value > 0
+        value, done: value >= 0
     }
 }
 
@@ -30,62 +30,61 @@ export function useSerialPort(
 
     useEffect(() => {
         navigator.serial.getPorts().then(ports => {
-            const readablePorts = ports.filter(port => port.readable);
-
-            setPort(readablePorts[0])
+            setPort(ports[0])
         });
     }, []);
 
     const requestPort = useCallback(async () => {
         try {
-            const port = await navigator.serial.requestPort();
+            if (!navigator.serial)
+                throw new Error("La conexión con la balanza no esta soportada por el navegador")
 
-            if (port.readable)
-                throw new Error("El puerto no se puede leer. Revise si seleccionó el correcto o si esta bien conectado")
+            const selected = await navigator.serial.requestPort();
 
-            setPort(port);
+            setPort(selected);
         } catch (error) {
-            alert(`Ha ocurrido un error \n ${(error as Error).message }`);
+            alert(`Ha ocurrido un error \n ${(error as Error).message}`);
         }
     }, []);
 
     const readFromSerial = useCallback(async () => {
-        if (port) {
-            await port.open(options);
+        if (!port) throw new Error("No se conecto la balanza")
 
-            let finalValue = undefined;
-            let keepReading = true
+        await port.open(options);
 
-            while (port.readable && keepReading) {
-                const reader = port.readable.getReader();
+        let finalValue = undefined;
+        let keepReading = true
 
-                try {
-                    while (true) {
-                        const { value, done } = await reader.read();
+        while (port.readable && keepReading) {
+            const reader = port.readable.getReader();
 
-                        if (done) break;
+            try {
+                while (true) {
+                    const { value, done } = await reader.read();
 
-                        const result = proccesser(value);
+                    if (done) break;
 
-                        if (result.done) {
-                            finalValue = result.value;
-                            keepReading = false;
-                            reader.cancel();
-                        }
+                    const result = proccesser(value);
+
+                    if (result.done) {
+                        finalValue = result.value;
+                        keepReading = false;
+
+                        await reader.cancel();
                     }
-
-                } catch (error) {
-                    console.error(error)
-                } finally {
-                    reader.releaseLock();
                 }
+
+            } catch (error) {
+                console.error(error)
+            } finally {
+                reader.releaseLock();
             }
-
-            await port.close();
-
-            return finalValue;
         }
-    }, [port])
+
+        await port.close();
+
+        return finalValue;
+    }, [port, options, proccesser])
 
     return { readFromSerial, requestPort };
 }

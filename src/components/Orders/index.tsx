@@ -9,12 +9,13 @@ import { getCurrentOrders } from '../../services/api/orders';
 import { OrderState } from "../../constants/enums/orderStates.enum";
 import { GetCurrentOrderDTO } from "../../constants/dto/order.dto";
 import useFetch from "../../hooks/useFetch";
+import { useSerialPort } from "../../hooks/useSerialPort";
 
 function CurrentOrders() {
-    const [value, setValue] = useState<OrderState>(OrderState.Created);
-
-    const handleChange = (event: SyntheticEvent, newValue: string) => {
-        setValue(newValue as OrderState);
+    const [currentTab, setCurrentTab] = useState<OrderState>(OrderState.Created);
+    const { readFromSerial, requestPort } = useSerialPort();
+    const handleChange = (event: SyntheticEvent, newCurrentTab: string) => {
+        setCurrentTab(newCurrentTab as OrderState);
     };
 
     const { data, setData, fetchCallback } = useFetch<GetCurrentOrderDTO[]>(
@@ -34,7 +35,7 @@ function CurrentOrders() {
 
     function createTabLabel(label: string, state: OrderState) {
         const count = ordersMap[state]?.length || 0;
-        const active = value === state;
+        const active = currentTab === state;
 
         return <div>
             <span style={{ marginRight: 10 }}> {label} </span>
@@ -46,7 +47,7 @@ function CurrentOrders() {
     }
 
     return (
-        <TabContext value={value}>
+        <TabContext value={currentTab}>
             <Grid container flexDirection="column">
                 <Box sx={{ borderBottom: 1, borderColor: 'divider', paddingBottom: 2, marginBottom: 2 }} >
                     <Grid
@@ -72,10 +73,8 @@ function CurrentOrders() {
                     </Grid>
                 </Box>
                 <Grid container item>
-                    {value === OrderState.Created &&
-                        <CreatedOrderListHeader setOrders={setData} />
-                    }
-                    <OrderList orders={ordersMap[value]} setOrders={setData} />
+                    <CreatedOrderListHeader currentTab={currentTab} requestPort={requestPort} setOrders={setData} />
+                    <OrderList readFromSerial={readFromSerial} orders={ordersMap[currentTab]} setOrders={setData} />
                 </Grid>
             </Grid >
         </TabContext>
