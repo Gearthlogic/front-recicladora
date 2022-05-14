@@ -10,10 +10,14 @@ import { OrderState } from "../../constants/enums/orderStates.enum";
 import { GetCurrentOrderDTO } from "../../constants/dto/order.dto";
 import useFetch from "../../hooks/useFetch";
 import { useSerialPort } from "../../hooks/useSerialPort";
+import ClientPaymentModal from "../common/Modal/ClientPaymentModal";
 
 function CurrentOrders() {
     const [currentTab, setCurrentTab] = useState<OrderState>(OrderState.Created);
+    const [selectedAccountId, setSelectedAccountId] = useState<number>();
+
     const { readFromSerial, requestPort } = useSerialPort();
+
     const handleChange = (event: SyntheticEvent, newCurrentTab: string) => {
         setCurrentTab(newCurrentTab as OrderState);
     };
@@ -47,8 +51,12 @@ function CurrentOrders() {
     }
 
     return (
-        <TabContext value={currentTab}>
-            <Grid container flexDirection="column">
+        <Grid container flexDirection="column">
+            <ClientPaymentModal
+                accountId={selectedAccountId}
+                onClose={ () => setSelectedAccountId(undefined) }
+            />
+            <TabContext value={currentTab}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider', paddingBottom: 2, marginBottom: 2 }} >
                     <Grid
                         container
@@ -74,10 +82,15 @@ function CurrentOrders() {
                 </Box>
                 <Grid container item>
                     <CreatedOrderListHeader currentTab={currentTab} requestPort={requestPort} setOrders={setData} />
-                    <OrderList readFromSerial={readFromSerial} orders={ordersMap[currentTab]} setOrders={setData} />
+                    <OrderList
+                        readFromSerial={readFromSerial}
+                        orders={ordersMap[currentTab]}
+                        setOrders={setData}
+                        setSelectedAccountId={setSelectedAccountId}
+                    />
                 </Grid>
-            </Grid >
-        </TabContext>
+            </TabContext>
+        </Grid >
     )
 }
 

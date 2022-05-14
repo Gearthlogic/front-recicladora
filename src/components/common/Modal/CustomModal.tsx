@@ -1,3 +1,4 @@
+import { Grid } from '@material-ui/core';
 import { Button, Dialog } from '@mui/material'
 
 interface Props {
@@ -14,17 +15,13 @@ const CustomModal = ({
 
    return (
       <Dialog
+         fullWidth
          open={open}
-         aria-labelledby="modal-modal-title"
-         aria-describedby="modal-modal-description"
       >
-         <div style={{ width: 'auto', height: 'auto' }}>
-            {children}
-         </div>
-
-         <Button
-            onClick={onClose}
-         >
+         <Grid padding={2}>
+         {children}
+         </Grid>
+         <Button onClick={onClose}  >
             Cerrar
          </Button>
       </Dialog>

@@ -8,9 +8,13 @@ export interface GetCurrentOrderDTO {
     id: number,
     client: {
         alias: string,
-        type: ClientType
+        type: ClientType,
+        account: {
+            accountId: number
+        }
     },
     items: any[],
+    payableAmount?: number,
     state: OrderState,
 }
 
@@ -67,3 +71,5 @@ export interface SetPriceOrderItemDTO {
     id: number;
     price: number;
 }
+
+

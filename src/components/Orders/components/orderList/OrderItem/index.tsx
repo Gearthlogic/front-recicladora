@@ -1,19 +1,20 @@
-import { Divider, Grid, Paper, Typography } from "@material-ui/core";
+import { Button, Divider, Grid, Paper, Typography } from "@material-ui/core";
 import { memo, ReactElement } from "react";
 
 import { GetCurrentOrderDTO } from "../../../../../constants/dto/order.dto";
 import { OrderState } from "../../../../../constants/enums/orderStates.enum";
 import CreateItemsForm from './components/CreateItemsForm';
-import OrderItemList from './components/OderItemList';
+import OrderItemList from '../../../../common/Orders/OrderSummary';
 
 interface OrderItemProps {
     item: GetCurrentOrderDTO,
     setOrders: React.Dispatch<React.SetStateAction<GetCurrentOrderDTO[] | undefined>>
-    readFromSerial: Function
+    readFromSerial: Function,
+    setSelectedAccountId: React.Dispatch<React.SetStateAction<number | undefined>>
 }
 
-function OrderItem({ item, setOrders, readFromSerial }: OrderItemProps) {
-    const { id, state, client: { type, alias }, items } = item;
+function OrderItem({ item, setOrders, readFromSerial, setSelectedAccountId }: OrderItemProps) {
+    const { id, state, client: { type, alias, account}, items, payableAmount } = item;
 
     function orderItemsComponentFactory() {
 
@@ -27,7 +28,7 @@ function OrderItem({ item, setOrders, readFromSerial }: OrderItemProps) {
                 />
             ),
             [OrderState.Controlling]: < OrderItemList items={items} />,
-            [OrderState.Closed]: < OrderItemList items={items} />
+            [OrderState.Closed]: < OrderItemList total={payableAmount} items={items} />
         }
 
         return stateComponentMap[state];
@@ -39,6 +40,15 @@ function OrderItem({ item, setOrders, readFromSerial }: OrderItemProps) {
                 <Grid item flexDirection="column" sm={2} >
                     <Typography> Orden N°{id} </Typography>
                     <Typography> Cliente: {alias} </Typography>
+                    {item.state === OrderState.Closed && (
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={() => setSelectedAccountId(account.accountId)}
+                        >
+                            Pagar
+                        </Button>
+                    )}
                 </Grid>
                 <Divider orientation="vertical" flexItem />
                 <Grid marginLeft={2} item flexDirection="column" sm={8} >

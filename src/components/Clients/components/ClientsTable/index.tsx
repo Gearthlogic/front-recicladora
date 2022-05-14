@@ -72,7 +72,7 @@ const columns: GridColDef[] = [
 		renderCell: (params) => (
 			<EditAction
 				alias={params.row.alias}
-				id={params.row.accountId} />
+				id={params.row.id} />
 		)
 	},
 ];

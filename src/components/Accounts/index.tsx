@@ -17,7 +17,6 @@ import { TransactionType } from "../../constants/enums/transactionTypes.enum";
 
 interface TransactionFormData {
     amount: number;
-    details?: string;
 }
 
 const schema = yup
@@ -27,57 +26,28 @@ const schema = yup
             .min(1, 'Por favor, establezca monto positivo.')
             .typeError('Ingrese números solamente, por favor.')
             .required("Ingrese un monto"),
-        details: yup
-            .string()
-            .min(5, 'Por favor, escriba una descripción.').required()
-            .max(140, 'La descripción es demaciado larga.').required()
     }).required();
 
 const ClientAccount = () => {
     const dispatch = useDispatch();
 
     const [account, setAccount] = useState<any>();
-    const [tableData, setTableData] = useState<any>();
     const [showModal, setShowModal] = useState<boolean>(false);
 
     const [pageToShow, setPageToShow] = useState<number>(0)
     const [pageSize, setPageSize] = useState<number>(20)
-    const [generateTableOnlyOnce, setGenerateTableOnlyOnce] = useState<boolean>(true);
 
     const userData = useExtractQueryParamData();
 
     useEffect(() => {
         dispatch(startLoading());
-        getAccount(userData.id).then((response: any) => {
-            setAccount({
-                accountId: response[0].accountId,
-                balance: response[0].balance,
-                transactions: response[0].transactions
-            })
-        })
+
+        getAccount(userData.id)
+            .then(data => setAccount(data))
             .catch(console.log)
             .finally(() => dispatch(endLoading()));
 
     }, [userData.id, dispatch])
-
-    useEffect(() => {
-        const generateTableData = () => {
-            const data = account?.transactions.map((e: any) => {
-                const typeFormat: TransactionType = e.type
-
-                return {
-                    id: e.transactionId,
-                    amount: e.amount,
-                    details: e.details,
-                    type: transalations['es-ES'][typeFormat],
-                    createdAt: moment(e.updatedAt).format("DD-MM-YYYY")
-                }
-            })
-
-            if (generateTableOnlyOnce) setTableData(data)
-        }
-        generateTableData()
-    }, [account, generateTableOnlyOnce])
 
     const { reset, handleSubmit, control, formState: { errors } } = useForm<TransactionFormData>({
         resolver: yupResolver(schema),
@@ -85,53 +55,34 @@ const ClientAccount = () => {
 
     const handleShowModal = () => {
         setShowModal(!showModal)
-        reset({
-            amount: 0,
-            details: ''
-        })
+        reset()
     }
 
     const onSubmit: SubmitHandler<TransactionFormData> = async (formData) => {
         dispatch(startLoading())
-        setGenerateTableOnlyOnce(false)
 
-        const toSend = { ...formData, accountId: account.accountId }
+        const toSend = { ...formData, clientId: account.clientId }
+
         try {
             const { data } = await postCurrentAccountTransaction(toSend);
 
-            const typeFormat: TransactionType = data.type
-            setTableData((prev: any) => prev.concat({
-                id: data.transactionId,
-                amount: data.amount,
-                details: data.details,
-                type: transalations['es-ES'][typeFormat],
-                createdAt: moment(data.updatedAt).format("DD-MM-YYYY")
-            }));
-            setAccount({
+            setAccount( (prev : any )=> ({
                 ...account,
-                balance: account?.balance - data.amount
-            });
+                alance: account?.balance - data.amount,
+                transactions: prev.transactions.concat(data)
+            }));
 
+            handleShowModal()
             dispatch(setMessage({ action: "Operación Exitosa" }))
         } catch (error) {
             dispatch(setMessage({ action: "ERROR - Operación incorrecta" }, 'error'))
         } finally {
             dispatch(endLoading())
-            handleShowModal()
         }
     };
 
-    const handleAutoComplete = () => {
-        reset({
-            amount: account?.balance,
-            details: ''
-        })
-    }
-
     return (
-        <Grid
-            container
-        >
+        <Grid container  >
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                 <div style={{ display: 'flex' }}>
                     <div style={{ display: 'flex', margin: '5px' }}>
@@ -160,9 +111,9 @@ const ClientAccount = () => {
             </div>
 
             <div style={{ marginTop: '20px' }}>
-                {account?.transactions.length > 0 && tableData?.length > 0 ?
+                {account?.transactions.length > 0 ?
                     <TransactionsTable
-                        orders={tableData}
+                        orders={account?.transactions}
                         page={pageToShow}
                         pageSize={pageSize}
                         onPageSizeChange={(newPage: number) => setPageSize(newPage)}
@@ -184,85 +135,39 @@ const ClientAccount = () => {
                 open={showModal}
                 onClose={handleShowModal}
             >
-                <Typography variant="h3" style={{ margin: '20px' }}>
-                    Crear Transacción
-                </Typography>
 
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'flex-Start',
-                    alignItems: 'center',
-                    width: 'auto',
-                    height: 'auto',
-                    paddingBottom: '25px'
-                }}>
-                    <form
-                        onSubmit={handleSubmit(onSubmit)}
-                        style={{ margin: '20px' }}
-                    >
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <div>
-                                <Controller
-                                    name="amount"
-                                    control={control}
-                                    defaultValue={0}
-                                    render={({ field }) => (
-                                        <TextField
-                                            label="Monto de la transación"
-                                            placeholder="Ingrese Monto"
-                                            type="number"
-                                            fullWidth
-                                            margin="normal"
-                                            {...field}
-                                        />
-                                    )}
-                                />
-                                {errors.amount && (
-                                    <Typography variant="subtitle2" style={{ color: "red" }}>
-                                        {errors.amount.message}
-                                    </Typography>
-                                )}
-                            </div>
-
-                            <div style={{ height: 'auto', margin: '0px 5px 0px 15px' }}>
-                                <Button
-                                    variant='contained'
-                                    onClick={handleAutoComplete}
-                                    disabled={account?.balance <= 0 && true}
-                                >
-                                    Max
-                                </Button>
-                            </div>
-                        </div>
-
-                        <Controller
-                            name="details"
-                            control={control}
-                            defaultValue=''
-                            render={({ field }) => (
-                                <TextField
-                                    label="Detalle de la Transacción"
-                                    placeholder="Descripción"
-                                    type="text"
-                                    fullWidth
-                                    margin="normal"
-                                    {...field}
-                                />
-                            )}
-                        />
-                        {errors.details && (
-                            <Typography variant="subtitle2" style={{ color: "red" }}>
-                                {errors.details.message}
-                            </Typography>
-                        )}
-
-                        <div
-                            style={{
-                                paddingTop: '5%',
-                                textAlign: 'center',
-                            }}
+                <Grid container >
+                    <form onSubmit={handleSubmit(onSubmit)} >
+                        <Grid
+                            padding={2}
+                            container
+                            flexDirection="column"
+                            justifyContent="center"
                         >
+                            <Typography variant="h5" style={{ margin: '20px' }}>
+                                Crear adelanto
+                            </Typography>
+
+                            <Controller
+                                name="amount"
+                                control={control}
+                                defaultValue={0}
+                                render={({ field }) => (
+                                    <TextField
+                                        label="Monto de la transación"
+                                        placeholder="Ingrese Monto"
+                                        type="number"
+                                        fullWidth
+                                        margin="normal"
+                                        {...field}
+                                    />
+                                )}
+                            />
+                            {errors.amount && (
+                                <Typography variant="subtitle2" style={{ color: "red" }}>
+                                    {errors.amount.message}
+                                </Typography>
+                            )}
                             <Button
                                 variant="contained"
                                 type="submit"
@@ -270,9 +175,9 @@ const ClientAccount = () => {
                             >
                                 Aceptar
                             </Button>
-                        </div>
+                        </Grid>
                     </form>
-                </div>
+                </Grid>
             </CustomModal>
 
         </Grid >

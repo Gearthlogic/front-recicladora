@@ -7,10 +7,11 @@ import OrderItem from './OrderItem';
 interface OrderListProps {
     orders?: GetCurrentOrderDTO[],
     setOrders: React.Dispatch<React.SetStateAction<GetCurrentOrderDTO[] | undefined>>,
-    readFromSerial: Function
+    readFromSerial: Function,
+    setSelectedAccountId: React.Dispatch<React.SetStateAction<number | undefined>>,
 }
 
-const OrderList = ({ orders, setOrders, readFromSerial }: OrderListProps) => {
+const OrderList = ({ orders, setOrders, readFromSerial, setSelectedAccountId }: OrderListProps) => {
 
     return (
         <Grid container>
@@ -21,6 +22,7 @@ const OrderList = ({ orders, setOrders, readFromSerial }: OrderListProps) => {
                         key={order.id}
                         setOrders={setOrders}
                         item={order}
+                        setSelectedAccountId={setSelectedAccountId}
                     />
                 ))}
             </Grid>

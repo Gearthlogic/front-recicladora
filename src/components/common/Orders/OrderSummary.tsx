@@ -1,13 +1,14 @@
-import { DataGrid, GridColDef } from "@material-ui/data-grid"
+import { Typography } from "@material-ui/core";
+import { DataGrid, GridColDef } from "@material-ui/data-grid";
 import { memo } from "react"
 
-import translateMap from '../../../../../../assets/translations.json';
-import { Material } from "../../../../../../constants/enums/material.enum";
+import translateMap from '../../../assets/translations.json'
+import { Material } from "../../../constants/enums/material.enum";
 
 const commonColumnsDef: GridColDef = {
     field: '',
     align: 'center',
-    width: 140,
+    width: 100,
     headerAlign: 'center',
     sortable: false,
     disableColumnMenu: true
@@ -23,13 +24,14 @@ const materialsTableColumns: GridColDef[] = [
     {
         ...commonColumnsDef,
         field: 'quantity',
-        headerName: "Cantidad",
+        headerName: "Pesaje",
         valueFormatter: (params) => `${params.value} ${params.row.unit}`
     },
     {
         ...commonColumnsDef,
         field: 'wastePercentage',
         headerName: "Merma",
+        width: 80,
         valueFormatter: (params) => `${params.value} %`
     },
     {
@@ -42,6 +44,7 @@ const materialsTableColumns: GridColDef[] = [
         ...commonColumnsDef,
         field: 'price',
         headerName: "Precio",
+        width: 80,
         valueFormatter: (params) => `$ ${params.value}`
     },
     {
@@ -52,33 +55,29 @@ const materialsTableColumns: GridColDef[] = [
     },
 ]
 
-/* finalInputQuantity: 1200
-finalQuantity: null
-id: 2
-initialInputQuantity: 12000
-material: "Iron"
-orderId: 4
-price: 20
-quantity: 10800
-total: null
-unit: "kg"
-wastePercentage: 0 */
-
 interface OrderItemListProps {
-    items: any[]
+    items: any[],
+    total?: number
 }
 
-function OrderItemList({ items }: OrderItemListProps) {
+function OrderSummary({ items, total }: OrderItemListProps) {
 
     return (
-        <DataGrid
-            style={{ height: 200 }}
-            columns={materialsTableColumns}
-            rows={items}
-            hideFooterPagination
-        />
+        <>
+            <DataGrid
+                autoHeight
+                columns={materialsTableColumns}
+                rows={items}
+                hideFooterPagination
+                hideFooter
+            />
+            {total && (
+                <Typography textAlign="end" padding={2} >
+                    Total: $ {total}
+                </Typography>
+            )}
+        </>
     )
 }
 
-
-export default memo(OrderItemList)
+export default memo(OrderSummary);

@@ -4,11 +4,13 @@ import { useDispatch } from 'react-redux';
 import { endLoading, startLoading } from '../../redux/actions/loading/loading';
 import { setMessage } from '../../redux/actions/message';
 
-const useFetch = <T>(requestPromise: Promise<AxiosResponse<T, any>>) => {
+const useFetch = <T>(requestPromise?: Promise<AxiosResponse<T, any>>) => {
 	const [data, setData] = useState<T>();
 	const dispatch = useDispatch();
 
 	const fetchCallback = useCallback(async () => {
+		if (!requestPromise) return setData(undefined);
+
 		dispatch(startLoading());
 		try {
 			const res = await requestPromise;

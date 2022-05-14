@@ -1,4 +1,8 @@
 import { DataGrid, GridColDef } from '@material-ui/data-grid';
+import moment from 'moment';
+
+import translations from '../../../assets/translations.json';
+import { TransactionType } from '../../../constants/enums/transactionTypes.enum';
 
 interface CurrentOrdersTableProps {
     orders: any[];
@@ -11,7 +15,7 @@ interface CurrentOrdersTableProps {
 
 const defaultColumns: GridColDef[] = [
     {
-        field: 'id',
+        field: 'transactionId',
         headerName: 'ID',
         headerAlign: 'center',
         align: 'center',
@@ -29,23 +33,6 @@ const defaultColumns: GridColDef[] = [
         disableColumnMenu: true,
     },
     {
-        field: 'details',
-        headerName: 'Detalles',
-        headerAlign: 'center',
-        align: 'center',
-        width: 150,
-        disableColumnMenu: true,
-        sortable: true,
-        renderCell: (params) => (
-            <p
-                title={String(params.getValue(params.id, 'details'))}
-                style={{ width:'100%' }}
-            >
-                {String(params.getValue(params.id, 'details'))}
-            </p>
-        ),
-    },
-    {
         field: 'type',
         headerName: 'Tipo',
         headerAlign: 'center',
@@ -53,6 +40,7 @@ const defaultColumns: GridColDef[] = [
         width: 150,
         disableColumnMenu: true,
         sortable: true,
+        valueFormatter: params => translations['es-ES'][params.value as TransactionType]
     },
     {
         field: 'createdAt',
@@ -62,8 +50,10 @@ const defaultColumns: GridColDef[] = [
         width: 150,
         disableColumnMenu: true,
         sortable: true,
-    }
+        valueFormatter: params => moment(params.value as string).format('DD/MM/YYYY')
+     }
 ];
+
 
 const TransactionsTable = ({
     pageSize,
@@ -76,7 +66,7 @@ const TransactionsTable = ({
 
     return (
         <DataGrid
-            rows={orders}
+            rows={orders.map(transaction => ({...transaction, id: transaction.transactionId}) )}
             columns={columns}
             pagination
             rowsPerPageOptions={[5, 10, 20, 30, 40]}
@@ -91,10 +81,5 @@ const TransactionsTable = ({
         />
     );
 }
-
-
-
-
-
 
 export default TransactionsTable;

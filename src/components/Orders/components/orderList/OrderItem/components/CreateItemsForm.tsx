@@ -56,7 +56,7 @@ const materialsTableColumns: GridColDef[] = [
 type WeigthInputField = 'finalInputQuantity' | "initialInputQuantity";
 
 function CreateItemsForm({ id, type, setOrders, readFromSerial }: CreateItemsFormProps) {
-    const { control, handleSubmit, setValue } = useForm<CreateOrderMaterialItemDTO>();
+    const { control, handleSubmit, setValue, reset } = useForm<CreateOrderMaterialItemDTO>();
     const [itemList, setItemList] = useState<CreateOrderMaterialItemDTO[]>([]);
 
     const isPriceVisible = useMemo(() => type === ClientType.Temporary, [type]);
@@ -112,11 +112,12 @@ function CreateItemsForm({ id, type, setOrders, readFromSerial }: CreateItemsFor
 
     function submitAddItem(data: CreateOrderMaterialItemDTO) {
         setItemList(prev => prev.concat(data));
+        reset();
     }
 
     const submitOrderItems = useGlobalLoader(async () => {
         const res = await createOrderItems({ id, items: itemList });
-
+        
         setOrders(prev => {
             const newOrders = prev ? [...prev] : []
             const currentOrder = newOrders?.find(order => order.id === id);
