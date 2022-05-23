@@ -71,7 +71,7 @@ function OrderSummary({ items, total }: OrderItemListProps) {
                 hideFooterPagination
                 hideFooter
             />
-            {total && (
+            {!!total  && (
                 <Typography textAlign="end" padding={2} >
                     Total: $ {total}
                 </Typography>

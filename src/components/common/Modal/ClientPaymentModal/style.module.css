@@ -1,0 +1,11 @@
+.SummaryTable {
+    margin: 10px 0;
+}
+
+.SummaryTable th {
+    font-weight: 500;
+}
+
+.SummaryTable td, .SummaryTable th {
+    text-align: center;
+}

@@ -6,7 +6,7 @@ import { OrderState } from "../../../../constants/enums/orderStates.enum";
 import CreateOrder from './create';
 
 interface CreatedOrderListHraderProps {
-    setOrders: React.Dispatch<React.SetStateAction<GetCurrentOrderDTO[] | undefined>>,
+    setOrders: React.Dispatch<React.SetStateAction<GetCurrentOrderDTO[]>>,
     requestPort: Function,
     currentTab: OrderState
 }

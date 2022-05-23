@@ -24,3 +24,7 @@ export const getPendingTransactions = async (accountId: number) => {
 export const postCancellingPayment = async (body: PostPaymentDTO) => {
 	return await privateAxiosInstance.post('/current_account/payment', body);
 };
+
+export const getPaymentInfoFromTransaction = async (transactionId: number) => {
+	return await privateAxiosInstance.get(`/current_account/${transactionId}/payment`, );
+};

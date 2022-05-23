@@ -13,9 +13,22 @@ export interface GetCurrentOrderDTO {
             accountId: number
         }
     },
-    items: any[],
-    payableAmount?: number,
+    items: OrderItemDTO[],
+    payableAmount: number,
+    pickupDate: string;
     state: OrderState,
+    transactionId: number
+}
+
+export interface OrderItemDTO {
+    finalQuantity: number
+    id: number
+    material: Material
+    price: number
+    quantity: number
+    total: number
+    unit: string
+    wastePercentage: number
 }
 
 export interface CreateOrderDTO {

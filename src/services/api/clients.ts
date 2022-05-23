@@ -1,5 +1,6 @@
 import { privateAxiosInstance } from '../axios';
 import { ClientType } from '../../constants/enums/client.enum';
+import { GetCurrentOrderDTO } from '../../constants/dto/order.dto';
 
 export interface CreateClientDTO {
 	alias: string;
@@ -56,7 +57,7 @@ export const createNewClient = (body: CreateClientDTO) => {
 };
 
 export const createNewOrder = (body: CreateOrder) => {
-	return privateAxiosInstance.post('/orders', body);
+	return privateAxiosInstance.post<GetCurrentOrderDTO>('/orders', body);
 };
 
 export const updateClient = (body: UpdateClientDTO) => {

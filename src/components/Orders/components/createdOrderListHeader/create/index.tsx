@@ -25,7 +25,7 @@ const schema = yup
     }).required();
 
 interface CreateOrderProps {
-    setOrders: React.Dispatch<React.SetStateAction<GetCurrentOrderDTO[] | undefined>>
+    setOrders: React.Dispatch<React.SetStateAction<GetCurrentOrderDTO[]>>
 }
 
 const CreateOrder = ({ setOrders }: CreateOrderProps) => {
@@ -42,14 +42,7 @@ const CreateOrder = ({ setOrders }: CreateOrderProps) => {
     const onSubmit = useGlobalLoader(async (dispatch, values) => {
         const { data } = await createNewOrder(values);
 
-        const newOrder = {
-            id: data.id as number,
-            client: data.client,
-            items: [],
-            state: data.state as OrderState
-        }
-
-        setOrders(prev => prev?.concat(newOrder))
+        setOrders(prev => prev?.concat(data))
     });
 
     return (

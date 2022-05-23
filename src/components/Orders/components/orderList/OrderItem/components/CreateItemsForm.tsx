@@ -15,7 +15,7 @@ import { OrderState } from "../../../../../../constants/enums/orderStates.enum";
 interface CreateItemsFormProps {
     id: number;
     type: ClientType;
-    setOrders: React.Dispatch<React.SetStateAction<GetCurrentOrderDTO[] | undefined>>
+    setOrders: React.Dispatch<React.SetStateAction<GetCurrentOrderDTO[]>>
     readFromSerial : Function
 }
 

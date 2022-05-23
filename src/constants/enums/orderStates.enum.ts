@@ -3,4 +3,5 @@ export enum OrderState {
     Controlling = 'Controlling',
     PendingToSetTemporaryClientPrice= "PendingToSetTemporaryClientPrice",
     Closed = 'Closed',
+    Payed = "Payed"
 }
