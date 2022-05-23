@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 
 import { createNewOrder, getAvailableClientsList } from "../../../../../services/api/clients";
-import { OrderState } from "../../../../../constants/enums/orderStates.enum";
 import { GetCurrentOrderDTO } from "../../../../../constants/dto/order.dto";
 import { useGlobalLoader } from "../../../../../hooks/UseGlobalLoader";
 

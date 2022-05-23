@@ -40,7 +40,7 @@ function ClientPaymentModal({
 
         return map[fetchDetails?.type];
       }
-    }, [fetchDetails?.id, fetchDetails?.type])
+    }, [fetchDetails])
   );
 
   const onSubmit = useGlobalLoader(async () => {

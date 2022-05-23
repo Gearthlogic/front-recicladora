@@ -1,4 +1,10 @@
-import { SyntheticEvent, useEffect, useMemo, useState } from "react";
+import {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Box, Tab, Grid, Badge, Button } from "@material-ui/core";
 import TabList from "@mui/lab/TabList";
 import TabContext from "@mui/lab/TabContext";
@@ -26,14 +32,16 @@ function CurrentOrders() {
     setCurrentTab(newCurrentTab as OrderState);
   };
 
-  const fetchCallback = useGlobalLoader(async () => {
-    const res = await getCurrentOrders();
-    setData(res.data);
-  });
+  const fetchCallback = useGlobalLoader(
+    useCallback(async () => {
+      const res = await getCurrentOrders();
+      setData(res.data);
+    }, [])
+  );
 
   useEffect(() => {
     fetchCallback();
-  }, []);
+  }, [fetchCallback]);
 
   const ordersMap = useMemo(() => {
     const ordersMap: { [key in OrderState]?: GetCurrentOrderDTO[] } = {};
@@ -70,7 +78,8 @@ function CurrentOrders() {
         filterOrder={() => {
           setData((prev) =>
             prev?.filter(
-              (order) => order.client.account.accountId !== paymentfetchDetails?.id
+              (order) =>
+                order.client.account.accountId !== paymentfetchDetails?.id
             )
           );
         }}
