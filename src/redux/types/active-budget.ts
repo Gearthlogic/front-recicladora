@@ -1,0 +1,4 @@
+export enum ActiveBudgetActionTypes {
+	INIT_ACTIVE_BUDGET = 'INIT_ACTIVE_BUDGET',
+	INPUT_PAYMENT = 'INPUT_PAYMENT',
+}

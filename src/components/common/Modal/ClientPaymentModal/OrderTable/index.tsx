@@ -13,33 +13,37 @@ function OrderTable({ orders }: OrderTableProps) {
     <Grid>
       <Typography variant="h6">Ordenes</Typography>
       {orders?.map(({ pickupDate, items, id }) => (
-        <>
+        <Grid key={id}>
           <Typography>
             Ordern #{id} - Fecha: {moment(pickupDate).format("DD-MM-YYYY")}
           </Typography>
-          <table className={styles.SummaryTable} key={id}>
+          <table className={styles.SummaryTable}>
             <thead>
-              <th> Pesaqje </th>
-              <th> Merma </th>
-              <th> Cantidad final </th>
-              <th> Precio </th>
-              <th> Total </th>
-            </thead>
-            {items.map((item) => (
-              <tr key={item.id}>
-                <td>
-                  {item.quantity} {item.unit}{" "}
-                </td>
-                <td>{item.wastePercentage} %</td>
-                <td>
-                  {item.finalQuantity} {item.unit}{" "}
-                </td>
-                <td>$ {item.price}</td>
-                <td>$ {item.total}</td>
+              <tr>
+                <th> Pesaqje </th>
+                <th> Merma </th>
+                <th> Cantidad final </th>
+                <th> Precio </th>
+                <th> Total </th>
               </tr>
-            ))}
+            </thead>
+            <tbody>
+              {items.map((item) => (
+                <tr key={item.id}>
+                  <td>
+                    {item.quantity} {item.unit}{" "}
+                  </td>
+                  <td>{item.wastePercentage} %</td>
+                  <td>
+                    {item.finalQuantity} {item.unit}{" "}
+                  </td>
+                  <td>$ {item.price}</td>
+                  <td>$ {item.total}</td>
+                </tr>
+              ))}
+            </tbody>
           </table>
-        </>
+        </Grid>
       ))}
     </Grid>
   );

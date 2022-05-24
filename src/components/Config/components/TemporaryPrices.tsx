@@ -83,10 +83,9 @@ const TemporaryPrices = () => {
             } else {
                await createClientTemporaryPrices(newCreatedPrices)
             }
-            dispatch(setMessage({ action: 'Precios establecidos correctamente.' }))
+            dispatch(setMessage({ message: 'Precios establecidos correctamente.' }))
          } catch (error) {
-            console.log(error)
-            dispatch(setMessage({ action: 'ERROR - al establecer precios.' }, 'error'))
+            dispatch(setMessage({ message: 'ERROR - al establecer precios.' }, 'error'))
          } finally {
             dispatch(endLoading())
          }

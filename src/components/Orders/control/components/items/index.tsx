@@ -3,41 +3,38 @@ import { Dispatch, memo, SetStateAction } from "react";
 import { useDispatch } from "react-redux";
 
 import { ControlOrderItemDTO } from "../../../../../constants/dto/order.dto";
-import { endLoading, startLoading } from "../../../../../redux/actions/loading/loading";
+import {
+  endLoading,
+  startLoading,
+} from "../../../../../redux/actions/loading/loading";
 import { setMessage } from "../../../../../redux/actions/message";
 import { endControlling } from "../../../../../services/api/orders";
-import Item from './item';
+import Item from "./item";
 
 interface ControlOrderItemsFormProps {
-    id: number;
-    items: ControlOrderItemDTO[],
-    setData: Dispatch<SetStateAction<any[] | undefined >>
+  items: ControlOrderItemDTO[];
+  setData: Dispatch<SetStateAction<any[] | undefined>>;
+  setSelectedId: Dispatch<SetStateAction<number | undefined>>;
+  id: number;
 }
 
-const ControlOrderItemsForm = ({items, id, setData} : ControlOrderItemsFormProps ) => {
-    const dispatch = useDispatch();
+const ControlOrderItemsForm = ({
+  items,
+  setSelectedId,
+  id,
+}: ControlOrderItemsFormProps) => {
+  return (
+    <Grid container>
+      {items.map((item) => (
+        <Item key={item.id} {...item} />
+      ))}
+      <Grid marginY={4} container justifyContent="center">
+        <Button variant="contained" onClick={() => setSelectedId(id)}>
+          Terminar control
+        </Button>
+      </Grid>
+    </Grid>
+  );
+};
 
-    async function submitEndContrlling () {
-        try {
-            dispatch(startLoading());
-            await endControlling(id)
-            setData(prev => prev?.filter(order => order.id !== id))
-            dispatch(setMessage({ message: "Actualziación axitosa" }));
-        } catch (error) {
-            dispatch(setMessage({ message: "error" }, "error" ));
-        }finally{
-            dispatch(endLoading());
-        }
-    }
-
-    return (
-        <Grid container>
-           {items.map(item => <Item key={item.id} {...item} />) }
-           <Grid marginY={4} container justifyContent="center">
-               <Button variant="contained" onClick={submitEndContrlling} > Terminar control </Button>
-           </Grid>
-        </Grid>
-    );
-}
-
-export default memo( ControlOrderItemsForm);
+export default memo(ControlOrderItemsForm);

@@ -17,7 +17,6 @@ const ChangeState = ({ id, active }: ChangeStateProps) => {
             await changeClientState(id);
             setIsActive(prev => !prev);
         } catch (error) {
-            console.log(error);
         } finally {
             setLoading(false);
         }

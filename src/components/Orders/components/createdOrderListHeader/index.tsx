@@ -1,38 +1,43 @@
-import { Button, Grid } from "@material-ui/core"
-import { memo, ReactElement } from "react"
+import { Button, Grid } from "@material-ui/core";
+import { memo, ReactElement } from "react";
 
 import { GetCurrentOrderDTO } from "../../../../constants/dto/order.dto";
 import { OrderState } from "../../../../constants/enums/orderStates.enum";
-import CreateOrder from './create';
+import CreateOrder from "./create";
+import ActiveBudget from "./ActiveBudget";
 
 interface CreatedOrderListHraderProps {
-    setOrders: React.Dispatch<React.SetStateAction<GetCurrentOrderDTO[]>>,
-    requestPort: Function,
-    currentTab: OrderState
+  setOrders: React.Dispatch<React.SetStateAction<GetCurrentOrderDTO[]>>;
+  requestPort: Function;
+  currentTab: OrderState;
 }
 
-function CreatedOrderListHrader({currentTab, setOrders, requestPort }: CreatedOrderListHraderProps) {
+function CreatedOrderListHrader({
+  currentTab,
+  setOrders,
+  requestPort,
+}: CreatedOrderListHraderProps) {
+  function currentTabHeaderFactory() {
+    const contentMap: { [key in OrderState]?: ReactElement } = {
+      [OrderState.Created]: (
+        <>
+          <CreateOrder setOrders={setOrders} />
+          <Button color="secondary" onClick={async () => await requestPort()}>
+            Conectar Balanza
+          </Button>
+        </>
+      ),
+      [OrderState.Closed]: <ActiveBudget />,
+    };
 
-    function currentTabHeaderFactory() {
-        const contentMap :{ [key in OrderState]?: ReactElement} = {
-            [OrderState.Created]: (
-                <>
-                    <CreateOrder setOrders={setOrders} />
-                    <Button color="secondary" onClick={async () => await requestPort()}>
-                        Conectar Balanza
-                    </Button>
-                </>
-            )
-        }
+    return contentMap[currentTab];
+  }
 
-        return contentMap[currentTab];
-    }
-
-    return (
-        <Grid container flexDirection="row" justifyContent="space-between" >
-            {currentTabHeaderFactory()}
-        </Grid>
-    )
+  return (
+    <Grid container flexDirection="row" justifyContent="space-between">
+      {currentTabHeaderFactory()}
+    </Grid>
+  );
 }
 
-export default memo(CreatedOrderListHrader)
+export default memo(CreatedOrderListHrader);

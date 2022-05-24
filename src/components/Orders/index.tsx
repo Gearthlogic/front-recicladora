@@ -75,13 +75,21 @@ function CurrentOrders() {
         onClose={() => {
           setPaymentFetchDetails(undefined);
         }}
-        filterOrder={() => {
-          setData((prev) =>
-            prev?.filter(
+        callback={() => {
+          setData((prev) => {
+            const newOrders = [...prev];
+
+            const toUpdate = newOrders?.find(
               (order) =>
-                order.client.account.accountId !== paymentfetchDetails?.id
-            )
-          );
+                order.client.account.accountId === paymentfetchDetails?.id
+            );
+
+            if (toUpdate) {
+              toUpdate.state = OrderState.Payed;
+            }
+
+            return newOrders;
+          });
         }}
       />
       <TabContext value={currentTab}>

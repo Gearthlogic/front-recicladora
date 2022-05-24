@@ -42,10 +42,10 @@ function App() {
 				autoHideDuration={3000}
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
 				onClose={() => dispatch(resetMessage())}
-				{...snackbar}
+				{...snackbar?.snackbarProps}
 			>
 				<Alert severity={snackbar?.messagetype}>
-					{snackbar?.action}
+					{snackbar?.snackbarProps.message}
 				</Alert>
 			</Snackbar>
 		</BrowserRouter>

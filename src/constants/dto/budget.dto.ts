@@ -13,3 +13,8 @@ export interface CreateBudgetDTO {
   finalDate: string;
   initialAmount: number;
 }
+
+
+export interface AddLiquidityDTO {
+    newAmount: number;
+}

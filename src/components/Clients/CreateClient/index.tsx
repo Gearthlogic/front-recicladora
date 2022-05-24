@@ -137,10 +137,9 @@ const CreateClient = () => {
 		try {
 			const response = await createNewClient(newBody)
 			history.push(Path.editClient.replace(':id', response.data.id))
-			dispatch(setMessage({ action: 'Creado correctamente.' }))
+			dispatch(setMessage({ message: 'Creado correctamente.' }))
 		} catch (error) {
-			dispatch(setMessage({ action: 'ERROR' }, 'error'))
-			console.log(error)
+			dispatch(setMessage({ message: 'ERROR' }, 'error'))
 		}
 
 		dispatch(endLoading())

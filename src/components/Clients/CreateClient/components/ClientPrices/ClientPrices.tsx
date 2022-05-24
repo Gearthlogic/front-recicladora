@@ -65,7 +65,7 @@ const ClientPrices = ({ id, prices = [], setPrices }: ClientPricesProps) => {
       try {
          await (isEditing ? submitUpdate(data) : submitCreate(data));
       } catch (error) {
-         console.log(error)
+
       } finally {
          dispatch(endLoading())
       }

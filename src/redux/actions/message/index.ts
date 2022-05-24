@@ -6,7 +6,8 @@ export const setMessage = (
 	messagetype: string = 'success'
 ) => ({
 	type: SET_MESSAGE,
-	payload: {...snackbarProps, open: true, 
+	payload: {
+		snackbarProps :  {...snackbarProps, open: true }, 
 		messagetype: messagetype
 	},
 });

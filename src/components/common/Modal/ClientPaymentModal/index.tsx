@@ -1,5 +1,5 @@
 import { Button, Grid, Typography } from "@material-ui/core";
-import { memo, useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
 import printJS from "print-js";
 
 import { GetPendingTransactionsSummaryDTO } from "../../../../constants/dto/account.dto";
@@ -13,6 +13,7 @@ import {
 import TransactionsSummary from "./TransactionsTable";
 import Modal from "../CustomModal";
 import OrderTable from "./OrderTable";
+import { inputPaymentActionCreator } from "../../../../redux/actions/active-budget";
 
 export interface PaymentFetchDetails {
   type: "account" | "transaction";
@@ -21,38 +22,45 @@ export interface PaymentFetchDetails {
 
 interface ClientPaymentModalProps {
   fetchDetails?: PaymentFetchDetails;
-  onClose: Function;
-  filterOrder: Function;
+  onClose: () => void;
+  callback: Function;
 }
+
+const promiseaMap = {
+  account: getPendingTransactions,
+  transaction: getPaymentInfoFromTransaction,
+};
 
 function ClientPaymentModal({
   fetchDetails,
   onClose,
-  filterOrder,
+  callback,
 }: ClientPaymentModalProps) {
   const { data } = useFetch<GetPendingTransactionsSummaryDTO>(
-    useMemo(() => {
+    useCallback(() => {
       if (fetchDetails) {
-        const map = {
-          account: getPendingTransactions(fetchDetails.id),
-          transaction: getPaymentInfoFromTransaction(fetchDetails.id),
-        };
-
-        return map[fetchDetails?.type];
+        return promiseaMap[fetchDetails.type](fetchDetails.id);
       }
     }, [fetchDetails])
   );
 
-  const onSubmit = useGlobalLoader(async () => {
+  const onSubmit = useGlobalLoader(async (dispatch) => {
     if (fetchDetails?.id) {
-      await postCancellingPayment({ accountId: fetchDetails.id });
-      filterOrder();
+      const res = await postCancellingPayment({ accountId: fetchDetails.id });
+
+      dispatch(inputPaymentActionCreator(res.data.total));
+      callback();
       onClose();
     }
   });
 
   return (
-    <Modal open={!!fetchDetails} onClose={onClose}>
+    <Modal
+      dialogProps={{
+        open: !!fetchDetails,
+        onClose,
+      }}
+    >
       <Grid id="payment-datail">
         <OrderTable orders={data?.orders} />
         <br />
