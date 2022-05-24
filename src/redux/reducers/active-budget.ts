@@ -1,7 +1,6 @@
 import { Budget } from "../../constants/dto/budget.dto";
 import { ActiveBudgetDispatchTypes } from "../actions/active-budget/type";
 import { ActiveBudgetActionTypes } from "../types/active-budget";
-import { LoadingType } from "../types/loading";
 
 export interface ActiveBudgetState {
   budget?: Budget;

@@ -1,5 +1,5 @@
 import { Button, Grid, Typography } from "@material-ui/core";
-import { memo, useCallback, useMemo } from "react";
+import { memo, useCallback } from "react";
 import printJS from "print-js";
 
 import { GetPendingTransactionsSummaryDTO } from "../../../../constants/dto/account.dto";

@@ -82,7 +82,9 @@ function AddLqiuidityModal({
           </Typography>
         )}
         <Grid container justifyContent="center">
-        <Button variant="contained" type="submit">Agregar presupuesto</Button>
+          <Button variant="contained" type="submit">
+            Agregar presupuesto
+          </Button>
         </Grid>
       </form>
     </CustomModal>

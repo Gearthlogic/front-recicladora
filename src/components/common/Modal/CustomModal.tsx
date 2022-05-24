@@ -2,10 +2,9 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Grid,
   useMediaQuery,
 } from "@material-ui/core";
-import { Button, Dialog, DialogProps } from "@mui/material";
+import { Dialog, DialogProps } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { ReactElement } from "react";
 

@@ -14,9 +14,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { setMessage } from "../../redux/actions/message";
 import TransactionsTable from "./components/TransactionsTable";
-import moment from "moment";
-import transalations from "../../assets/translations.json";
-import { TransactionType } from "../../constants/enums/transactionTypes.enum";
+
 
 interface TransactionFormData {
   amount: number;

@@ -7,12 +7,12 @@ import {
   Typography,
 } from "@material-ui/core";
 import { AccordionDetails } from "@mui/material";
+import { useCallback, useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import Items from "./components/items";
 import useFetch from "../../../hooks/useFetch";
 import { getControllingOrders } from "../../../services/api/orders";
-import { useCallback, useMemo, useState } from "react";
 import ConfirmationModal from "./components/ConfirmationModal";
 
 const paperStyles = {

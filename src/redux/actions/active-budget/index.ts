@@ -1,7 +1,6 @@
 import { Dispatch } from "redux";
 import { getActiveBudget } from "../../../services/api/budget";
 import { ActiveBudgetActionTypes } from "../../types/active-budget";
-import { LoadingType } from "../../types/loading";
 
 export const initActiveBudgetActionCreator = () => async (dispatch: Dispatch) => {
   const { data } = await getActiveBudget();
