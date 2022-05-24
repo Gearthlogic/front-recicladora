@@ -15,6 +15,8 @@ import Config from '../../Config';
 import { Path } from '../../../constants/enums/path.enum';
 import { Role } from '../../../constants/enums/role.enum';
 import { User } from '../../../constants/types/user.type';
+import BudgetList from '../../Budget';
+import CreateBudget from '../../Budget/create';
 
 export class Route {
 	constructor(
@@ -64,7 +66,7 @@ export const routes: Array<Route> = [
 	),
 	new Route(
 		{ component: OrderList, path: Path.orderList, exact: true },
-		[Role.Admin, Role.Purchaser],
+		[ Role.Purchaser],
 		{ name: 'Ordenes' },
 	),
 	new Route(
@@ -80,11 +82,7 @@ export const routes: Array<Route> = [
 		[Role.Admin],
 		{ name: 'Usuarios' }
 	),
-	new Route(
-		{ component: Config, path: Path.config, exact: true },
-		[Role.Admin],
-		{ name: 'Configuración' }
-	),
+
 	new Route(
 		{ component: CreateUser, path: Path.createUser, exact: true },
 		[Role.Admin]
@@ -92,6 +90,20 @@ export const routes: Array<Route> = [
 	new Route(
 		{ component: EditUser, path: Path.editUser, exact: true },
 		[Role.Admin]
+	),
+	new Route(
+		{ component: BudgetList, path: Path.budget, exact: true },
+		[Role.Admin],
+		{ name: 'Presupuestos' }
+	),
+	new Route(
+		{ component: CreateBudget, path: Path.createBudget, exact: true },
+		[Role.Admin],
+	),
+	new Route(
+		{ component: Config, path: Path.config, exact: true },
+		[Role.Admin],
+		{ name: 'Configuración' }
 	),
 	new Route({ path: Path.notFound, component: NotFound }),
 ];

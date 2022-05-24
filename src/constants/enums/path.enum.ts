@@ -13,5 +13,7 @@ export enum Path {
 	clientAccount = "/client/account",
 	controllingOrderList = '/orders/control',
 	paymentSettlement = '/payment_settlement',
+	budget = '/budget',
+	createBudget = '/budget/create',
 	notFound = '/*'
 };

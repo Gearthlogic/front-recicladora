@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import { Route as RouteObject } from '../routes/routes'
 
@@ -18,7 +18,7 @@ const Router = ({ userRoutes }: RouterProps) => {
 		))
 	};
 
-	return <>{builRoutes()}</>;
+	return <Switch>{builRoutes()}</Switch>;
 };
 
 export default memo(Router);
