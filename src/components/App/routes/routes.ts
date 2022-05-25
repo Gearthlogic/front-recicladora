@@ -103,7 +103,7 @@ export const routes: Array<Route> = [
 	new Route(
 		{ component: Config, path: Path.config, exact: true },
 		[Role.Admin],
-		{ name: 'Configuración' }
+		{ name: 'Precios temporales' }
 	),
 	new Route({ path: Path.notFound, component: NotFound }),
 ];

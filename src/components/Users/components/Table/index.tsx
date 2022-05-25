@@ -4,6 +4,8 @@ import { useHistory } from 'react-router-dom';
 import { Path } from '../../../../constants/enums/path.enum';
 import EditAction from './EditAction';
 import { UserTableRow } from '../..';
+import transalations from '../../../../assets/translations.json';
+import { Role } from '../../../../constants/enums/role.enum';
 
 interface ClientsTableProps {
 	rows: UserTableRow[],
@@ -29,6 +31,7 @@ export default function ClientsTable({ rows, setRows }: ClientsTableProps) {
 			sortable: false,
 			width: 150,
 			disableColumnMenu: true,
+			valueFormatter: params => transalations["es-ES"][params.value as Role]
 		},
 		{
 			field: 'Actions',
@@ -51,7 +54,7 @@ export default function ClientsTable({ rows, setRows }: ClientsTableProps) {
 
 	return (
 		<Grid container>
-			<Grid paddingBottom={2} container justifyContent="flex-end" >
+			<Grid container justifyContent="flex-end" >
 				<Button
 					onClick={() => history.push(Path.createUser)}
 					variant="contained">

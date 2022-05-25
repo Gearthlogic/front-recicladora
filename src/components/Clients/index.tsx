@@ -20,7 +20,6 @@ const ClientList = () => {
         <Grid container>
             <Grid
                 container
-                margin={2}
                 direction="row"
                 justifyContent="flex-end"
             >

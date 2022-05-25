@@ -28,7 +28,7 @@ function BudgetList() {
 
   return (
     <Grid container>
-      <Grid paddingBottom={2} container justifyContent="flex-end">
+      <Grid  container justifyContent="flex-end">
         <Button
           style={{ marginRight: "5px" }}
           onClick={() => setOpen(true)}

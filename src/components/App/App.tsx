@@ -33,7 +33,7 @@ function App() {
 			{!initializing && (
 				<>
 					<Navbar userRoutes={userRoutes} />
-					<Grid container padding={2}>
+					<Grid container padding={5}>
 						<Router userRoutes={userRoutes} />
 					</Grid>
 				</>

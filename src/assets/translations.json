@@ -11,6 +11,9 @@
         "Payed": "Pagado",
         "Debit": "Débito",
         "Credit": "Crédito",
+        "Purchaser": "Comprador",
+        "EntryController": "Controlador",
+        "Admin": "Administrador",
         "NotActiveBudget": "No hay un presupuesto activo",
         "NotEnoughBudget": "No hay fondos suficientes en el presupuesto"
     },
